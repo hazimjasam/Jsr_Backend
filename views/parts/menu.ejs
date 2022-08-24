@@ -1,0 +1,514 @@
+<% if(!drawer){ %> 
+
+
+
+
+    <div>
+
+        <ul  style="position:relative;">
+    
+            <li class="scroll_enabled" style="overflow: auto;">
+                <a onclick="big()">
+                    <div class="side_nav_ul_item flex ">
+                        <div style="width: 100%; text-align:center;"><i class="p fas fa-angle-double-right"></i></div>
+                        <div class="snuiai"></div>
+                    </div>
+                </a>
+            </li>
+            <% if (user.orders) { %>
+            <li class="mb">
+                <a href="/orders">
+                    <div class="side_nav_ul_item flex <% if (index == 050) { %>side_nav_ul_item_active<% } %>">
+                        <div class="snuip"><i class="fas fa-box-open"></i></div>
+                       
+                        <div class="snuipt">الطلبات</div>
+                        <div class="snuiai"></div>
+                       
+                    </div>
+                </a>
+            </li>
+            <% } %>
+            <% if (user.all) { %>
+            <li class="mb">
+                <a href="/all">
+                    <div class="side_nav_ul_item flex <% if (index == 0) { %>side_nav_ul_item_active<% } %>">
+                        <div class="snuip"><i class="fas fa-user"></i></div>
+                       
+                        <div class="snuipt">العملاء</div>
+                        <div class="snuiai"></div>
+                       
+                    </div>
+                </a>
+            </li>
+            <% } %>
+           
+            <% if (user.add) { %>
+            <li class="mb">
+                <a href="/add">
+                    <div class="side_nav_ul_item flex <% if (index == 1) { %>side_nav_ul_item_active<% } %>">
+                        <div class="snuip"><i class="fas fa-user-plus"></i></div>
+                        <div class="snuipt">اضافة عميل </div>
+                        <div class="snuiai"></div>
+                    </div>
+                </a>
+            </li>
+            <% } %>
+            
+            
+            <% if (user.pharmacy) { %>
+            <li class="mb">
+                <a href="/products">
+                    <div class="side_nav_ul_item flex <% if (index == 5) { %>side_nav_ul_item_active<% } %>">
+                        <div class="snuip"><i class="fas fa-th-large"></i></div>
+                        <div class="snuipt">العناصر</div>
+                        <div class="snuiai"></div>
+                    </div>
+                </a>
+            </li>
+            
+            <% } %>
+            
+            <li class="mb">
+                <a href="/add_stock">
+                    <div class="side_nav_ul_item flex <% if (index == 30) { %>side_nav_ul_item_active<% } %>">
+                        <div class="snuip"><i class="fas fa-folder-plus"></i></div>
+                        <div class="snuipt">اضافة منتج</div>
+                        <div class="snuiai"></div>
+                    </div>
+                </a>
+            </li>
+           
+            <% if (user.accounts) { %>
+           
+            <li class="mb">
+                <a class="collapsible">
+                    <div class="side_nav_ul_item flex">
+                        <div class="snuip"><i class="fas fa-calculator"></i></div>
+                        <div class="snuipt">الحسابات</div>
+                        <div class="snuiai"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+    
+    
+                    <div class="collapsible_content" style="<% if (index >= 20 && index<=25) { %>max-height: 328px;<% } %>">
+                        <ul>
+    
+                            <li class="mb">
+                                <a href="/accounts">
+                                    <div class="side_nav_ul_item flex <% if (index == 20) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-box"></i></div>
+                                        <div class="snuipt">الصندوق</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="mb">
+                                <a href="/creditor">
+                                    <div class="side_nav_ul_item flex <% if (index == 21) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-money-check-alt"></i></div>
+                                        <div class="snuipt">الدائن</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/debit">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 22) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-money-check-alt"></i>
+                                        </div>
+                                        <div class="snuipt">المدين</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/sales">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 24) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-boxes"></i>
+                                        </div>
+                                        <div class="snuipt">مبيعات </div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/archive">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 23) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-archive"></i>
+                                        </div>
+                                        <div class="snuipt">الارشيف</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+    
+                        </ul>
+                    </div>
+                </a>
+            </li>
+            <% } %>
+    
+    
+         
+            <% if (user.setting) { %>
+    
+            <li class="mb">
+                <a class="collapsible">
+                    <div class="side_nav_ul_item flex">
+                        <div class="snuip"><i class="fas fa-cog"></i></div>
+                        <div class="snuipt">الاعدادات</div>
+                        <div class="snuiai"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+    
+    
+                    <div class="collapsible_content" style="<% if (index >= 7 && index<=12) { %>max-height: 428px;<% } %>">
+                        <ul>
+    
+                            <li>
+                                <a href="/settings/action">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 7) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i
+                                                class="fas fa-arrow-alt-circle-up"></i>
+                                        </div>
+                                        <div class="snuipt">التـوجيـهات</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/settings/employees">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 8) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-users-cog"></i>
+                                        </div>
+                                        <div class="snuipt">الموظفين</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/settings/general">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 9) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-border-all"></i>
+                                        </div>
+                                        <div class="snuipt">العامة</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                           
+                            <li>
+                                <a href="/settings/accounting">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 10) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-money-check-alt"></i>
+                                        </div>
+                                        <div class="snuipt">اعدادات الحسابات</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/banners">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 12) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-photo-video"></i>
+                                        </div>
+                                        <div class="snuipt">البنرات </div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+    
+                            <li>
+                                <a href="/settings/logsystem">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 11) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-history"></i>
+                                        </div>
+                                        <div class="snuipt"> Log System</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                           
+                        </ul>
+                    </div>
+                </a>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+   
+   
+<% } else{%> 
+
+    <style>
+        .snuip{
+            width:fit-content;
+
+
+        }
+        #side_nav{
+            width:220px;
+        }
+        .snuipt{
+            display: block;
+        }
+        .p{
+
+        }
+    </style>
+    <div>
+
+        <ul  style="position:relative;">
+    
+            <li class="scroll_enabled" style="overflow: auto;">
+                <a onclick="big()">
+                    <div class="side_nav_ul_item flex ">
+                        <div style="width: 100%; text-align:center;"><i class="p fas fa-angle-double-right"></i></div>
+                        <div class="snuiai"></div>
+                    </div>
+                </a>
+            </li>
+            <% if (user.orders) { %>
+            <li class="mb">
+                <a href="/orders">
+                    <div class="side_nav_ul_item flex <% if (index == 50) { %>side_nav_ul_item_active<% } %>">
+                        <div class="snuip"><i class="fas fa-box-open"></i></div>
+                       
+                        <div class="snuipt">الطلبات</div>
+                        <div class="snuiai"></div>
+                       
+                    </div>
+                </a>
+            </li>
+            <% } %> 
+            <% if (user.all) { %>
+            <li class="mb">
+                <a href="/all">
+                    <div class="side_nav_ul_item flex <% if (index == 0) { %>side_nav_ul_item_active<% } %>">
+                        <div class="snuip"><i class="fas fa-user"></i></div>
+                       
+                        <div class="snuipt">العملاء</div>
+                        <div class="snuiai"></div>
+                       
+                    </div>
+                </a>
+            </li>
+            <% } %>
+           
+            <% if (user.add) { %>
+            <li class="mb">
+                <a href="/add">
+                    <div class="side_nav_ul_item flex <% if (index == 1) { %>side_nav_ul_item_active<% } %>">
+                        <div class="snuip"><i class="fas fa-user-plus"></i></div>
+                        <div class="snuipt">اضافة عميل </div>
+                        <div class="snuiai"></div>
+                    </div>
+                </a>
+            </li>
+            <% } %>
+          
+            <% if (user.pharmacy) { %>
+            <li class="mb">
+                <a href="/products">
+                    <div class="side_nav_ul_item flex <% if (index == 5) { %>side_nav_ul_item_active<% } %>">
+                        <div class="snuip"><i class="fas fa-th-large"></i></div>
+                        <div class="snuipt">العناصر</div>
+                        <div class="snuiai"></div>
+                    </div>
+                </a>
+            </li>
+            <% } %>
+            <li class="mb">
+                <a href="/add_stock">
+                    <div class="side_nav_ul_item flex <% if (index == 30) { %>side_nav_ul_item_active<% } %>">
+                        <div class="snuip"><i class="fas fa-folder-plus"></i></div>
+                        <div class="snuipt">اضافة منتج</div>
+                        <div class="snuiai"></div>
+                    </div>
+                </a>
+            </li>
+            
+            
+            <% if (user.accounts) { %>
+           
+            <li class="mb">
+                <a class="collapsible">
+                    <div class="side_nav_ul_item flex">
+                        <div class="snuip"><i class="fas fa-calculator"></i></div>
+                        <div class="snuipt">الحسابات</div>
+                        <div class="snuiai"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+    
+    
+                    <div class="collapsible_content" style="<% if (index >= 20 && index<=25) { %>max-height: 328px;<% } %>">
+                        <ul>
+    
+                            <li class="mb">
+                                <a href="/accounts">
+                                    <div class="side_nav_ul_item flex <% if (index == 20) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-box"></i></div>
+                                        <div class="snuipt">الصندوق</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="mb">
+                                <a href="/creditor">
+                                    <div class="side_nav_ul_item flex <% if (index == 21) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-money-check-alt"></i></div>
+                                        <div class="snuipt">الدائن</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/debit">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 22) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-money-check-alt"></i>
+                                        </div>
+                                        <div class="snuipt">المدين</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/sales">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 24) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-boxes"></i>
+                                        </div>
+                                        <div class="snuipt">مبيعات </div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                           
+                            <li>
+                                <a href="/archive">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 23) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-archive"></i>
+                                        </div>
+                                        <div class="snuipt">الارشيف</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+    
+                        </ul>
+                    </div>
+                </a>
+            </li>
+            <% } %>
+    
+    
+         
+            <% if (user.setting) { %>
+    
+            <li class="mb">
+                <a class="collapsible">
+                    <div class="side_nav_ul_item flex">
+                        <div class="snuip"><i class="fas fa-cog"></i></div>
+                        <div class="snuipt">الاعدادات</div>
+                        <div class="snuiai"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+    
+    
+                    <div class="collapsible_content" style="<% if (index >= 7 && index<=12) { %>max-height: 428px;<% } %>">
+                        <ul>
+    
+                            <li>
+                                <a href="/settings/action">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 7) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i
+                                                class="fas fa-arrow-alt-circle-up"></i>
+                                        </div>
+                                        <div class="snuipt">التـوجيـهات</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/settings/employees">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 8) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-users-cog"></i>
+                                        </div>
+                                        <div class="snuipt">الموظفين</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/settings/general">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 9) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-border-all"></i>
+                                        </div>
+                                        <div class="snuipt">العامة</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                           
+                            <li>
+                                <a href="/settings/accounting">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 10) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-money-check-alt"></i>
+                                        </div>
+                                        <div class="snuipt">اعدادات الحسابات</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/banners">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 12) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-photo-video"></i>
+                                        </div>
+                                        <div class="snuipt">البنرات </div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/settings/logsystem">
+                                    <div
+                                        class="side_nav_ul_item flex <% if (index == 11) { %>side_nav_ul_item_active<% } %>">
+                                        <div class="snuip"><i class="fas fa-history"></i>
+                                        </div>
+                                        <div class="snuipt"> Log System</div>
+                                        <div class="snuiai"></div>
+                                    </div>
+                                </a>
+                            </li>
+                           
+                        </ul>
+                    </div>
+                </a>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+    <% } %> 
+
+<!--
+<div class=' flex pointer tip' style="position: fixed; z-index: 50000;">
+    <div class="arrow-right" style="margin-top: 22px;"></div>
+    <div style="font-size: larger; border: 3px solid gray; border-radius: 10px; height: 70px; padding: 1rem 1rem; background-color: rgba(0, 0, 0, 0.75); color: white; text-align: center;">العميل ين</div>
+
+    
+</div>
+
+-->

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<style>
+
+</style>
+
+<body style="opacity:0;">
+
+    <div class="card mycard fixedpanel no" id="add_appo">
+        <div>
+
+            <div>
+                اضافة موعد جديد
+            </div>
+
+            <hr>
+
+            <form id="form" autocomplete="off">
+
+                <div class="form-group">
+                    <label>الاسم</label>
+                    <input id="add_name" type="text" class="form-control" style="background-color: rgb(243, 243, 243);"
+                        required>
+                    <div id="med" class="noselect pointer"
+                        style="width: 448px; top: 28%; left: 5%; max-height: fit-content;">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف</label>
+                    <input id="phone" type="text" class="form-control" style="background-color: rgb(243, 243, 243);"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label>الوقت</label>
+                    <input id="time" type="time" class="form-control" name="main"
+                        style="background-color: rgb(243, 243, 243);" required>
+                </div>
+                <div class="form-group">
+                    <label>السبب</label>
+                    <input id="reason" type="text" class="form-control" name="main"
+                        style="background-color: rgb(243, 243, 243);" placeholder="أختياري">
+                </div>
+
+
+
+                <div class="input-group">
+
+                    <div style="width: 100%;">
+                        <label >الحجز الى</label>
+                        <div class="input-group">
+                            <select class="form-select" id="action_">
+                                <option selected>
+                                    <%= selected_action%>
+                                </option>
+                                <% for( let index=0; index < actions.length; index++ ) { %>
+                                    <option value="<%= actions[index].name  %>">
+                                        <%= actions[index].name %>
+                                    </option>
+                                    <% } %>
+
+                            </select>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+                </select>
+
+
+
+        </div>
+        <div class="flex">
+            <button onclick="add_date()" class="btn btn-primary" style="width: 100%; margin-top: 12px;">+أضافة</button>
+            <div style="width: 20px;"></div>
+            <button id="close" type="button" class="btn btn-primary"
+                style="width: 100%; margin-top: 12px; background-color: gray;">غلق</button>
+        </div>
+        </form>
+
+    </div>
+  
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+            <div id="alert">
+
+            </div>
+
+            <%- include('parts/bar.ejs'); -%>
+
+
+                <div class="card massage" style="flex: 1;">
+                    <div class="card-body">
+                        <i class="fas fa-check-circle"></i>
+                        تمت اضافة الموعد
+                    </div>
+                </div>
+
+                <div style="padding: 3rem 1rem;">
+
+
+                    <div class="mycard" style="position: relative;">
+
+
+                        <div class="flex" style="position: relative;">
+                            <div class="title">
+                                <i class="fas fa-calendar-check" style="margin-left: 10px;"></i>المواعيد
+                            </div>
+
+
+                            <div style="position: absolute; left: 0%; transform: translate(0%,-16%);z-index: 3;">
+                                <a class="sidrbtn" href="/display" onclick="window.open('/display', 
+                                                     'newwindow', 
+                                                     'width=1240,height=680'); 
+                                          return false;"><i style="margin-left: 20px;" class="fas fa-tv"></i>اضهار شاشة
+                                    العرض</a>
+                                <div class="dropdown">
+                                    <button class="dropbtn" style="background-color:#<%= col %> ">
+                                        <%= selected_action%>
+                                    </button>
+                                    <div class="dropdown-content">
+                                        <a onclick="changeAction('الكل')" style="background-color:#3e8e41;">
+                                            الكل
+                                        </a>
+                                        <% for( let index=0; index < actions.length; index++ ) { %>
+                                            <a onclick="changeAction('<%= actions[index].name%>','<%= actions[index].color %>')"
+                                                style="background-color:#<%= actions[index].color %>">
+                                                <%= actions[index].name %>
+                                            </a>
+                                            <% } %>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <hr>
+
+
+
+
+                        <div style="display: flex;">
+
+                            <div class="fjc" style="display: flex;">
+                                <div style="position: relative;">
+                                    <div class="flex">
+                                        <button onclick="shift_right()" class="abtn"><i
+                                                class="fas fa-angle-right"></i></button>
+                                        <input style="text-align:center; border:none;" type="date" class="form-control"
+                                            id="date_selector" value="<%= current_date %>">
+                                        <button onclick="shift_left()" class="abtn"><i
+                                                class="fas fa-angle-left"></i></button>
+                                    </div>
+                                    <hr>
+                                    <div class="maingridlable">
+                                        <div>الاحد</div>
+                                        <div>الاثنين</div>
+                                        <div>الثلاثاء</div>
+                                        <div>الاربعاء</div>
+                                        <div>الخميس</div>
+                                        <div>الجمعة</div>
+                                        <div>السبت</div>
+                                    </div>
+                                    <br>
+                                    <div class="maingrid">
+                                        <% for( let i=0; i < offset; i++ ) { %>
+                                            <a>-</a>
+
+                                            <% } %>
+                                                <% for( let i=0; i < days_count; i++ ) { %>
+                                                    <a onclick="change_date('<%= year+'-'+month+'-'%><%if(i+1 < 10){%><%=`0`+(i+1)%><% }else{%><%= (i+1)%><% } %>')"
+                                                        class="noselect <%  if (today==(year+'-'+month+'-'+((i+1 < 10)?`0${i+1}`:`${i+1}`)))  { %>activetoday<% } %> <%  if (current_date==(year+'-'+month+'-'+((i+1 < 10)?`0${i+1}`:`${i+1}`)))  { %>set<% } %>">
+                                                        <%= i +1 %>
+                                                            <% if (count[i]> 0) { %>
+                                                                <h6 class="tag"
+                                                                    style="width: fit-content; height: fit-content; font-size: 15px; background-color: #<%= col%>;">
+                                                                    <%= count[i] %>
+                                                                </h6>
+                                                                <% } %>
+                                                    </a>
+                                                    <% } %>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div style="width:20px"></div>
+                            <div style="flex: 1;">
+                                <div>
+                                    <div class="card scroll_enabled" style="height: 480px; overflow-y: auto;">
+                                        <div id="dates">
+                                            <%for( let i=0; i < appo.length; i++ ) { %>
+                                                <div id='<%= appo[i].id %>' style="margin: 1rem 1rem 0 1rem;">
+                                                    <div class="trello">
+                                                        <div class="innertrello">
+                                                            <div class="flex">
+                                                                <div style="flex:1;">
+                                                                    <div class="flex">
+                                                                        <div class="trellotag">
+                                                                            <%= (today==appo[i].date
+                                                                                )?'اليوم':""+appo[i].date %> &nbsp&nbsp
+                                                                                <%= tConvert(appo[i].time)%>
+                                                                        </div>
+                                                                        <%if(appo[i].patient_id=="" ) {%>
+                                                                            <div class="trellotag"
+                                                                                style="background-color: orange; margin-right: 10px;">
+                                                                                غير
+                                                                                مسجل
+                                                                            </div>
+                                                                            <% } %>
+                                                                    </div>
+                                                                </div>
+                                                                <div style="display: flex;">
+                                                                    <button class="abtn"
+                                                                        onclick="alert_('<%= appo[i].name%>')"><i
+                                                                            class="fas fa-bell"></i></button>
+                                                                            <%if(appo[i].patient_id !="" ) {%>
+                                                                    <button class="abtn" id="xx<%=appo[i].id%>"
+                                                                        onclick="sginIn('<%= appo[i].id%>')"><i
+                                                                            class="fas fa-file-signature"></i></button>
+                                                                            <% }else{ %> 
+                                                                                <button class="abtn" id="xx<%=appo[i].id%>"
+                                                                                    onclick="add_from_appo('<%= appo[i].name%>','<%= appo[i].action%>','<%= appo[i].phone_number%>','<%= appo[i].id%>')"><i
+                                                                                        class="fas fa-file-signature"></i></button>
+                                                                                <% } %> 
+                                                                    <button class="abtn"
+                                                                        onclick="delete_date('<%= appo[i].id%>')"><i
+                                                                            class="fas fa-trash-alt"></i></button>
+                                                                </div>
+                                                            </div>
+                                                            <div style="margin-top: 3px;">الاسم : <span
+                                                                    style="font-weight: bold; font-size: 18px;">
+                                                                    <%= appo[i].name%>
+                                                                </span></div>
+                                                            <div style="margin-top: 3px;">الرقم : <a
+                                                                    href="tel:<%= appo[i].phone_number%>">
+                                                                    <%= appo[i].phone_number%>
+                                                                </a></div>
+                                                            <div style="margin-top: 3px;">السبب : <%= appo[i].reason%>
+                                                            </div>
+                                                            <div style="margin-top: 3px;">التوجية : <%= appo[i].action%>
+                                                            </div>
+                                                        </div>
+                                                        <div class="sidetag"
+                                                            style="background-color:<%if(appo[i].patient_id=="" ) { %>   orange"
+                                                            <% }else{ %> #007aff" <% } %> >
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                                        </div>
+                                        <div style="margin: 1rem 1rem 0 1rem;">
+                                            <button id="open_appo" class="bigButton bigbtn"
+                                                style="text-align: center; ">
+                                                <li class="fas fa-plus"> </li>
+                                                <div>أضافة موعد جديد</div>
+                                            </button>
+                                        </div>
+                                        <br>
+
+                                    </div>
+                                    <br>
+                                    <div class="flex">
+                                            
+                                    <input type="text" id="search_name" placeholder="بحث" class="form-control" style="width: 200px;"
+                                    aria-label="Text input with segmented dropdown button">
+                                        <div style="width: 12px;"></div>
+                                        <button id="all_btn" onclick="change_date('<%= current_date%>')" type="button" style="width: fit-content;"
+                                            class="btn btn-primary">بحث</button>
+                                        <div style="width: 12px;"></div>
+                                        <div style="width: 120px;"></div>
+                                        <div >
+                                            عدد الحجوزات لهذا اليوم : <span style='color: blue; font-weight: bold;'>
+                                                <%=appo.length %>
+                                            </span>
+                                        </div>
+                                      
+                                            
+                                
+                                        
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+
+
+
+
+                        </div>
+
+
+
+
+
+
+
+                    </div>
+                </div>
+
+                <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+
+<script>
+
+    var socket = io();
+    var d = new Date();
+
+    var current_date = '<%= current_date%>'
+    var sheet_date = '<%= year+"-"+month+"-01"%>'
+
+    var selected_action = '<%= selected_action%>'
+
+    function daysInMonth(anyDateInMonth) {
+        return new Date(anyDateInMonth.getFullYear(),
+            anyDateInMonth.getMonth() + 1,
+            0).getDate();
+    }
+
+
+    function changeAction(_action, col) {
+
+        selected_action = _action;
+
+
+        $('.dropbtn').text(selected_action);
+        $('.dropbtn').css("background-color", "#" + col)
+
+        setTimeout(change_date(current_date), 1000)
+
+    }
+
+
+
+    $('#add_name').keyup(() => {
+
+
+        $('#med').show()
+        socket.emit('search_small', { index: $('#add_name').val() })
+
+    })
+
+
+    socket.on('update_small', (_data) => {
+
+        var data = _data
+
+        console.log(_data)
+
+
+        $('#med').empty();
+
+        if ($('#add_name').val() != '') {
+
+
+
+            for (var i = 0; i < data.length; i++) {
+
+
+                $('#med').append(`
+
+
+                                <div>
+                                    <a onclick='select_name("${data[i].name}","${data[i].phone_number}","${data[i].action}")' class="flex">
+                                        <div><img src="${(data[i].image != "") ? '/' + data[i].image : `/images/unknown.png`}" style="width: 35px; height:35px; margin-left: 20px; border-radius:30px "></div>
+                                        <div>${data[i].name}</div>
+                                
+                                    </a>
+                                </div>
+
+                                 `)
+
+            }
+        }
+    })
+
+
+
+
+
+    function select_name(index, phone, action) {
+        $('#med').empty();
+
+        $('#add_name').val(index.trim())
+        $('#phone').val(phone.trim())
+        $('#action_').val(action)
+
+
+        $('#med').on('click', () => {
+            $('#med').hide()
+        })
+    }
+
+    function add_date() {
+        $.ajax({
+            type: "POST",
+            url: "/add_date",
+            data: {
+                name: $('#add_name').val(),
+                phone_number: $('#phone').val(),
+                action: $('#action_').val(),
+                time: $('#time').val(),
+                reason: $('#reason').val(),
+                date: current_date,
+
+            }
+        }).done(function (o) {
+
+
+            if (o.success == 1) {
+
+                $(".massage").show()
+
+
+            }
+        })
+    }
+
+
+    function delete_date(id) {
+        $.ajax({
+            type: "POST",
+            url: "/delete_date",
+            data: {
+                id: id
+
+
+            }
+        }).done(function (o) {
+
+
+            if (o.success == 1) {
+
+
+
+                $('#' + id).hide(200)
+
+
+            }
+        })
+    }
+    function sginIn(id) {
+        $.ajax({
+            type: "POST",
+            url: "/sginin_date",
+            data: {
+                id: id
+
+
+            }
+        }).done(function (o) {
+
+
+            if (o.success == 1) {
+
+
+
+                $('#xx' + id).css("background-color", "#9eca98")
+
+
+            }
+        })
+    }
+
+    $("#form").submit(function (e) {
+        e.preventDefault();
+        $("#add_appo").hide(100)
+    });
+
+
+    $('.close').on('click', (e) => {
+        $(e.currentTarget).parent("div").parent('div').parent('div').fadeOut(100)
+    })
+    $("#close").on("click", () => {
+        $("#add_appo").hide(200)
+    })
+    $("#open_appo").on("click", () => {
+        $("#add_appo").fadeIn(200)
+    })
+
+
+    function shift_right() {
+        var dt = new Date(sheet_date);
+
+        var newdt = new Date(dt.setMonth(dt.getMonth() + 1))
+
+        var month = (newdt.getMonth() + 1);
+        if (month < 10)
+            month = "0" + month;
+
+        change_date_sheet(newdt.getFullYear() + '-' + month + '-01');
+    }
+    function shift_left() {
+        var dt = new Date(sheet_date);
+
+        var newdt = new Date(dt.setMonth(dt.getMonth() - 1))
+
+        var month = (newdt.getMonth() + 1);
+        if (month < 10)
+            month = "0" + month;
+
+        change_date_sheet(newdt.getFullYear() + '-' + month + '-01');
+    }
+
+
+    function change_date(index) {
+
+
+        window.location.href = `/appointments?current_date=${index}&date_sheet=${index}&selected_action=${selected_action}&name=${$('#search_name').val().trim()}`
+
+    }
+
+    $('#date_selector').on('change', () => {
+
+        change_date($('#date_selector').val())
+    })
+    function change_date_sheet(index) {
+
+
+        window.location.href = `/appointments?current_date=${index}&date_sheet=${index}&selected_action=${selected_action}&name=${$('#search_name').val().trim()}`
+
+    }
+    function alert_(index) {
+        socket.emit('update_alert', { name: index })
+    }
+
+
+    function add_from_appo(name,index,phone,appoid) {
+        window.location.href = "/add?name=" + name+'&action='+index+'&phone='+phone+'&appoid='+appoid;
+    }
+
+
+
+
+    window.onload = function () { setTimeout(function () { document.body.style.opacity = "100"; }, 1); };
+
+</script>
+
+<script>
+
+    $('#content').scroll(function () {
+        sessionStorage.scrollTop = $(this).scrollTop();
+    });
+    $(document).ready(function () {
+        if (sessionStorage.scrollTop != "undefined") {
+            $('#content').scrollTop(sessionStorage.scrollTop);
+        }
+    });
+</script>
+
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<body>
+
+
+    <div class="fixedpanel scroll_enabled" id="doc_panel" style="display: none; width: 500px; height: 650px;">
+        <div class="mycard">
+            <div class="flex">
+                <h5 style="flex: 1;"> فتح قائمة جديدة</h5>
+                <a onclick="doc_Toggle()" class="x close noselect"><i class="fas fa-times-circle"></i></a>
+            </div>
+            <hr>
+            <form action="/add_debit" method="post" enctype="multipart/form-data">
+                <div class="form-group" style="width: 100%;">
+                    <label >الاسم *</label>
+                    <input type="text" class="form-control" name="title" style="background-color: rgb(243, 243, 243);"
+                        id="name" autocomplete="off" required>
+                </div>
+                <div class="form-group" style="width: 100%;">
+                    <label > الشركة</label>
+                    <input type="text" class="form-control" name="company" style="background-color: rgb(243, 243, 243);"
+                        id="price" placeholder="اختياري">
+                </div>
+                <div class="form-group" style="width: 100%;">
+                    <label > رقم الهاتف</label>
+                    <input type="number" class="form-control" name="phone_number"
+                        style="background-color: rgb(243, 243, 243);" id="price" autocomplete="off"
+                        placeholder="اختياري">
+                </div>
+                <button type="button" onclick="scan();" class="btn coolBtn"><i
+                    class="fas fa-print"
+                    style="margin-left: 10px ; color:#ffc107;"></i>الماسح
+                الضوئي</button>
+                <br>
+                <hr>
+                <div class="form-group" style="width: 100%;">
+                    <label >العنصر *</label>
+                    <input type="text" class="form-control" name="name" style="background-color: rgb(243, 243, 243);"
+                        id="name" autocomplete="off" required>
+                </div>
+                <div class="form-group" style="width: 100%;">
+                    <label >المبلغ *</label>
+                    <input type="number" class="form-control" name="price" style="background-color: rgb(243, 243, 243);"
+                        id="price" autocomplete="off" required>
+                </div>
+               
+
+              
+
+                <label > التفاصيل </label>
+                <textarea id="details" class="form-control" name="details" placeholder="اختياري"
+                    style="background-color: rgb(243, 243, 243);resize: none;"></textarea>
+                <br>
+                <hr>
+                <div class="form-group" style="width: 100%;">
+                    <label >تم تسديد المبلغ</label>
+                    <input type="number" class="form-control" name="paid" style="background-color: rgb(243, 243, 243);"
+                        id="price" autocomplete="off" placeholder="اختياري" value=0>
+                </div>
+
+                <label >التسديد بعد *</label>
+                <div class=" radio-toolbar">
+
+
+                    <input id="no" type="radio" name="alert" value="no" checked>
+                    <label class="custom-control-label pointer" for="no"><i class="fas fas fa-ban"
+                            style="margin-left: 10px;"></i>لايوجد</label>
+
+
+                    <input id="d7" type="radio" name="alert" value="d7">
+                    <label class="custom-control-label pointer" for="d7"><i class="fas fa-stopwatch"
+                            style="margin-left: 10px;"></i>7 يوم</label>
+                    <input id="d14" type="radio" name="alert" value="d14">
+                    <label class="custom-control-label pointer" for="d14"><i class="fas fa-stopwatch"
+                            style="margin-left: 10px;"></i>14 يوم</label>
+
+
+                    <input id="d30" type="radio" name="alert" value="d30">
+                    <label class="custom-control-label pointer" for="d30"><i class="fas fa-stopwatch"
+                            style="margin-left: 10px;"></i>30 يوم</label>
+
+
+                </div>
+                <input type="text" class="form-control" name="type" style="display:none;" id="patient_id"
+                    autocomplete="off" required value=0>
+
+                <input class="btn btn-primary" type="submit" style="width: 100%; margin-top: 12px;" value="+أضافة">
+
+            </form>
+
+
+
+
+        </div>
+    </div>
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+            <div id="alert">
+
+            </div>
+
+            <%- include('parts/bar.ejs'); -%>
+
+
+                <% if(mass){ %>
+                    <div class="card massage" style="flex: 1; display: block;">
+                        <div class="card-body">
+                            <i class="fas fa-check-circle"></i>
+                            تم فتح قائمة جديدة بنجاح
+                        </div>
+                    </div>
+                    <% } %>
+                        <% if(mass2 !='' ){ %>
+
+                            <div class="card massage-error" style="flex: 1;display: block;">
+                                <div class="card-body">
+                                    <i class="fas fa-ban"></i>
+                                    <%= mass2%>
+                                </div>
+                            </div>
+                            <% } %>
+
+
+                                <div style="padding: 2.3rem 1rem;">
+
+
+                                    <div class="mycard" style="position: relative">
+
+                                        <div class="title">
+                                            <i class="fas fa-money-check-alt" style="margin-left: 10px;"></i>
+                                           <%= title  %> 
+
+                                            <button onclick="doc_Toggle()" class="btn btn-primary"
+                                                style="margin-right: 30px; border-radius: 10px;"><i
+                                                    style="margin-left: 10px;" class="fas fa-plus-circle"></i>
+                                                انشاء قائمة مدين  جديدة</button>
+
+
+                                            <div class="flex"
+                                                style="position: absolute; left: 0%; transform: translate(9%,-100%);z-index: 3; gap: 10px;">
+
+
+
+                                                <div class="input-group">
+                                                    <select class="form-select" id="type" onchange="search()"
+                                                        name="type">
+                                                        <option selected value=-1>الصنف : الكل</option>
+                                                        <option value=1>الموظفين</option>
+                                                        <option value=2>المشتريات</option>
+                                                        <option value=3>الشركات</option>
+                                                        <option value=0>الاخرى</option>
+
+
+
+
+
+                                                    </select>
+
+
+
+                                                </div>
+
+
+
+                                              
+                                                <div class="input-group">
+                                                    <select class="form-select" id="filter" onchange="search()"
+                                                        name="filter">
+                                                        <option selected value="">الحالة : الجميع</option>
+                                                        <option value="المتاخر"> المتاخر </option>
+
+
+
+
+                                                    </select>
+
+
+
+                                                </div>
+                                                <input type="text" id="search_box" placeholder="بحث ,اسم , باركود"
+                                                    class="form-control"
+                                                    aria-label="Text input with segmented dropdown button"
+                                                    style="width: 300px;">
+                                                <div style="width: 12px;"></div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <hr>
+                                        <div class="card" style="border: none;">
+                                            <div class="card">
+                                                <div class="flex card-body" style="gap:30px; position: relative;">
+                                                    <div>
+                                                        <span> عدد القوائم : <%=creditor.length%>
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span> مجموع المبلغ الكلي : <%=formatCurrancy( total )%>
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span> المدفوع الكلي :
+                                                            <%= formatCurrancy(paid) %>
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span>المتبقي الكلي : <%= formatCurrancy(total - paid) %>
+                                                        </span>
+                                                    </div>
+                                                    <button class="btn btn-primary" style="position: absolute; left:2%; top: 15%;">تنزيل البيانات (Excel)</button>
+                                                </div>
+
+                                              
+
+                                            </div>
+                                        </div>
+
+                                        <div style="height: 12px;"></div>
+
+
+                                        <div class="card">
+                                            <div class="card-body">
+
+
+
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">الاسم</th>
+                                                            <th scope="col">رقم القائمة</th>
+                                                            <th scope="col">التاريخ</th>
+                                                            <th scope="col">السعر الكلي (<%=general.currency %>)</th>
+
+
+                                                            <th scope="col">المدفوع (<%=general.currency %>)</th>
+                                                            <th scope="col"> المتبقي (<%=general.currency %>)</th>
+                                                            <th scope="col">الحالة</th>
+                                                            <th scope="col">الاجراء</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody id="data_tabel">
+
+                                                    </tbody>
+
+
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="height: 24px;"></div>
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+<script defer>
+    function getdatein_ar(index) {
+        var now = new Date(index);
+        var month = (now.getMonth() + 1);
+        var day = now.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+        return day + '/' + month + '/' + now.getFullYear();
+    }
+    function formatCurrancy(price) {
+
+
+        var the_price = price.toFixed(2)
+
+
+        var fractional_number = the_price.toString().split(".")
+
+        var isLower = false
+
+        if (the_price < 0) {
+            isLower = true
+        }
+
+        var StringPrice = Math.abs(fractional_number[0]).toString()
+
+        var StringArray = StringPrice.split("").reverse()
+        var newArray = []
+        var counter = 0;
+
+
+        for (let i = 0; i < StringArray.length; i++) {
+            if (counter == 3) {
+                newArray.push(",")
+                counter = 0
+            }
+            newArray.push(StringArray[i])
+            counter++
+        }
+
+        if (isLower) {
+            newArray.push("-")
+        }
+
+        return newArray.reverse().join("") + ((fractional_number[1] == '00') ? '' : '.' + fractional_number[1])
+
+    }
+
+    $(document).ready(function () {
+        search()
+    });
+
+
+
+    function doc_Toggle() {
+        $('#doc_panel').fadeToggle()
+    }
+    $("#search_box").keyup(function () {
+
+
+
+
+        search()
+
+
+
+
+    })
+
+    
+    $("#filter").change(function () {
+
+
+
+
+        search()
+
+
+
+    })
+
+    function search() {
+        $.ajax({
+            type: "POST",
+            url: "/serach_debit",
+            data: {
+
+                serach: $('#search_box').val(),
+                type: $('#type').val(),
+                filter: $('#filter').val()
+
+            }
+
+
+        }).done(function (o) {
+
+            if (o.success == 1) {
+                $('#data_tabel').empty()
+                for (let i = 0; i < o.creditor.length; i++)
+                    $('#data_tabel').append(`
+                    <tr>
+<td>
+    <div>
+        ${o.creditor[i].name}
+       
+    </div>
+    <i style="color: gray; font-size: 14px;"> ${o.creditor[i].company}</i>
+</td>
+
+<td style="width: 200px;">
+    ${o.creditor[i].bar_code}
+</td>
+<td style="width: 150px;">
+    <div>
+        ${getdatein_ar(o.creditor[i].createdAt)}
+    </div>
+
+</td>
+<td>
+    <div>
+        ${formatCurrancy(o.creditor[i].total_price)}
+    </div>
+
+</td>
+<td>
+    <div>
+        ${formatCurrancy(o.creditor[i].total_paid)}
+    </div>
+</td>
+<td>
+    <div>
+        ${formatCurrancy(o.creditor[i].total_price -
+                        o.creditor[i].total_paid)}
+    </div>
+</td>
+<td>
+    ${(o.creditor[i].late != '') ? '<div>' + o.creditor[i].late + '</div>' : ''}
+
+</td>
+<td>
+    <a class="abtn" style=' padding: 0 20px;'
+        href="/statement?id=${o.creditor[i]._id}&last_page=/debit"><i
+            class="fas fa-eye"><span
+                style="margin-right: 15px;">عرض
+                القائمة </span></i></a>
+</td>
+</tr>
+                `)
+
+            }
+        })
+    }
+
+
+      var images = []
+
+
+
+    var scanRequest = {
+        "use_asprise_dialog": true, // Whether to use Asprise Scanning Dialog
+        "show_scanner_ui": false, // Whether scanner UI should be shown
+        "twain_cap_setting": { // Optional scanning settings
+            "ICAP_PIXELTYPE": "TWPT_RGB" // Color
+        },
+        "output_settings": [{
+            "type": "return-base64",
+            "format": "jpg"
+        }]
+    };
+
+
+
+    function scan() {
+        images = []
+        $("#add_scan").fadeToggle(200)
+        scanner.scan(displayImagesOnPage, scanRequest);
+    }
+
+    /** Processes the scan result */
+    function displayImagesOnPage(successful, mesg, response) {
+        if (!successful) { // On error
+            console.error('Failed: ' + mesg);
+            return;
+        }
+        if (successful && mesg != null && mesg.toLowerCase().indexOf('user cancel') >= 0) { // User cancelled.
+            console.info('User cancelled');
+            return;
+        }
+        var scannedImages = scanner.getScannedImages(response, true, false); // returns an array of ScannedImage
+        for (var i = 0;
+            (scannedImages instanceof Array) && i < scannedImages.length; i++) {
+            var scannedImage = scannedImages[i];
+            images.push((scannedImage.src).toString().split("\n").join(""))
+
+
+            var elementImg = scanner.createDomElementFromModel({
+                'name': 'img',
+                'attributes': {
+                    'class': 'scanned',
+                    'src': scannedImage.src
+                }
+            });
+            (document.getElementById('images') ? document.getElementById('images') : document.body).appendChild(elementImg);
+        }
+    }
+
+
+</script>
+<script src="/scannerjs/scanner.js"></script>
+<script src="/js/scaner.js"></script>
+<script src="/js/open_statement.js"></script>
+
+
+
+
+
+
+
+
+
+
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+<style>
+    #timedate {
+        font: small-caps lighter 20px/150% "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+        text-align: left;
+
+
+
+        color: #fff;
+        border-right: 3px solid #ed1f24;
+        padding: 5px;
+    }
+</style>
+
+<body onLoad="initClock()">
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled stcon">
+
+
+
+
+
+
+            <div class="stconin">
+
+
+                <div>
+
+
+
+
+
+                    <br>
+
+
+                    <div>
+                        <div class="card-body">
+
+                            <i class="fas fa-chalkboard-teacher"></i> الصلاحيات الخاصة بك
+
+                            <div class="grid_start" style="padding: 20px;">
+                                <% if(user.all) { %>
+                                    <a href="/all" class="stbtn noselect"
+                                        style="background-color: rgb(163, 174, 214) ;">
+
+                                        <div class="flex">
+                                            <i class="fas fas fa-user"></i>
+
+                                        </div>
+                                        <div
+                                            style="text-align: center; color: white; position: relative; bottom: -20%;">
+                                            <h5>المراجعين</h5>
+                                        </div>
+
+                                    </a>
+                                    <% } %>
+                                        <% if(user.doctor) { %>
+                                            <a href="/doctor" class="stbtn noselect"
+                                                style="background-color: rgb(70, 127, 213) ; ">
+
+                                                <div class="flex">
+                                                    <i class="fas fa-stethoscope"></i>
+
+                                                </div>
+                                                <div
+                                                    style="text-align: center; color: white; position: relative; bottom: -20%;">
+                                                    <h5>الطبيب</h5>
+                                                </div>
+
+                                            </a>
+                                            <% } %>
+                                                <% if(user.nures) { %>
+                                                    <a href="/nurse" class="stbtn noselect"
+                                                        style="background-color: rgb(178, 149, 209) ; ">
+
+                                                        <div class="flex">
+                                                            <i class="fas fa-user-nurse"></i>
+
+                                                        </div>
+                                                        <div
+                                                            style="text-align: center; color: white; position: relative; bottom: -20%;">
+                                                            <h5>الممرضين</h5>
+                                                        </div>
+
+                                                    </a>
+                                                    <% } %>
+                                                        <% if(user.presentation) { %>
+                                                            <a href="/presentation" class="stbtn noselect"
+                                                                style="background-color: rgb(178, 149, 209) ; ">
+
+                                                                <div class="flex">
+                                                                    <i class="fas fa-bed"></i>
+
+                                                                </div>
+                                                                <div
+                                                                    style="text-align: center; color: white; position: relative; bottom: -20%;">
+                                                                    <h5>الاسرة</h5>
+                                                                </div>
+
+                                                            </a>
+                                                            <% } %>
+                                                                <% if(user.appointment) { %>
+                                                                    <a href="/appointments" class="stbtn noselect"
+                                                                        style="background-color: rgb(149, 197, 209) ; ">
+
+                                                                        <div class="flex">
+                                                                            <i class="fas fa-calendar-check"></i>
+
+                                                                        </div>
+                                                                        <div
+                                                                            style="text-align: center; color: white; position: relative; bottom: -20%;">
+                                                                            <h5>المواعيد</h5>
+                                                                        </div>
+
+                                                                    </a>
+                                                                    <% } %>
+                                                                        <% if(user.pharmacy) { %>
+                                                                            <a href="/pharmacy" class="stbtn noselect"
+                                                                                style="background-color: rgb(85, 178, 96) ; ">
+
+                                                                                <div class="flex">
+                                                                                    <i
+                                                                                        class="fas fa-clinic-medical"></i>
+
+                                                                                </div>
+                                                                                <div
+                                                                                    style="text-align: center; color: rgb(255, 255, 255); position: relative; bottom: -20%;">
+                                                                                    <h5>الصيدلية</h5>
+                                                                                </div>
+
+                                                                            </a>
+                                                                            <% } %>
+                                                                                <% if(user.analytic) { %>
+                                                                                    <a href="/analytic"
+                                                                                        class="stbtn noselect"
+                                                                                        style="background-color: rgb(67, 153, 174) ; ">
+
+                                                                                        <div class="flex">
+                                                                                            <i
+                                                                                                class="fas fa-chart-pie"></i>
+
+                                                                                        </div>
+                                                                                        <div
+                                                                                            style="text-align: center; color: white; position: relative; bottom: -20%;">
+                                                                                            <h5>التحليلات</h5>
+                                                                                        </div>
+
+                                                                                    </a>
+                                                                                    <% } %>
+                                                                                        <% if(user.accounts){ %>
+                                                                                            <a href="/accounts"
+                                                                                                class="stbtn noselect"
+                                                                                                style="background-color: rgb(65, 108, 72) ; ">
+
+                                                                                                <div class="flex">
+                                                                                                    <i
+                                                                                                        class="fas fa-calculator"></i>
+
+                                                                                                </div>
+                                                                                                <div
+                                                                                                    style="text-align: center; color: white; position: relative; bottom: -20%;">
+                                                                                                    <h5>الحسابات</h5>
+                                                                                                </div>
+
+                                                                                            </a>
+                                                                                            <% } %>
+                                                                                                <% if(user.setting){ %>
+                                                                                                    <a href="/settings/action"
+                                                                                                        class="stbtn noselect"
+                                                                                                        style="background-color: rgb(165, 144, 205) ; ">
+
+                                                                                                        <div
+                                                                                                            class="flex">
+                                                                                                            <i
+                                                                                                                class="fas fa-cog"></i>
+
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            style="text-align: center; color: white; position: relative; bottom: -20%;">
+                                                                                                            <h5>الاعدادات
+                                                                                                            </h5>
+                                                                                                        </div>
+
+                                                                                                    </a>
+                                                                                                    <% } %>
+
+                            </div>
+
+
+
+
+
+                        </div>
+
+                    </div>
+                    <br>
+                    <% if(user.accounts) {%>
+                        <div class="card-body">
+
+                            <i class="fas fa-chalkboard-teacher"></i> تقرير الحسابات
+
+                            <div class="grid_start">
+                                <div class="noselect state_box ">
+                                    <div>الصندوق</div>
+                                    <i>الكلي</i>
+                                    <h5>
+                                        <%= formatCurrancy(box) %> 
+                                        <%= general.currency %>
+                                    </h5>
+                                </div>
+                                <div class="noselect state_box ">
+                                    <div>المتاخرين دائن</div>
+                                   
+                                    <h5>
+                                        <%= cre_late %> 
+                                     
+                                    </h5>
+                                </div>
+                                <div class="noselect state_box ">
+                                    <div>المتاخرين مدين</div>
+                                   
+                                    <h5>
+                                        <%= debit_late %> 
+                                      
+                                    </h5>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <% } %>
+                </div>
+            </div>
+
+            <div style="width: 100%; background-color: white">
+                <div class="flex" style="padding: 20px;">
+                    <div style="flex:1;">
+                        <div class="grid_start">
+
+
+
+                            <img style=" width: 55px; height: 55px; border-radius: 90px;"
+                                src="/<% if( user.image != '') { %><%= user.image%> <% }else{ %>images/unknown.png <% } %>">
+                            <div>
+                                <span style="margin-left: 10px; font-weight: bold;">
+                                    <%= user.name %>
+                                        <div style="font-size: x-small; color:#38a2d6 ;">
+                                            <a href="/logeout" class="pointer">
+                                                <i class="fas fa-door-open"></i><span style="font-size: xx-small;">تسجيل
+                                                    الخروج</span></a>
+                                        </div>
+                                </span>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div>
+
+                        <a href="/logeout" class="pointer">
+                            <i style="font-size: 30px; text-align: left;" class="fas fa-cog"></i></a>
+                    </div>
+
+
+                </div>
+                <h4 style="text-align: center;">اهلا بك من جديد !</h4>
+
+                <div
+                    style="background: linear-gradient(0deg,  <%= general.color %> 0%,<%= general.color %>1a 50%, rgba(254,254,254,1) 100%); width: 90%; padding: 20px;  border-radius: 5px; margin: 0 auto; text-align: center;">
+                    <div class="flex fjc">
+                        <img src="/images/<%=  general.img %>" style="width: 150px; max-height: 150px;">
+
+                    </div>
+                    <h5>
+                        <%= general.name %>
+                    </h5>
+                    <div>
+                        <%= general.name_en %>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: right; margin: 24px; ">
+
+                    <div id="timedate" style="color: black;">
+                        <a id="mon">January</a>
+                        <a id="d">1</a>,
+                        <a id="y">0</a><br />
+                        <a id="s">12</a> :
+                        <a id="m">00</a>:
+                        <a id="h">00</a>
+                        <a id="mi" style="display: none;">000</a>
+                    </div>
+                    <div style="width: 60px;"></div>
+                </div>
+                <div style="padding: 10px;  text-align: center;">
+
+                    <h6 style="text-align: right;">صلاحيات اضافية</h6>
+                    <div style="display: flex; gap:10px;">
+                        <div class="stbtn noselect"
+                            style="background-color: rgb(206, 121, 99); width: 80px; height: 90px; border-radius: 6px; color: white;">
+                            <div style="padding: 20px;">
+                                <li class="fas fa-trash button_user"></li>
+                                <h6 style="margin-top: 10px;">مسح</h6>
+                            </div>
+                        </div>
+                        <div class="stbtn noselect"
+                            style="background-color: rgb(164, 204, 229); width: 80px; height: 90px; border-radius: 6px; color: white;">
+                            <div style="padding: 20px;">
+                                <li class="fas fa-clinic-medical"></li>
+                                <h6 style="margin-top: 10px;">اضافة</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid_start fjc"
+                        style=" border:2px solid rgba(207, 81, 81,0.8); width: 98%; height: 50px; border-radius: 6px; color: rgb(207, 54, 54); margin: 30px auto; padding: 16px; font-size: 18px;">
+
+                        <i class="fab fa-youtube"></i>
+                        <h6>شاهد الكورس التعليمي</h6>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+
+<script>
+
+
+
+    Number.prototype.pad = function (n) {
+        for (var r = this.toString(); r.length < n; r = 0 + r);
+        return r;
+    };
+
+    function updateClock() {
+        var now = new Date();
+        var milli = now.getMilliseconds(),
+            sec = now.getSeconds(),
+            min = now.getMinutes(),
+            hou = now.getHours(),
+            mo = now.getMonth(),
+            dy = now.getDate(),
+            yr = now.getFullYear();
+        var months = ["كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول", "تشرين الأول", "تشرين الثاني", "كانون الأول"];
+        var tags = ["mon", "d", "y", "h", "m", "s", "mi"],
+            corr = [months[mo], dy, yr, hou.pad(2), min.pad(2), sec.pad(2), milli];
+        for (var i = 0; i < tags.length; i++)
+            document.getElementById(tags[i]).firstChild.nodeValue = corr[i];
+    }
+
+    function initClock() {
+        updateClock();
+        window.setInterval("updateClock()", 1);
+    }
+
+
+
+
+
+// END CLOCK SCRIPT
+</script>
+
+
+
+</html>

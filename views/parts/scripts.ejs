@@ -1,0 +1,120 @@
+<script src="/js/jquery.js"></script>
+
+<script src="/js/admin.js"></script>
+<script src="/js/bootstrap-tagsinput.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+ 
+
+
+<script>
+
+
+
+
+
+$('#side_nav').scroll(function () {
+    sessionStorage.scrollTop = $(this).scrollTop();
+});
+$(document).ready(function () {
+    if (sessionStorage.scrollTop != "undefined") {
+        $('#side_nav').scrollTop(sessionStorage.scrollTop);
+    }
+});
+   
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+
+    function setCookie(cName, cValue) {
+        let date = new Date();
+        date.setTime(date.getTime() + (100 * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = cName + "=" + cValue + "; " + expires + "; path=/";
+    }
+    var resize = false;
+
+
+    $(document).ready(() => {
+
+       
+
+
+
+        if (getCookie("drawer") == "true") {
+            $('.snuip').css('width', 'fit-content')
+
+            $("#side_nav").css('width', "220px")
+
+            $('.snuipt').show()
+            $('.p').removeClass('fas fa-angle-double-left')
+            $('.p').addClass('fas fa-angle-double-right')
+
+            resize = true;
+        }
+        else {
+
+            console.log("dwdfwfw")
+
+            $('.snuipt').hide()
+
+            $("#side_nav").css('width', "64px")
+
+            $('.snuip').css('width', '100%')
+            $('.p').removeClass('fas fa-angle-double-right')
+            $('.p').addClass('fas fa-angle-double-left')
+
+
+            resize = false;
+        }
+
+
+    })
+
+
+
+
+
+
+    function big() {
+
+        if (resize) {
+
+
+            $('.snuipt').hide()
+            console.log('cc')
+            $("#side_nav").animate({ width: "64px" }, 2, () => {
+
+                $('.snuip').css('width', '100%')
+                $('.p').removeClass('fas fa-angle-double-right')
+                $('.p').addClass('fas fa-angle-double-left')
+
+            });
+
+            resize = false;
+            setCookie("drawer", false)
+        }
+        else {
+
+
+
+
+            console.log('cc')
+            $("#side_nav").animate({ width: "220px" }, 2, () => {
+
+                setTimeout(() => $('.snuip').css('width', 'fit-content').show(), 200)
+                setTimeout(() => $('.snuipt').show(), 200)
+
+                $('.p').removeClass('fas fa-angle-double-left')
+                $('.p').addClass('fas fa-angle-double-right')
+
+            });
+            resize = true;
+            setCookie("drawer", true)
+        }
+    }
+</script>
+

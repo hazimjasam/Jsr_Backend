@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<style>
+    .scanned {
+        width: 100px;
+    }
+</style>
+
+<body>
+
+
+    <div class="card mycard fixedpanel" id="add_doc" style="display: none;">
+        <div class="card massage-error" style="flex: 1; display: none;">
+            <div class="card-body flex">
+                <i class="fas fas fa-ban"></i>
+                <div id="err">رقم الغرفة في هذا الطابق موجود بالفعل</div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <div>
+                اضافة سـجل جديد
+            </div>
+
+            <hr>
+
+            <form autocomplete="on">
+
+                <div class="form-group">
+                    <label >الشكوى الاساسية</label>
+                    <input id="name_ill" type="text" class="form-control" name="name"
+                        style="background-color: rgb(243, 243, 243);" required>
+                </div>
+                <div class="form-group" style="display: none;">
+
+                    <input id="id" type="text" class="form-control" name="id" value=<%=patients._id%>
+                    style="background-color: rgb(243, 243, 243);" required>
+                </div>
+                <label >النوع</label>
+                <div class="input-group">
+                    <select class="form-select" id="type"
+                        onchange=" roomtype()" name="type">
+                        <option value="مراجعة">الزيارات</option>
+                        <option value="العرض السريري">العرض السريري</option>
+
+
+
+                    </select>
+
+
+
+                </div>
+                <div id="sleep_det" style="display: none;">
+
+                    <div class="form-group">
+                        <label >رقم الطابق</label>
+                        <input id="floor" type="number" class="form-control" name="floor"
+                            style="background-color: rgb(243, 243, 243);">
+                    </div>
+                    <div class="form-group">
+                        <label >رقم الغرفة</label>
+                        <input id="room" type="number" class="form-control" name="room"
+                            style="background-color: rgb(243, 243, 243);">
+                    </div>
+                    <div class="form-group">
+                        <label >رقم السرير</label>
+                        <input id="bed" type="number" class="form-control" name="bed"
+                            style="background-color: rgb(243, 243, 243);">
+                    </div>
+                </div>
+                <div class="flex">
+                    <button type="button" onclick="send_doc()" class="btn btn-primary"
+                        style="width: 100%; margin-top: 12px;">+أضافة</button>
+                    <div style="width: 20px;"></div>
+                    <button id="close" type="button" class="btn btn-primary"
+                        style="width: 100%; margin-top: 12px; background-color: gray;">غلق</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <div class="card mycard fixedpanel " id="add_recipe" style="display: none; width: 650px;">
+        <div class="scroll_enabled" style="height: 600px;">
+
+
+            <div class="flex">
+                <h5 style="flex: 1;"> <i class="fas fa-notes-medical"
+                        style="margin-left: 10px; color: #007aff;"></i>اضافة وصفة طبية</h5>
+                <a class="x close noselect"><i class="fas fa-times-circle"></i></a>
+            </div>
+
+            <hr>
+
+            <div class="card" style="background-color: #fdfdfd;">
+
+                <div style="padding: 10px;">
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr; text-align: center; background-color: rgb(240, 240, 240); border-radius: 5px; padding: 5px;">
+                        <div style="flex: 1; margin-top: 20px;">
+                            <div style="font-size: 20px; font-weight: bold; color: blue;">
+                                <%= user.name %>
+                            </div>
+                            <div style="height: 12px;"></div>
+                            <div>
+                                <%= user.job %>
+                            </div>
+                        </div>
+                        <div>
+                            <img src='/images/<%= general.img  %>' style="width: 60px; max-height: 60px;">
+                            <div>
+                                <%= general.name %>
+                            </div>
+                            <div>
+                                <%= general.name_en %>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <div style=" min-height: 400px; ">
+                        <hr style="border: 1px solid rgb(0, 47, 150); opacity: 1;">
+                        <div
+                            style="display: grid; grid-template-columns: 2fr 1fr ; text-align: right; padding: 0 0.5rem;">
+                            <div>
+                                <%= 'اسم المريض : ' + patients.name %>
+                            </div>
+                            <div>
+                                <%= 'الـعمر  : ' + calculateAge(patients.age) %>
+                            </div>
+                            <div>
+                                <%= 'الـتاريخ  : ' + patients.name %>
+                            </div>
+                        </div>
+                        <hr style="border: 1px solid rgb(0, 47, 150); opacity: 1;">
+
+                        <div>
+
+                            <div id="medlist">
+
+                            </div>
+
+
+                            <div class="card flex" style="margin: 1rem;">
+
+
+                                <li class="card-body">
+                                    <div class="flex" style="position: relative;">
+
+                                        <div style="flex: 1;">
+                                            <input class="medname form-control" placeholder="اسم الدواء">
+                                            <div id="med" class="noselect pointer">
+
+                                            </div>
+                                        </div>
+
+                                        <div style="width:10px"></div>
+                                        <div><input type="text" class="medvalue form-control" placeholder="التكرار ">
+                                        </div>
+                                    </div>
+                                    <div style="height:10px"></div>
+                                    <textarea placeholder="ملاحظة " class="mednote form-control"></textarea>
+                                </li>
+                                <a class="btn btn-primary" onclick="add_med()">+اضافة دواء </a>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+        </div>
+        <div class="flex">
+            <button onclick="add_recipe_item()" class="btn btn-primary"
+                style="width: 100%; margin-top: 12px;">+أضافة</button>
+            <div style="width: 20px;"></div>
+            <button id="close" onclick="open_recipe()" class="btn btn-primary"
+                style="width: 100%; margin-top: 12px; background-color: gray;">غلق</button>
+        </div>
+
+
+    </div>
+
+
+    <div class="card mycard fixedpanel" id="add_scan" style="display: none; max-width:500px;">
+        <div class="scroll_enabled" style="max-height:500px;">
+
+            <div class="flex">
+                <h5 style="flex: 1;"> <i class="fas fa-print" style="margin-left: 10px ; color:#ffc107;"></i>اضافة صور
+                    من الماسح الضوئي</h5>
+                <a class="x close noselect"><i class="fas fa-times-circle"></i></a>
+            </div>
+
+            <hr>
+
+            <div>
+
+                <div class="form-group">
+                    <label >ملاحظة</label>
+                    <textarea id="scan_note" type="text" class="form-control"
+                        style="background-color: rgb(243, 243, 243);" placeholder="اختياري"></textarea>
+                </div>
+                <div id="images"
+                    style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-gap: 20px; padding: 1rem 1rem; margin-top: 10px;">
+                </div>
+
+
+            </div>
+            <div class="flex">
+                <button onclick="add_sacn_item()" class="btn btn-primary"
+                    style="width: 100%; margin-top: 12px;">+أضافة</button>
+                <div style="width: 20px;"></div>
+                <button id="close" type="button" class="close btn btn-primary"
+                    style="width: 100%; margin-top: 12px; background-color: gray;">غلق</button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="card mycard fixedpanel" id="med_details" style="display: none;">
+        <div class="card-body" style="padding: 0;">
+
+            <h6 class="bold">الوصف:</h6>
+            <h6 id="med_det">لايوجد معلومات</h6>
+            <br>
+            <h6 class="bold">لايعطى في الحالات التالية:</h6>
+            <h6 id="med_not">لايوجد معلومات</h6>
+            <br>
+            <h6 class="bold">الاعراض الجانبية :</h6>
+            <h6 id="med_side">لايوجد معلومات</h6>
+            <br>
+            <h6 class="bold">المادة الفعالة :</h6>
+            <h6 id="med_eff">لايوجد معلومات</h6>
+        </div>
+    </div>
+
+
+    <div class="card mycard fixedpanel" id="add_appo" style="display: none;">
+        <div>
+
+            <div class="flex">
+                <h5 style="flex: 1;"> <i class="fas fa-clock" style="margin-left: 10px; color: #dd4d4d;"></i>اضافة موعد
+                </h5>
+                <a class="x close noselect"><i class="fas fa-times-circle"></i></a>
+            </div>
+            <hr>
+
+            <form id="form" autocomplete="off">
+
+                <div class="form-group">
+                    <label >ملاحظة</label>
+                    <textarea id="appo_note" type="text" class="form-control"
+                        style="background-color: rgb(243, 243, 243);" placeholder="اختياري"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>الوقت</label>
+                    <input id="time" type="time" class="form-control" name="main"
+                        style="background-color: rgb(243, 243, 243);" required>
+                </div>
+
+                <div class="form-group">
+                    <label>التاريخ</label>
+                    <input id="appo_date" type="date" class="form-control" name="main"
+                        style="background-color: rgb(243, 243, 243);" placeholder="أختياري" required>
+                </div>
+
+
+
+
+
+        </div>
+        <div class="flex">
+            <button onclick="add_date()" class="btn btn-primary" style="width: 100%; margin-top: 12px;">+أضافة</button>
+
+
+        </div>
+        </form>
+
+    </div>
+    <div class="card mycard fixedpanel" id="add_images" style="display: none;">
+        <div>
+
+            <div class="flex">
+                <h5 style="flex: 1;"> <i class="fas fa-clock" style="margin-left: 10px; color: #dd4d4d;"></i>اضافة موعد
+                </h5>
+                <a class="x close noselect"><i class="fas fa-times-circle"></i></a>
+            </div>
+            <hr>
+
+            <div>
+
+                <div class="form-group">
+                    <label >ملاحظة</label>
+                    <textarea id="img_note" type="text" class="form-control"
+                        style="background-color: rgb(243, 243, 243);" placeholder="اختياري"></textarea>
+                </div>
+                <div>
+                    <input class="form-control" type="file" id="imagefile" name="files" accept="image/x-png,image/jpeg"
+                        multiple>
+                </div>
+
+
+
+
+
+            </div>
+            <div class="flex">
+                <button onclick="add_images_item()" class="btn btn-primary"
+                    style="width: 100%; margin-top: 12px;">+أضافة</button>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" patients_age="<%= age  %>" user_name="<%= user.name%>" patient_id="<%= patients._id%>"
+            patients_name='<%= patients.name%>' patients_action='<%= patients.action%>'
+            patients_phone_number="<%= patients.phone_number%>" class="scroll_enabled">
+
+
+            <div id="alert">
+
+            </div>
+
+            <%- include('parts/bar.ejs'); -%>
+
+                <div style="padding: 3rem 1rem;">
+
+
+                    <div class="mycard adaptiveflex" style="position: relative;">
+                        <div style="flex: 4;">
+                            <div class="flex" style="position: relative;">
+                                <div class="title" style="margin-right: 30px; font-size: 25px; margin-bottom: 0;">
+                                    <%= patients.name%>
+                                        <div class='note'>
+                                            <%= patients.bar_code %>
+                                        </div>
+                                </div>
+                                <div style="position: absolute; left: 0%; transform: translate(0%,0%);z-index: 3;">
+                                    <button class="abtn" onclick="edit_patient('<%= patients.id%>')"><i
+                                            class="fas fa-pen"></i></button>
+                                    <% if(user.accounts) {%>
+                                        <button class="abtn" onclick="patient_account('<%= patients.id%>')"><i
+                                                class="fas fa-wallet"></i></button>
+                                        <% } %>
+
+
+
+                                            <div class="dropdown">
+                                                <button class="dropbtn" id="<%= patients._id %>"
+                                                    style="background-color:#<%= patients.action_color %>">
+                                                    <%= patients.action %>
+                                                </button>
+                                                <div class="dropdown-content">
+                                                    <% for( let index=0; index < actions.length; index++ ) { %>
+                                                        <a onclick="changeAction('<%= patients._id%>','<%= actions[index].name%>')"
+                                                            style="background-color:#<%= actions[index].color %>">
+                                                            <%= actions[index].name %>
+                                                        </a>
+                                                        <% } %>
+
+                                                </div>
+
+
+                                            </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="card" style="border: none;">
+                                <div class="card-body">
+
+
+
+                                    <div class="flex">
+
+                                        <div>
+                                            <div class="flex">
+                                                <h4>العمر : </h4>
+                                                <h4 class="systemcolor">
+                                                    <%= calculateAge(patients.age)%>
+                                                </h4>
+                                            </div>
+                                            <h6>( <%= "تاريخ الميلاد :" +patients.age %> )</h6>
+
+                                        </div>
+                                        <div style="width: 5rem;"></div>
+                                        <div>
+                                            <div class="flex">
+                                                <h4>الجنس : </h4>
+                                                <h4 class="systemcolor">
+                                                    <%= (patients.sex==1)?"ذكر":"انثى" %>
+                                                </h4>
+                                            </div>
+
+
+                                        </div>
+
+                                        <img style="border: 2px solid rgb(145, 145, 145); border-radius: 400px; position: absolute ; left: 0%; width: 150px; height: 150px; transform: translate(10%,0%);"
+                                            src='<%= (patients.image != "")? "/" +patients.image:"/images/unknown.png" %>'>
+
+                                    </div>
+                                    <br>
+                                    <div class="flex">
+                                        <div>
+                                            <div><i class="fas fa-phone"></i><a href="tel:<%= patients.phone_number %>"
+                                                    style="margin-right: 20px; ">
+                                                    <%= patients.phone_number %>
+                                                </a>
+                                            </div>
+                                            <div style="height: 10px;"></div>
+                                            <div><i class="fas fa-map-marked-alt"></i><span
+                                                    style="margin-right: 20px; ">
+                                                    <%= patients.residence %>
+                                                </span></div>
+                                            <div style="height: 10px;"></div>
+                                            <div><i class="fas fa-user"></i><span style="margin-right: 20px; ">
+                                                    <%= patients.nationality %>
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                        <div style="width: 200px;"></div>
+                                        <div>
+                                            <div><i class="fas fa-venus-mars"></i><span style="margin-right: 20px; ">
+                                                    <%= patients.marital_Status %>
+                                                </span>
+                                            </div>
+                                            <div style="height: 10px;"></div>
+                                            <div><i class="fas fa-users"></i><span style="margin-right: 20px; ">
+                                                    <%= patients.number_Children %>
+                                                </span></div>
+                                            <div style="height: 10px;"></div>
+                                            <div><i class="fas fa-briefcase"></i><span style="margin-right: 20px; ">
+                                                    <%= patients.occupation %>
+                                                </span>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <% if(patients.Attached !='' ){ %>
+                                        <div style="height: 20px;"></div>
+                                        <div><a href="tel:<%= patients.Attached %>" style="margin-right: 20px; ">
+                                                رقم المرافق الاول : <%= patients.Attached %>
+                                            </a>
+                                        </div>
+                                        <% } %>
+                                            <% if(patients.Attached2 !='' ){ %>
+                                                <div><a href="tel:<%= patients.Attached2 %>"
+                                                        style="margin-right: 20px; ">
+                                                        رقم المرافق الثاني : <%= patients.Attached2 %>
+                                                    </a>
+                                                </div>
+                                                <% } %>
+
+                                                    <div style="height: 20px;"></div>
+                                                    <div class="flex">
+
+                                                        <div style="flex: 1;"><span style="margin-right: 20px; ">
+                                                                فصيلة الدم : <span class="tag"
+                                                                    style="background-color: #007aff; color: white !important;">
+                                                                    <%=discover_blood_type(patients.blood_type) %>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+
+                                                        <div><span style="margin-right: 20px; ">
+                                                                <%= "اخر تحديث من قبل : " +patients.data_entry_name %>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <hr>
+
+                                                    <div>
+
+                                                        <div>
+                                                            <div>
+                                                                <h5>التاريخ الطبي</h5>
+                                                                <div style="display:none" id="his">
+                                                                    <%= patients.history %>
+                                                                </div>
+                                                                <input id="history" type="text"
+                                                                    style="width: 100%; height: 90px;"
+                                                                    data-role="tagsinput">
+                                                                <div class="scroll_enabled flexwidth"
+                                                                    style="display:flex;  overflow-y:hidden; white-space:nowrap; height: 45px; overflow-x:auto;">
+                                                                    <span>اختصارات :</span>
+
+                                                                    <div>
+                                                                        <% for( let index=0; index < ill.length; index++
+                                                                            ) { %>
+
+                                                                            <span class="tag pointer marg"
+                                                                                onclick="putaill('<%= ill[index].name  %>')">
+                                                                                <%= ill[index].name %>
+                                                                            </span>
+
+                                                                            <% } %>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div style="margin-top: 10px;">
+                                                                <h5>الملاحظات</h5>
+
+                                                                <textarea id="note" class="form-control"
+                                                                    id="exampleFormControlTextarea1" rows="3"
+                                                                    placeholder="اختياري"><%= patients.note %></textarea>
+
+                                                            </div>
+                                                            <div></div>
+
+                                                        </div>
+                                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="height: 12px; width: 3rem;"></div>
+
+                        <% if(user.doctor || user.nures) {%>
+                            <div class="mycard sidePage">
+                                <div class="flex scroll_enabled"
+                                    style=" display:flex; width: 100%; overflow-y:hidden; white-space:nowrap; height: fit-content; overflow-x:scroll; background-color:#ffffff ;">
+
+                                    <button onclick="add_doc()" class="add_new_doc"> +اضافة سجل جديد</button>
+                                    <% for( let index=0; index < record.length; index++ ) { %>
+                                        <button id="<%= record[index]._id %>"
+                                            style="<% if (record[index].type && !record[index].sign_out ){ %>background-color: #49d759;<% } else if(record[index].type && record[index].sign_out){ %>background-color: #ffc6c6;<% } %> "
+                                            onclick="select_doc('<%= record[index].name %>','<%= record[index]._id %>')"
+                                            class="add_new_doc docbtn">
+                                            <div style="text-align: center;">
+                                                <%= record[index].name %>
+                                            </div>
+                                            <div style="font-weight:lighter;">
+                                                <%=getdatein_ar(new Date( record[index].open_date)) %>
+                                            </div>
+                                        </button>
+
+                                        <% } %>
+
+
+                                </div>
+
+                                <div class="card" style="border: none; ">
+
+                                    <div class="card-body">
+
+                                        <div class="scroll_enabled" id="items" style="overflow-y: auto; height: 500px;">
+
+
+
+
+                                        </div>
+                                        <hr>
+                                        <% if(user.doctor){ %>
+                                            <div id="tools" style="display: none;">
+                                                <div class="flex">
+                                                    <button id="all_btn" onclick="add_note_item()" type="button"
+                                                        class="btn btn-primary"><i
+                                                            class="fas fa-clipboard"></i>اضافة</button>
+                                                    <div style="width: 12px;"></div>
+                                                    <input type="text" id="note_box" placeholder="ملاحظة"
+                                                        class="form-control"
+                                                        aria-label="Text input with segmented dropdown button">
+                                                    <div style="width: 12px;"></div>
+
+                                                </div>
+                                                <br>
+                                                <div class="flex fjc">
+                                                    <button id="all_btn" onclick="open_recipe()" type="button"
+                                                        class="btn coolBtn"><i class="fas fa-notes-medical"
+                                                            style="margin-left: 10px; color: #007aff;"></i>وصفة
+                                                        طبية</button>
+                                                    <div style="width: 12px;"></div>
+                                                    <button id="all_btn" onclick="open_date()" type="button"
+                                                        class="btn coolBtn"><i class="fas fa-clock"
+                                                            style="margin-left: 10px; color: #dd4d4d;"></i>مــوعد</button>
+                                                    <div style="width: 12px; "></div>
+                                                    <button id="all_btn" onclick="open_imge()" type="button"
+                                                        class="btn coolBtn"><i class="fas fa-photo-video"
+                                                            style="margin-left: 10px; color: #49d759;"></i>الصور</button>
+                                                    <div style="width: 12px; "></div>
+                                                    <button type="button" onclick="scan();" class="btn coolBtn"><i
+                                                            class="fas fa-print"
+                                                            style="margin-left: 10px ; color:#ffc107;"></i>الماسح
+                                                        الضوئي</button>
+
+
+                                                </div>
+                                            </div>
+                                            <% } %>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <% } %>
+                    </div>
+                    <div style="height: 12px;"></div>
+
+                    <div style="height: 24px;"></div>
+
+
+
+                </div>
+        </div>
+
+        <%- include('parts/scripts.ejs'); -%>
+    </div>
+</body>
+
+
+<script src="/scannerjs/scanner.js"></script>
+<script src="/js/print-html-element.min.js"></script>
+
+<script>
+    <% if (selected_doc != '') {%>
+        $(document).ready(() => {
+            select_doc('<%= selected_doc %>')
+        })
+        <% } %>
+</script>
+
+<script src="/js/single_patient.js"></script>
+
+<script src="/js/savepagepostion.js"></script>
+
+
+</html>

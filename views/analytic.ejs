@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/chart.min.js"></script>
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<style>
+
+</style>
+
+<body>
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+            <div id="alert">
+
+            </div>
+
+            <%- include('parts/bar.ejs'); -%>
+
+                <div style="padding: 3rem 1rem;">
+
+
+
+
+                    <div class="mycard2" style="position: relative; background-color:none;">
+
+
+                        <div class="flex" style="position: relative;">
+                            <div class="title">
+                                عامة
+                            </div>
+                            <div style="position: absolute; left: 0%; transform: translate(0%,-16%);z-index: 3;">
+                                <div style="direction: ltr;">
+                                    <select class="form-select" id="type_warehouce"
+                                        name="type" style="width: 200px;">
+                                        <option value="30">اخر 30 يوم</option>
+                                        <option value="30">اخر 90 يوم</option>
+                                        <option value="30">custom</option>
+
+
+
+
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+
+
+
+                        </div>
+
+                        <hr>
+
+                        <div class="grid_anyl">
+
+                            <div class="bigButton" style="width: 100%">
+                                <br>
+                                <canvas id="myChart2" width="1" height="1"></canvas>
+                                <br>
+                                <br>
+
+                                <div class="flex percentage">
+                                    <div>
+                                        <div>
+                                            <span>%</span> 33
+                                        </div>
+                                        <div class="flex" style="font-size:small;">
+                                            <div class="ball"></div>نسبة المراجعين الذكور
+                                        </div>
+                                    </div>
+                                    <div style="width: 50px;"></div>
+                                    <div>
+                                        <div>
+                                            <span>%</span> 68
+                                        </div>
+                                        <div class="flex" style="font-size:small;">
+                                            <div class="ball" style="background-color:rgba(255, 99, 132, 1) ;"></div>
+                                            نسبة المراجعين الاناث
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="bigButton" style="width: 100%;  grid-column: span 3; ">
+                                <div>
+
+                                    <canvas id="myChart3" style="flex: 1;" width='8' height="3"></canvas>
+                                </div>
+                                <br>
+                                <div class="flex percentage">
+                                    <div>
+                                        <div>
+                                            <span>%</span> 33
+                                        </div>
+                                        <div class="flex" style="font-size:small;">
+                                            متوسط عدد الزوار شهريًا
+                                        </div>
+                                    </div>
+                                    <div style="width: 50px;"></div>
+                                    <div>
+                                        <div>
+                                            <span>%</span> 68
+                                        </div>
+                                        <div class="flex" style="font-size:small;">
+                                            <div class="ball" style="background-color:rgba(255, 99, 132, 1) ;"></div>
+                                            نسبة المراجعين الاناث
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div>
+                                <div>
+                                    <div style="border-radius: 10px; position: relative; width: 100%;">
+                                        <div class="card-body"
+                                            style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                            <div
+                                                style="background-color: rgb(113, 224, 93); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                <div class="card-title">
+                                                    عدد الزيارات
+                                                </div>
+                                                <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                        class="fab fa-sellsy"></i></div>
+                                            </div>
+                                            <div
+                                                style="background-color: rgb(77, 147, 94); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                2
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div>
+                                <div>
+                                    <div style="border-radius: 10px; position: relative; width: 100%;">
+                                        <div class="card-body"
+                                            style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                            <div
+                                                style="background-color: rgb(136, 110, 227); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                <div class="card-title">
+                                                    عدد المرضى المسجلين الكلي
+                                                </div>
+                                                <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                        class="fab fa-sellsy"></i></div>
+                                            </div>
+                                            <div
+                                                style="background-color: rgb(113, 90, 195); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                2
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div>
+                                <div>
+                                    <div style="border-radius: 10px; position: relative; width: 100%;">
+                                        <div class="card-body"
+                                            style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                            <div
+                                                style="background-color: rgb(136, 110, 227); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                <div class="card-title">
+                                                    عدد الحجوزات
+                                                </div>
+                                                <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                        class="fab fa-sellsy"></i></div>
+                                            </div>
+                                            <div
+                                                style="background-color: rgb(113, 90, 195); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                2
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div>
+                                <div>
+                                    <div style="border-radius: 10px; position: relative; width: 100%;">
+                                        <div class="card-body"
+                                            style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                            <div
+                                                style="background-color: rgb(136, 110, 227); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                <div class="card-title">
+                                                    عدد المرضى المسجلين الكلي
+                                                </div>
+                                                <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                        class="fab fa-sellsy"></i></div>
+                                            </div>
+                                            <div
+                                                style="background-color: rgb(113, 90, 195); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                2
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <br>
+
+                    <div class="mycard2" style="position: relative; background-color:none;">
+
+
+                        <div class="flex" style="position: relative;">
+                            <div class="title">
+                                الصيدلية
+                            </div>
+
+
+
+
+
+
+                        </div>
+
+                        <hr>
+
+                        <div class="grid_anyl">
+
+
+
+
+                            <div>
+                                <div>
+                                    <div style="border-radius: 10px; position: relative; width: 100%;">
+                                        <div class="card-body"
+                                            style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                            <div
+                                                style="background-color: rgb(113, 224, 93); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                <div class="card-title">
+                                                    عدد الزيارات
+                                                </div>
+                                                <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                        class="fab fa-sellsy"></i></div>
+                                            </div>
+                                            <div
+                                                style="background-color: rgb(77, 147, 94); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                2
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div>
+                                    <div style="border-radius: 10px; position: relative; width: 100%;">
+                                        <div class="card-body"
+                                            style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                            <div
+                                                style="background-color: rgb(136, 110, 227); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                <div class="card-title">
+                                                    عدد المرضى المسجلين الكلي
+                                                </div>
+                                                <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                        class="fab fa-sellsy"></i></div>
+                                            </div>
+                                            <div
+                                                style="background-color: rgb(113, 90, 195); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                2
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div>
+                                <div>
+                                    <div style="border-radius: 10px; position: relative; width: 100%;">
+                                        <div class="card-body"
+                                            style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                            <div
+                                                style="background-color: rgb(113, 224, 93); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                <div class="card-title">
+                                                    عدد الزيارات
+                                                </div>
+                                                <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                        class="fab fa-sellsy"></i></div>
+                                            </div>
+                                            <div
+                                                style="background-color: rgb(77, 147, 94); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                2
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div>
+                                    <div style="border-radius: 10px; position: relative; width: 100%;">
+                                        <div class="card-body"
+                                            style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                            <div
+                                                style="background-color: rgb(136, 110, 227); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                <div class="card-title">
+                                                    عدد المرضى المسجلين الكلي
+                                                </div>
+                                                <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                        class="fab fa-sellsy"></i></div>
+                                            </div>
+                                            <div
+                                                style="background-color: rgb(113, 90, 195); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                2
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="bigButton" style="width: 100%">
+                                <br>
+                                <canvas id="myChart4" width="1" height="1"></canvas>
+                                <br>
+                                <br>
+
+                                <div class="flex percentage">
+                                    <div>
+                                        <div>
+                                            <span>%</span> 33
+                                        </div>
+                                        <div class="flex" style="font-size:small;">
+                                            <div class="ball"></div>نسبة المراجعين الذكور
+                                        </div>
+                                    </div>
+                                    <div style="width: 50px;"></div>
+                                    <div>
+                                        <div>
+                                            <span>%</span> 68
+                                        </div>
+                                        <div class="flex" style="font-size:small;">
+                                            <div class="ball" style="background-color:rgba(255, 99, 132, 1) ;"></div>
+                                            نسبة المراجعين الاناث
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="bigButton" style="width: 100%; ">
+                                <div>
+
+                                    <canvas id="myChart5" style="flex: 1;" width='1' height="1"></canvas>
+                                </div>
+                                <br>
+                                <div class="flex percentage">
+                                    <div>
+                                        <div>
+                                            <span>%</span> 33
+                                        </div>
+                                        <div class="flex" style="font-size:small;">
+                                            متوسط عدد الزوار شهريًا
+                                        </div>
+                                    </div>
+                                    <div style="width: 50px;"></div>
+                                    <div>
+                                        <div>
+                                            <span>%</span> 68
+                                        </div>
+                                        <div class="flex" style="font-size:small;">
+                                            <div class="ball" style="background-color:rgba(255, 99, 132, 1) ;"></div>
+                                            نسبة المراجعين الاناث
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div>
+
+
+
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                    <br>
+
+<div class="card" style="border: none;">
+                            <div class="card-body">
+
+
+                                <div class="title">
+                                  الموظفين
+                                </div>
+                               
+                                <div class="grid_anyl">
+
+
+
+
+                                    <div>
+                                        <div>
+                                            <div style="border-radius: 10px; position: relative; width: 100%;">
+                                                <div class="card-body"
+                                                    style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                                    <div
+                                                        style="background-color: rgb(113, 224, 93); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                        <div class="card-title">
+                                                            عدد الموظفين المسجلين
+                                                        </div>
+                                                        <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                                class="fab fa-sellsy"></i></div>
+                                                    </div>
+                                                    <div
+                                                        style="background-color: rgb(77, 147, 94); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                        2
+                                                    </div>
+        
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+        
+                                    </div>
+                                 
+                                    <div>
+                                        <div>
+                                            <div style="border-radius: 10px; position: relative; width: 100%;">
+                                                <div class="card-body"
+                                                    style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                                    <div
+                                                        style="background-color: rgb(113, 224, 93); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                        <div class="card-title">
+                                                            عدد الاطباء المسجلين
+                                                        </div>
+                                                        <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                                class="fab fa-sellsy"></i></div>
+                                                    </div>
+                                                    <div
+                                                        style="background-color: rgb(77, 147, 94); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                        2
+                                                    </div>
+        
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+        
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <div style="border-radius: 10px; position: relative; width: 100%;">
+                                                <div class="card-body"
+                                                    style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                                    <div
+                                                        style="background-color: rgb(113, 224, 93); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                        <div class="card-title">
+                                                            عدد الممرضين المسجلين
+                                                        </div>
+                                                        <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                                class="fab fa-sellsy"></i></div>
+                                                    </div>
+                                                    <div
+                                                        style="background-color: rgb(77, 147, 94); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                        2
+                                                    </div>
+        
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+        
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <div style="border-radius: 10px; position: relative; width: 100%;">
+                                                <div class="card-body"
+                                                    style="background-color: rgb(136, 110, 227); color : white; padding: 0; width: 100%; border-radius: 10px;">
+                                                    <div
+                                                        style="background-color: rgb(113, 224, 93); padding: 2rem; border-radius: 10px 10px 0 0 ">
+                                                        <div class="card-title">
+                                                            عدد الصيادلة
+                                                        </div>
+                                                        <div><i style="color: rgba(255, 255, 255,0.5); position: absolute; top: 50%; left: 50%; font-size: 48px; transform: translate(-200%,-50%);"
+                                                                class="fab fa-sellsy"></i></div>
+                                                    </div>
+                                                    <div
+                                                        style="background-color: rgb(77, 147, 94); padding: 2rem; border-radius: 0px 0px 10px 10px;">
+                                                        2
+                                                    </div>
+        
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+        
+                                    </div>
+        
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div style="height: 12px;"></div>
+
+
+                        <div class="card">
+                            <div class="card-body">
+
+
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">الصورة</th>
+                                            <th scope="col">الاسم</th>
+                                            <th scope="col">العمر</th>
+
+
+                                            <th scope="col">الحجوزات</th>
+                                            <th scope="col">الاجراء</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="data_tabel">
+
+
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+
+
+
+                   
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+
+<script>
+  //  const ctx = document.getElementById('myChart').getContext('2d');
+    const ctx2 = document.getElementById('myChart2').getContext('2d');
+    const ctx3 = document.getElementById('myChart3').getContext('2d');
+    const ctx4 = document.getElementById('myChart4').getContext('2d');
+    const ctx5 = document.getElementById('myChart5').getContext('2d');
+
+   /* const myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['0 - 18', '18 - 26', '26 - 38', '38 - 45', '45 - 65', '<65'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });*/
+
+
+    const myChart2 = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+            labels: ['اناث', 'ذكور'],
+            datasets: [{
+                label: '# of Votes',
+                data: [68, 33],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'نسبة الذكور على الاناث'
+                },
+                legend: {
+                    display: false,
+                }
+            },
+            interaction: {
+                intersect: false,
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                }
+
+
+
+            }
+        }
+    });
+
+
+    const myChart3 = new Chart(ctx3, {
+        type: 'line',
+        data: {
+            labels: ['كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب', ' أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول'],
+            datasets: [{
+                label: '# of Votes',
+                data: [20, 30, 55, 60, 70, 70, 40, 50, 20, 23, 46, 23],
+                cubicInterpolationMode: 'monotone',
+                tension: 0.4,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'عدد الزيارات الشهرية لهذة السنة'
+                },
+                legend: {
+                    display: false,
+                }
+            },
+            interaction: {
+                intersect: false,
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'العدد'
+                    },
+                    suggestedMin: -10,
+                    suggestedMax: 200
+                }
+            }
+        },
+    }
+    );
+
+    const myChart4 = new Chart(ctx4, {
+        type: 'pie',
+        data: {
+            labels: ['دواء1', '2', 'دواء3', 'دواء4', 'دواء5', 'دواء6'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'نسبة الذكور على الاناث'
+                },
+                legend: {
+                    display: false,
+                }
+            },
+            interaction: {
+                intersect: false,
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                }
+
+
+
+            }
+        }
+    });
+
+
+    const myChart5 = new Chart(ctx5, {
+        type: 'bar',
+        data: {
+            labels: ['سبا', 'المتميزين', 'blue man', 'xyz', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'نسبة الذكور على الاناث'
+                },
+                legend: {
+                    display: false,
+                }
+            },
+            interaction: {
+                intersect: false,
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                }
+
+
+
+            }
+        }
+    });
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+</html>

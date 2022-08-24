@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>اضافة مادة</title>
+</head>
+
+<body>
+    <div id="container" class="flex">
+        <div id="side_nav">
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content">
+            <% if (err_bool) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= err %>
+                </div>
+                <% } %>
+
+                    <h4>الفئات</h4>
+
+                    <div style="height: 24px;"></div>
+
+
+                    <div class="card">
+                        <div class="card-body">
+
+                            <form method="post" action="/category/add">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">الصنف</label>
+                                    <div style="height: 12px;"></div>
+                                    <input type="text" name="title" class="form-control" placeholder="اسم الصنف">
+                                </div>
+
+                                <div style="height: 24px;"></div>
+
+                                <button type="submit" class="btn btn-primary">اضافة</button>
+                            </form>
+
+                        </div>
+                    </div>
+
+                    <div style="height: 24px;"></div>
+
+                    <div class="card">
+                        <div class="card-body">
+
+                            <% for( let i=0; i < docs.length; i++ ) { %>
+                              
+                                    <form method="post" action="/category/delete" style="display: flex;justify-content: space-between;align-items: center; padding: 12px; background-color: rgb(223, 223, 223);margin-bottom: 12px;">
+                                        <h5><%= docs[i].title %></h5>
+                                            <button name="id" value="<%= docs[i].id %>" type="submit" class="btn btn-danger">مسح</button>
+                                    </form>
+                           
+                                <% } %>
+
+                        </div>
+                    </div>
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+</html>

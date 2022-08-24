@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/style/fontawesome.css">
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: 'Cairo';
+        box-sizing: border-box;
+        direction: rtl;
+    }
+
+    body {
+        background-color: #efeff0;
+    }
+
+    #timedate {
+        font: small-caps lighter 43px/150% "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+        text-align: left;
+        width: 50%;
+
+        color: #fff;
+        border-left: 3px solid #ed1f24;
+        padding: 20px;
+    }
+
+    .panel {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0px 0px 11px 2px rgb(0 0 0 / 10%);
+    }
+</style>
+
+
+
+<body onLoad="initClock()">
+
+    <div style="display: flex; justify-content: left; margin-top: 24px;">
+
+        <div id="timedate" style="color: black;">
+            <a id="mon">January</a>
+            <a id="d">1</a>,
+            <a id="y">0</a><br />
+            <a id="s">12</a> :
+            <a id="m">00</a>:
+            <a id="h">00</a>
+            <a id="mi" style="display: none;">000</a>
+        </div>
+        <div style="width: 60px;"></div>
+    </div>
+
+    <br>
+   
+
+
+    <div id="data_tabel">
+        <% for( let index=0; index < al.length; index++ ) { %>
+            <div class="flex" style="padding: 1rem 10rem;">
+                <div class="panel" style="display: flex;">
+                    <h3 style="flex: 1;">
+                        <i class="fas fa-user" style="margin-left: 10px;"></i>
+                        <%= al[index].name %>
+                    </h3>
+                    <div style="width: 150px;"></div>
+                    <h3 style="font-weight:bold;">
+
+                        يرجى التوجة الى الاستعلامات
+                        <i class="fas fa-directions"></i>
+                    </h3>
+                </div>
+            </div>
+            <% } %>
+    </div>
+
+
+    <audio id="mySound" src="/alert.mp3"></audio>
+
+
+</body>
+
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap.js"></script>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+
+    var socket = io();
+    socket.on("connect", () => {
+
+
+    })
+
+
+    socket.on('alert', function (doc) {
+
+
+        setTimeout(() => {
+            document.getElementById('mySound').play();
+        }, 500)
+
+        var data = doc.data;
+        var dataTabel = $("#data_tabel")
+        dataTabel.empty()
+        for (let i = 0; i < data.length; i++) {
+            dataTabel.append(`
+        
+        <div class="flex" style="padding: 1rem 10rem;">
+        <div class="panel" style="display: flex;">
+            <h3 style="flex: 1;">
+                <i class="fas fa-user" style="margin-left: 10px;"></i>
+                ${data[i].name}
+            </h3>
+            <div style="width: 150px;"></div>
+            <h3 style="font-weight:bold;">
+
+                يرجى التوجة الى الاستعلامات
+                <i class="fas fa-directions"></i>
+            </h3>
+        </div>
+    </div>
+        
+        `)
+        }
+    })
+
+    Number.prototype.pad = function (n) {
+        for (var r = this.toString(); r.length < n; r = 0 + r);
+        return r;
+    };
+
+    function updateClock() {
+        var now = new Date();
+        var milli = now.getMilliseconds(),
+            sec = now.getSeconds(),
+            min = now.getMinutes(),
+            hou = now.getHours(),
+            mo = now.getMonth(),
+            dy = now.getDate(),
+            yr = now.getFullYear();
+        var months = ["كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول", "تشرين الأول", "تشرين الثاني", "كانون الأول"];
+        var tags = ["mon", "d", "y", "h", "m", "s", "mi"],
+            corr = [months[mo], dy, yr, hou.pad(2), min.pad(2), sec.pad(2), milli];
+        for (var i = 0; i < tags.length; i++)
+            document.getElementById(tags[i]).firstChild.nodeValue = corr[i];
+    }
+
+    function initClock() {
+        updateClock();
+        window.setInterval("updateClock()", 1);
+    }
+
+
+
+    setTimeout(()=> window.location.reload(),50000)
+
+// END CLOCK SCRIPT
+</script>
+
+</html>

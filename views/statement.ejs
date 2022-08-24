@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+
+
+        <style>
+            .barelement {
+                padding: 0.5rem;
+                height: 20px;
+                background-color: <%=general.color %>;
+                text-align: center;
+                height: fit-content;
+            }
+
+            .crelement {
+                display: grid;
+                grid-template-columns: 4fr 2fr 3fr 2fr;
+                text-align: center;
+            }
+
+            .crelement2 {
+                display: grid;
+                grid-template-columns: 4fr 2fr 3fr;
+                text-align: center;
+            }
+
+
+            h6 {
+                margin: 0;
+
+            }
+
+            .sp {
+                margin-left: 20px;
+            }
+        </style>
+</head>
+
+<body>
+
+
+    <div class="fixedpanel scroll_enabled" id="doc_panel" style="display: none; width: 500px; height: 650px;">
+        <div class="card massage-error" style="flex: 1; display: none;">
+            <div class="card-body flex">
+                <i class="fas fas fa-ban"></i>
+                <div id="err"></div>
+            </div>
+        </div>
+        <div class="mycard">
+            <div class="flex">
+                <h6 style="flex: 1;"> اضافة سند قبض</h6>
+                <a onclick="doc_Toggle()" class="x close noselect"><i class="fas fa-times-circle"></i></a>
+            </div>
+            <hr>
+            <input id="the_price" type="number" style="display: none;" value="<%= fullprice-paidprice %>">
+            <form action="/add_creditor_patient" method="post">
+
+
+                <div class="form-group" style="width: 100%;">
+
+                    <div class="flex">
+                        <div style="flex: 1;">
+                            <label >المبلغ *</label>
+                            <input type="number" class="form-control" name="paid" id="paid" required>
+                        </div>
+                        <button class="actionbutton" type="button" onclick="full_price()">كامل المبلغ</button>
+                    </div>
+
+                    <input id="creditor" style="display: none;" value="<%= creditor.id %>">
+
+
+                </div>
+                <p>المبلغ المتبقي : <%= fullprice-paidprice %>
+                </p>
+                <label >منبة بعد *</label>
+                <div class=" radio-toolbar">
+
+                    <input id="no" type="radio" name="alert" value="no" checked>
+                    <label class="custom-control-label pointer" for="no"><i class="fas fas fa-ban"
+                            style="margin-left: 10px;"></i>لايوجد</label>
+
+
+                    <input id="d7" type="radio" name="alert" value="d7">
+                    <label class="custom-control-label pointer" for="d7"><i class="fas fa-stopwatch"
+                            style="margin-left: 10px;"></i>7 يوم</label>
+                    <input id="d14" type="radio" name="alert" value="d14">
+                    <label class="custom-control-label pointer" for="d14"><i class="fas fa-stopwatch"
+                            style="margin-left: 10px;"></i>14 يوم</label>
+
+
+                    <input id="d30" type="radio" name="alert" value="d30">
+                    <label class="custom-control-label pointer" for="d30"><i class="fas fa-stopwatch"
+                            style="margin-left: 10px;"></i>30 يوم</label>
+                    <input id="d30" type="radio" name="alert" value="d90">
+                    <label class="custom-control-label pointer" for="d90"><i class="fas fa-stopwatch"
+                            style="margin-left: 10px;"></i>90 يوم</label>
+
+                </div>
+
+
+                <input class="btn btn-primary" type="button" onclick="pay()" style="width: 100%; margin-top: 12px;"
+                    value="+أضافة">
+
+            </form>
+
+
+
+
+        </div>
+    </div>
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled" doctype='<%= creditor.debit  %>'>
+
+
+
+
+            <%- include('parts/barVtwo.ejs'); -%>
+
+
+
+
+                <div style="padding: 2.3rem 1rem;">
+
+
+                    <div class="mycard">
+
+
+
+                        <div class="flex" style="gap: 10px;">
+
+                            <div style="flex: 1; position: relative;">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="flex">
+                                            <h6 class="sp">نــوع القائمة : </h6>
+                                            <h6>
+                                                <% if(creditor.debit == false) {%> 
+                                                    دائن
+                                                    <% } else { %> 
+                                                        مدين
+                                                        <% } %> 
+                                            </h6>
+
+                                        </div>
+                                        <div class="flex">
+                                            <h6 class="sp">المبلغ الـكلي : </h6>
+                                            <h6>
+                                                <%= formatCurrancy(fullprice) %>
+                                                    <%= general.currency %>
+                                            </h6>
+
+                                        </div>
+                                        <% if(creditor.debit == false) {%> 
+                                        <div class="flex">
+                                            <h6 class="sp">الـــخـــصـــم : </h6>
+                                            <h6>
+                                                <%= formatCurrancy(creditor.discount) %>
+                                                    <%= general.currency %>
+                                            </h6>
+
+                                        </div>
+                                        <% } %> 
+                                        <div class="flex">
+                                            <h6 class="sp">الـــمدفــــوع : </h6>
+                                            <h6>
+                                                <%= formatCurrancy(paidprice) %>
+                                                    <%= general.currency %>
+                                            </h6>
+
+                                        </div>
+                                        <div class="flex">
+                                            <h6 class="sp">الـــمـتبـــقي : </h6>
+                                            <h6 style="color: blue;">
+                                                <%= formatCurrancy(fullprice-paidprice) %>
+                                                    <%= general.currency %>
+                                            </h6>
+
+                                        </div>
+                                        <div class="flex">
+                                            <h6 class="sp"> تاريخ انشاء القائمة : </h6>
+                                            <h6>
+                                                <%=getdatein_ar( creditor.createdAt) %>
+                                            </h6>
+
+                                        </div>
+                                        <div class="flex">
+                                            <h6 class="sp">تم انشاء القائمة من قبل : </h6>
+                                            <h6>
+                                                <%= creditor.data_entry_name %>
+                                            </h6>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="flex" style="gap: 60px;">
+                                            <div> تم تسديد <%= ((paidprice/fullprice) * 100).toFixed(2) %> % </div>
+                                            <div>
+                                                <% if(creditor.alert_ !='' ) {%>يوم السداد <%= getdatein_ar(new
+                                                        Date(creditor.alert_)) %>
+                                                        <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="card">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">التاريخ</th>
+                                                <th scope="col">المبلغ</th>
+                                                <th scope="col">المحاسب</th>
+
+
+
+                                                <th scope="col">الاجراء</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="data_tabel">
+                                            <% for( let i=0; i < creditor_paid.length; i++ ) { %>
+                                                <thead>
+                                                    <tr>
+                                                        <td scope="col">
+                                                            <%= getdatein_ar(creditor_paid[i].createdAt) %>
+                                                        </td>
+                                                        <td scope="col">
+                                                            <%=formatCurrancy(creditor_paid[i].price) %>
+                                                        </td>
+                                                        <td scope="col">
+                                                            <%=creditor_paid[i].data_entry_name %>
+                                                        </td>
+
+
+
+                                                        <td scope="col">
+                                                            <div class="flex" style="gap: 15px;">
+                                                                <% if(!creditor.debit){ %> <a>سند قبض</a>
+                                                                    <% } else { %><a
+                                                                            onclick="Print_catch_receipt('<%= getdatein_ar(creditor_paid[i].createdAt) %>','<%=formatCurrancy(creditor_paid[i].price) %>')">سند
+                                                                            صرف</a>
+                                                                        <% } %>
+                                                                            <a
+                                                                                onclick="delete_catch_receipt('<%= creditor_paid[i].id%>')">مسح
+                                                                            </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </thead>
+                                                <% } %>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <% if(!creditor.debit){ %>
+                                    <input class="btn btn-primary" type="button" onclick="doc_Toggle()"
+                                        style="width: 100%; margin-top: 12px;" value="محاسبة">
+                                    <% } else{ %>
+                                        <input class="btn btn-primary" type="button" onclick="doc_Toggle()"
+                                            style="width: 100%; margin-top: 12px;" value="تسديد">
+                                        <% } %>
+
+
+
+                                            <div style="position: absolute; bottom: 0%;">
+                                                <form action="/delete_creditor" method="post">
+                                                    <input style="display: none;" name="id" value="<%= creditor.id %>">
+                                                    <button class="btn btn-primary" type="submit"
+                                                        style="width: 100%; margin-top: 12px;">مسح</button>
+                                                </form>
+                                            </div>
+
+                            </div>
+                            <div style="flex: 1;">
+                                <div id="statement" class="statement card" style="padding: 1rem;">
+
+                                    <div style="display: flex; justify-content: right; margin: 10px; ">
+
+                                        <div style="margin-top: 10px;">
+                                            <div style="display: flex;">
+                                                <div style="width: 150px; border: 1px solid black; padding: 3px;">
+                                                    الاسم
+                                                </div>
+                                                <div style="width: 250px; border: 1px solid black;  padding: 3px;">
+                                                    <%= creditor.name %>
+                                                </div>
+
+
+                                            </div>
+                                            <% if(creditor.company !='' ) {%>
+                                                <div style="display: flex;">
+                                                    <div style="width: 150px; border: 1px solid black; padding: 3px;">
+                                                        الشركة
+                                                    </div>
+                                                    <div style="width: 250px; border: 1px solid black;  padding: 3px;">
+                                                        <%= creditor.company %>
+                                                    </div>
+
+
+                                                </div>
+                                                <% } %>
+                                                    <div style="display: flex;">
+                                                        <div
+                                                            style="width: 150px; border: 1px solid black; padding: 3px;">
+                                                            رقم الهاتف
+                                                        </div>
+                                                        <div
+                                                            style="width: 250px; border: 1px solid black;  padding: 3px;">
+                                                            <%= creditor.phone %>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div style="display: flex;">
+                                                        <div
+                                                            style="width: 150px; border: 1px solid black; padding: 3px;">
+                                                            رقم القائمة
+                                                        </div>
+                                                        <div
+                                                            style="width: 250px; border: 1px solid black;  padding: 3px;">
+                                                            <%= creditor.bar_code %>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div style="display: flex;">
+                                                        <div
+                                                            style="width: 150px; border: 1px solid black; padding: 3px;">
+                                                            التاريخ
+                                                        </div>
+                                                        <div
+                                                            style="width: 250px; border: 1px solid black;  padding: 3px;">
+                                                            <%=getdatein_ar(new Date()) %>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div style="display: flex;">
+                                                        <div
+                                                            style="width: 150px; border: 1px solid black; padding: 3px;">
+                                                            العملة المستخدمة
+                                                        </div>
+                                                        <div
+                                                            style="width: 250px; border: 1px solid black;  padding: 3px;">
+                                                            <%= general.currency %>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="barcode">
+                                                        *<%= creditor.bar_code %>*
+
+                                                    </div>
+
+                                        </div>
+
+                                        <div class="flex" style="justify-content: left">
+
+                                            <div>
+                                                <img style="width: 140px;" src="/images/<%= general.img %>">
+
+
+                                                <div>
+                                                    <h6 style="text-align: center;">
+                                                        <%= general.name %>
+                                                    </h6>
+                                                    <div style="text-align: center;">
+                                                        <%= general.name_en %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <div>
+                                        الفاتورة
+                                    </div>
+
+                                    <br>
+                                    <div
+                                        style="display: grid; grid-template-columns: 4fr 2fr 3fr 2fr ; color: white; font-weight: bold; padding: 0.2rem; height: fit-content;">
+                                        <div class='barelement'>
+                                            العنصر</div>
+                                        <div class='barelement'>
+                                            السعر </div>
+                                        <div class='barelement'>
+                                            التاريخ </div>
+                                        <div class='barelement'>
+                                            الموظف </div>
+
+
+                                    </div>
+                                    <% for( let i=0; i < creditor_element.length; i++ ) { %>
+                                        <div class="crelement">
+
+                                            <h6>
+                                                <%=creditor_element[i].name %>
+                                            </h6>
+                                            <h6>
+                                                <%=formatCurrancy(creditor_element[i].price )%>
+                                            </h6>
+                                            <h6>
+                                                <%= getdatein_ar(creditor_element[i].createdAt) %>
+                                            </h6>
+                                            <h6>
+                                                <%=creditor_element[i].data_entry_name %>
+                                            </h6>
+
+
+                                        </div>
+                                        <% } %>
+                                            <% if(creditor_element.length==1 && creditor_element[0].details !='' ){ %>
+                                                <br>
+                                                
+                                                    التفاصيل
+                                                    <hr>
+                                                <div>
+                                                    <%= creditor_element[0].details %>
+                                                </div>
+                                                <% }%>
+
+
+
+
+
+
+
+                                                    <br>
+                                                    <div
+                                                        style="height:20px; width: 100%; background-color: <%= general.color %>;">
+
+
+                                                    </div>
+                                                    <hr>
+                                                    <div>
+                                                        الدفعات
+                                                    </div>
+
+                                                    <br>
+                                                    <div
+                                                        style="display: grid; grid-template-columns: 4fr 2fr 3fr  ; color: white; font-weight: bold; height: fit-content;">
+                                                        <h6 class='barelement' style="background-color:gray;">
+                                                            التاريخ</h6>
+                                                        <h6 class='barelement' style="background-color:gray;">
+                                                            المبلغ </h6>
+                                                        <h6 class='barelement' style="background-color:gray;">
+                                                            المحاسب </h6>
+
+
+
+                                                    </div>
+                                                    <% for( let i=0; i < creditor_paid.length; i++ ) { %>
+                                                        <div class="crelement2" <% if(i % 2==0){ %>
+                                                            style="background-color:
+                                                            rgb(227, 227, 227);" <% } %> >
+
+                                                                <h6>
+                                                                    <%= getdatein_ar(creditor_paid[i].createdAt) %>
+                                                                </h6>
+                                                                <h6>
+                                                                    <%=formatCurrancy(creditor_paid[i].price) %>
+                                                                </h6>
+                                                                <h6>
+                                                                    <%= creditor_paid[i].data_entry_name %>
+                                                                </h6>
+
+
+
+                                                        </div>
+                                                        <% } %>
+
+                                                            <br>
+
+
+                                                            <div
+                                                                style="display: grid; grid-template-columns:4fr 2fr 2fr 2fr ; text-align: center;">
+
+                                                                <h6></h6>
+                                                                <h6></h6>
+                                                                <h6>المجموع</h6>
+                                                                <h6>
+                                                                    <%= formatCurrancy(fullprice) %>
+                                                                </h6>
+
+
+                                                            </div>
+                                                            <% if(creditor.debit == false) {%> 
+                                                            <div
+                                                                style="display: grid; grid-template-columns:4fr 2fr 2fr 2fr ; text-align: center;">
+
+                                                                <h6></h6>
+                                                                <h6></h6>
+                                                                <h6>الـخـصـم</h6>
+                                                                <h6>
+                                                                    <%= (creditor.discount==0)?"0.00":formatCurrancy(creditor.discount)
+                                                                        %>
+                                                                </h6>
+
+
+                                                            </div>
+                                                            <% } %> 
+                                                            <div
+                                                                style="display: grid; grid-template-columns:4fr 2fr 2fr 2fr ; text-align: center;">
+
+                                                                <h6></h6>
+                                                                <h6></h6>
+                                                                <h6>المدفوع</h6>
+                                                                <h6>
+                                                                    <%= formatCurrancy(paidprice) %>
+
+                                                                </h6>
+
+
+                                                            </div>
+                                                            <div
+                                                                style="display: grid; grid-template-columns:4fr 2fr 2fr 2fr ; text-align: center;">
+
+                                                                <h6></h6>
+                                                                <h6></h6>
+                                                                <h6>المتبقي</h6>
+                                                                <h6>
+                                                                    <%= (fullprice-paidprice==0)?"0.00":formatCurrancy(fullprice-paidprice)
+                                                                        %>
+                                                                </h6>
+
+
+                                                            </div>
+
+
+
+                                                            <br>
+
+
+                                </div>
+                                <button class="btn btn-primary" onclick="print_statement()"><i class="fas fa-print"></i> طباعة </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div style="height: 24px;"></div>
+
+
+
+        </div>
+    </div>
+
+    <div class="no">
+        <div id="cr" style="width: 100%; height: 100%; background-color: white;">
+            <div>
+                <div style="height: 30px; background-color: <%= general.color%>;"></div>
+                <div style="padding: 2rem;">
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; text-align: center;">
+                        <div>
+                            <h4>
+                                <%= general.name %>
+                            </h4>
+                            <h5>
+                                <%= general.name_en %>
+                            </h5>
+                        </div>
+                        <div>
+                            <img style="width: 140px;" src="/images/<%= general.img %>">
+                        </div>
+                        <div>
+                            <h4>
+                                <%= general.location %>
+                            </h4>
+                            <h5>
+                                Tel: <%= general.phone %>
+                            </h5>
+                        </div>
+                    </div>
+                    <h4 style="text-align: center;">
+                        سـند قبض | Catch Receipt
+                    </h4>
+                    <div style="display: flex; justify-content: left;">
+                        <div style="padding: 1rem; border: 1px solid black;">
+                            <%= creditor.bar_code %>
+                        </div>
+                        <div style="padding: 1rem; border: 1px solid black;">
+                            NO.
+                        </div>
+                    </div>
+
+                    <div class="flex" style="padding: 1rem;">
+                        <div class="f1">
+                            <div>
+                                <h4>
+                                    التاريخ : <span id="date1"></span>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    استلمنا من السيد / السادة : <%= creditor.name %>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    مبلغ قدره : <span id="price1"></span>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    و ذلك عن :
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="en">
+                            <div>
+                                <h4>
+                                    Date : <span id="date2"></span>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    Received from MR. / Gentlemen : <%= creditor.name %>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    Amount of : <span id="price2"></span>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    For :
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; text-align: center;">
+
+                        <div>
+                            <h5>المستلم | Receiver</h5>
+                            <br>
+                            <h5>..................</h5>
+                        </div>
+                        <div>
+                            <h5>المحاسب | Accountent</h5>
+                            <br>
+                            <h5><u>
+                                    <%= user.name %>
+                                </u></h5>
+                        </div>
+                        <div>
+                            <h5>المدير | Manager</h5>
+                            <br>
+                            <h5>..................</h5>
+                        </div>
+                    </div>
+                    <br>
+                    <h5 class="barcode" style="text-align: center;">
+                        *<%= creditor.bar_code %>*
+                    </h5>
+                </div>
+            </div>
+            <div>
+                <div style="height: 30px; background-color: <%= general.color%>;"></div>
+                <div style="padding: 2rem;">
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; text-align: center;">
+                        <div>
+                            <h4>
+                                <%= general.name %>
+                            </h4>
+                            <h5>
+                                <%= general.name_en %>
+                            </h5>
+                        </div>
+                        <div>
+                            <img style="width: 140px;" src="/images/<%= general.img %>">
+                        </div>
+                        <div>
+                            <h4>
+                                <%= general.location %>
+                            </h4>
+                            <h5>
+                                Tel: <%= general.phone %>
+                            </h5>
+                        </div>
+                    </div>
+                    <h4 style="text-align: center;">
+                        سـند قبض | Catch Receipt
+                    </h4>
+                    <div style="display: flex; justify-content: left;">
+                        <div style="padding: 1rem; border: 1px solid black;">
+                            <%= creditor.bar_code %>
+                        </div>
+                        <div style="padding: 1rem; border: 1px solid black;">
+                            NO.
+                        </div>
+                    </div>
+
+                    <div class="flex" style="padding: 1rem;">
+                        <div class="f1">
+                            <div>
+                                <h4>
+                                    التاريخ : <span id="date3"></span>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    استلمنا من السيد / السادة : <%= creditor.name %>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    مبلغ قدره : <span id="price3"></span>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    و ذلك عن :
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="en">
+                            <div>
+                                <h4>
+                                    Date : <span id="date4"></span>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    Received from MR. / Gentlemen : <%= creditor.name %>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    Amount of : <span id="price4"></span>
+                                </h4>
+                            </div>
+                            <div>
+                                <h4>
+                                    For :
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; text-align: center;">
+
+                        <div>
+                            <h5>المستلم | Receiver</h5>
+                            <br>
+                            <h5>..................</h5>
+                        </div>
+                        <div>
+                            <h5>المحاسب | Accountent</h5>
+                            <br>
+                            <h5><u>
+                                    <%= user.name %>
+                                </u></h5>
+                        </div>
+                        <div>
+                            <h5>المدير | Manager</h5>
+                            <br>
+                            <h5>..................</h5>
+                        </div>
+                    </div>
+                    <br>
+                    <h5 class="barcode" style="text-align: center;">
+                        *<%= creditor.bar_code %>*
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+<script src="/js/print-html-element.min.js"></script>
+
+<script>
+
+
+    function full_price() {
+
+        $('#paid').val($('#the_price').val())
+
+    }
+
+    function doc_Toggle() {
+        $('#doc_panel').fadeToggle()
+    }
+
+    function pay(index) {
+        $.ajax({
+            type: "POST",
+            url: "/catch_receipt",
+            data: {
+                price: $('#paid').val(),
+                creditor: $('#creditor').val(),
+                alert: $("input[name='alert']:checked").val(),
+                debit: $('#content').attr('doctype')
+            }
+
+
+        }).done(function (o) {
+
+            if (o.success == 1) {
+                location.reload();
+            }
+            else {
+
+                $('.massage-error').show()
+                $('#err').html(o.mass)
+            }
+
+        })
+    }
+
+    function delete_catch_receipt(index) {
+        $.ajax({
+            type: "POST",
+            url: "/delete_catch_receipt",
+            data: {
+                id: index,
+                debit: $('#content').attr('doctype')
+
+            }
+
+
+        }).done(function (o) {
+
+            if (o.success == 1) {
+                location.reload();
+            }
+            else {
+
+                $('.massage-error').show()
+                $('#err').html(o.mass)
+            }
+
+        })
+    }
+
+    function Print_catch_receipt(date, price) {
+
+
+
+        $('#date1').html(date)
+        $('#price1').html(price)
+        $('#date2').html(date)
+        $('#price2').html(price)
+
+        $('#date3').html(date)
+        $('#price3').html(price)
+        $('#date4').html(date)
+        $('#price4').html(price)
+
+        PHE.printElement(document.getElementById('cr'));
+
+    }
+
+    var PHE = printHtmlElement;
+    function print_statement() {
+        PHE.printElement(document.getElementById('statement'));
+    }
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</html>

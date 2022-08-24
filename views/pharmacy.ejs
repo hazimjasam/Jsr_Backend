@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+<style>
+    #Casher {
+        top: 0%;
+        right: 0%;
+        transform: none;
+        display: none;
+        width: 520px;
+        height: 100%;
+
+    }
+
+    .global-grid {
+        display: block;
+        grid-template-columns: 4fr 7fr;
+        grid-gap: 10px;
+
+    }
+
+    .side {
+        display: none;
+    }
+</style>
+
+<body>
+
+
+    <div class="fixedpanel" id="Casher">
+        <div class="mycard" style="height: 100%; padding: 0;">
+            <div class="cardlable"
+                style="box-shadow: 0px 0px 11px 2px rgb(0 0 0 / 10%); border-bottom: 1px solid rgb(209, 209, 209); background-color: white;">
+                <div class="flex">
+
+                    <h5 style="flex: 1;">
+                        <i style="color: rgb(62, 125, 184); margin: 0 10px 0 10px ;" class="fas fa-cash-register"></i>
+                        الطلب المباشر
+                    </h5>
+                    <a class="x noselect" onclick="closeCasher()"><i class="fas fa-times-circle"></i></a>
+                </div>
+
+            </div>
+            <div style="padding:1rem;">
+
+                <div class="scroll_enabled" id="innercaher">
+                    <div id="cashermass"
+                        style="display: none; background-color: rgb(231, 77, 77); color: white; padding: 5px 30px 5px 5px; border-radius: 5px; margin-bottom: 8px;">
+                        <i class="fas fa-ban"></i> لايوجد عدد كافي من هذا المنتج داخل الفرع
+                    </div>
+
+
+
+
+
+                </div>
+                <div>
+                    <hr>
+                    <div style=" direction: ltr; font-size: large;">
+                        <div style="direction: rtl;">
+                            الاســـــــم : <input id="name_client" type="text" placeholder="الاسـم"
+                                onchange="discountChange()" style="width: 300px;"> </div>
+
+
+                    </div>
+                    <hr>
+                    <div style="direction: rtl;">
+                        العـــنــــوان : <input id="location" type="text" placeholder="العنوان"
+                            onchange="discountChange()" style="width: 300px;"> </div>
+
+                    <hr>
+                    <div style="direction: rtl;">
+                        رقم الهاتف : <input id="phone_number" type="text" placeholder="رقم الهاتف "
+                            onchange="discountChange()" style="width: 300px;"> </div>
+
+                    <hr>
+                    <div style="direction: rtl;">
+                        الـــوقــــــت : <select class="form-select" id="time_slot" name="type">
+
+                            <option value="فوري">
+                                فوري
+                            </option>
+
+
+                            <% for( let i=0; i < time_solts.length; i++ ) { %>
+
+
+                                <option value="<%= time_solts[i] %>">
+                                    <%= time_solts[i] %> اليوم :
+                                </option>
+
+                                <% } %>
+
+
+
+                        </select> </div>
+
+                    <hr>
+                    <div style=" direction: ltr; font-size: large;">
+                        <div style="direction: ltr;"><input id="discount" type="number" placeholder="الخصم"
+                                onkeydown="discountChange()" style="width: 100px;"> :
+                            الخصم</div>
+
+                        <span> الاجمالي</span> : <span id="total" style="font-weight: bolder;">000</span>
+                    </div>
+                    <br>
+                    <div class="flex">
+                        <button id="addbtn" onclick="Submit_receipt()" class="btn btn-primary w100">ارسال الى
+                            التوصيل</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+
+
+            <%- include('parts/bar.ejs'); -%>
+
+                <div id="alert">
+
+                </div>
+
+                <div style="padding: 2.3rem 1rem;">
+
+
+                    <div class="mycard" style="padding: 0;">
+
+                        <div style="padding: 1.5rem 0.3rem 0.1rem 0.1rem; position: relative;">
+                            <div class="title" style="height: 30px;">
+
+
+
+
+
+                            </div>
+                            <div class="flex"
+                                style="position: absolute; left: 0%; transform: translate(0%,-145%);z-index: 3;">
+
+
+
+                                <div>
+
+                                    <div class="input-group">
+                                        <select class="form-select" id="warehouce" onchange="search()" name="type"
+                                            style="width: 200px;">
+                                            <option selected value="المخزن">الفرع : الكل</option>
+                                            <% for( let index=0; index < warehouse.length; index++ ) { %>
+
+                                                <option value="<%=warehouse[index].name%>">
+                                                    <%=warehouse[index].name %>
+                                                </option>
+                                                <% } %>
+
+
+
+
+                                        </select>
+
+
+
+                                    </div>
+                                </div>
+
+                                <div>
+
+
+                                    <div class="input-group">
+                                        <select class="form-select" id="type" onchange="search()" name="type">
+                                            <option selected value="الجميع">الحالة : الجميع</option>
+
+
+                                            <option value="قارب النفاذ">
+                                                قارب النفاذ
+                                            </option>
+                                            <option value="غير متوفر">
+                                                غير متوفر
+                                            </option>
+                                            <option value="التخفيضات">
+                                                التخفيضات
+                                            </option>
+
+                                            <option value='غير الفعال'>
+                                                غير الفعال
+                                            </option>
+
+
+
+
+                                        </select>
+
+
+
+                                    </div>
+                                </div>
+
+
+
+                                <div>
+
+                                    <div class="input-group">
+                                        <select class="form-select" id="categorysel" onchange="search()" name="type"
+                                            style="width: 200px;">
+                                            <option selected value="الكل">القسم : الكل</option>
+                                            <% for( let index=0; index < category.length; index++ ) { %>
+
+                                                <option value="<%=category[index].id%>">
+                                                    <%=category[index].name %>
+                                                </option>
+                                                <% } %>
+
+
+
+
+                                        </select>
+
+
+
+                                    </div>
+                                </div>
+
+                                <div style="width: 10px;"></div>
+                                <input type="text" id="search_box" placeholder="بحث ,اسم , باركود" class="form-control"
+                                    aria-label="Text input with segmented dropdown button" style="width: 300px;">
+                                <div style="width: 12px;"></div>
+                            </div>
+                        </div>
+
+
+
+                        <div>
+
+                            <div>
+
+                                <div class="table-grid">
+                                    <div>صورة </div>
+                                    <div>الحالة </div>
+                                    <div>الاسم </div>
+                                    <div>التقييم </div>
+                                    <div>السعر </div>
+                                    <div>العدد </div>
+
+
+                                    <div>الاجراء </div>
+
+
+                                </div>
+
+
+
+
+
+                                <div id="dataTabel">
+
+
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div style="height: 24px;"></div>
+
+
+
+
+
+        </div>
+    </div>
+    <div style="display: none; ">
+        <div id="main_con" class="w100" style="padding: 1rem; background-color: white; height: 100%;">
+
+            <div style="display: flex; justify-content: right; margin: 20px; ">
+                <img style="width: 140px;" src="/images/<%= general.img %> ">
+            </div>
+            <div style="display: flex; justify-content: left; margin-left: 50px; text-align: right; ">
+                <div>
+                    <h4> الاســـم : </h4>
+                    <h4> الهاتف : </h4>
+
+                </div>
+
+            </div>
+            <hr>
+
+            <div style="display: flex; display:none">
+                <div style=" flex: 1; text-align: right; display: flex; justify-content: right;">
+                    <div>
+                        <h3>عنوان التوصيل</h3>
+                        <div style="font-weight: bold; margin-bottom: 5px;">حازم جسام حازم</div>
+                        <div style="font-weight: bold;">الموصل,حس الجامعة</div>
+                    </div>
+                </div>
+                <div style=" text-align: center; background-color: rgb(215, 215, 215); width: 220px; height: 120px;">
+                    <div style="font-weight: bold; margin-top: 20px;">رقم الفاتورة</div>
+                    <div>1222222</div>
+                    <div style="font-weight: bold;">التاريخ</div>
+                    <div>1222222</div>
+                </div>
+
+
+            </div>
+
+            <br>
+            <div
+                style="display: grid; grid-template-columns: 2fr 2fr 1fr 5fr ; color: white; font-weight: bold; padding: 0.2rem;">
+                <div style="padding: 0.5rem;  height: 40px; background-color: rgb(251, 113, 113); text-align: center;">
+                    العنصر</div>
+                <div style="padding: 0.5rem; height: 40px; background-color: rgb(251, 113, 113); text-align: center;">
+                    السعر </div>
+                <div style="padding: 0.5rem; height: 40px; background-color: rgb(251, 113, 113); text-align: center;">
+                    الكمية </div>
+                <div style="padding: 0.5rem;  height: 40px; background-color: rgb(251, 113, 113); text-align: center;">
+                    السعر الكلي </div>
+
+
+
+            </div>
+
+            <div style="display: grid; grid-template-columns:2fr 2fr 1fr 5fr ; text-align: center;">
+
+                <h4>50000</h4>
+                <h4>50000</h4>
+                <h4>1</h4>
+                <h4>sk,k,ss</h4>
+
+            </div>
+
+
+
+
+
+
+            <br>
+            <div class="w100" style="height:30px;  background-color: rgb(251, 113, 113);">
+
+
+            </div>
+
+        </div>
+
+    </div>
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+<script src="/js/print-html-element.min.js"></script>
+
+<script defer src="/js/pharmacy.js">
+
+
+
+
+
+</script>
+
+</html>

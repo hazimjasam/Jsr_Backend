@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+
+
+
+</head>
+
+<body>
+
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+
+
+            <%- include('parts/barVtwo.ejs'); -%>
+
+
+
+
+                <div style="padding: 2.3rem 1rem;">
+
+
+                    <div class="mycard">
+
+
+
+                        <div class="flex" style="gap: 10px;">
+
+                            <div class="f1 pr">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="flex">
+                                            <h6 class="sp"> نوع التوصيل : </h6>
+                                            <h6>
+                                               <% if(order_list.mode) {%> فوري <% }else { %> موعد <% } %>    
+                                            </h6>
+
+                                        </div>
+                                        <div class="flex">
+                                            <h6 class="sp">  اسم الزبون : </h6>
+                                            <h6>
+                                               <%= order_list.name  %>     
+                                            </h6>
+
+                                        </div>
+                                        <div class="flex">
+                                            <h6 class="sp">  رقم الطلب : </h6>
+                                            <h6>
+                                               <%= order_list.bar_code  %>     
+                                            </h6>
+
+                                        </div>
+                                        <div class="flex">
+                                            <h6 class="sp">  الموقع : </h6>
+                                            <h6>
+                                               <%= order_list.location  %>     
+                                            </h6>
+
+                                        </div>
+                                        <div class="flex">
+                                            <h6 class="sp">  رقم الزبون : </h6>
+                                            <h6>
+                                               <a href="tel:<%= order_list.phone_number  %>"> <%= order_list.phone_number  %> </a>
+                                            </h6>
+
+                                        </div>
+                                        <div class="flex">
+                                            <h6 class="sp">  رقم الزبون : </h6>
+                                            <h6>
+                                               <%= order_list.phone_number  %>     
+                                            </h6>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="f1 pr">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div
+                                            style="display: grid; grid-template-columns: 4fr 2fr 3fr 2fr ; font-weight: bold; padding: 0.2rem; height: fit-content;">
+                                            <div class='barelement'>
+                                                الصورة</div>
+                                            <div class='barelement'>
+                                                العنصر </div>
+                                            <div class='barelement'>
+                                                السعر </div>
+                                            <div class='barelement'>
+                                                الاجراء </div>
+
+
+                                        </div>
+                                        <% for( let i=0; i < orders.length; i++ ) { %>
+                                            <div
+                                                style="display: grid; grid-template-columns: 4fr 2fr 3fr 2fr ; font-weight: bold; padding: 0.2rem; height: fit-content;">
+
+                                                <h6>
+                                                   <img src='/images/<%=orders[i].img %>' style='width: 50px;'> 
+                                                </h6>
+                                                <h6>
+                                                    <%=orders[i].name %>
+                                                </h6>
+                                                <h6>
+                                                    <%=formatCurrancy(orders[i].price )%>
+                                                </h6>
+                                                
+                                                <h6>
+                                                   <a onclick='delete_order("<%= orders[i]._id  %>")' >مسح</a>
+                                                </h6>
+
+
+                                            </div>
+                                            <% } %>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+        </div>
+    </div>
+
+
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+<script src="/js/print-html-element.min.js"></script>
+
+<script>
+
+
+   
+
+
+    function delete_order(index) {
+        $.ajax({
+            type: "POST",
+            url: "/delete_order_single",
+            data: {
+               id: index,
+                
+            }
+
+
+        }).done(function (o) {
+
+            if (o.success == 1) {
+                location.reload();
+            }
+            else {
+
+                $('.massage-error').show()
+                $('#err').html(o.mass)
+            }
+
+        })
+    }
+
+   
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</html>

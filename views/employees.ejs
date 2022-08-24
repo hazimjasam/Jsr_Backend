@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<style>
+
+</style>
+
+<body>
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+            <div class="card mycard fixedpanel scroll_enabled" id="add_doc" style="display: none; width: fit-content; height: 700px;">
+                <div>
+
+
+                    <div class="flex">
+                        <h5 style="flex: 1;"> <i class="fas fa-user-plus"
+                                style="margin-left: 10px; color: #007aff;"></i>اضافة موظف جديد </h5>
+                        <a class="x close noselect"><i class="fas fa-times-circle"></i></a>
+                    </div>
+
+                    <div class="card massage" style="flex: 1;">
+                        <div class="card-body">
+                            <i class="fas fa-check-circle"></i>
+                            تم تسجيل الموظف
+                        </div>
+                    </div>
+                   
+                    <div class="card massage-error" style="flex: 1;">
+                        <div class="card-body">
+                            <i class="fas fa-ban"></i>
+                           <span id="err"></span>
+                        </div>
+                    </div>
+                    <div class="flex">
+
+                        <form>
+                            <div style="flex: 1;">
+                                <div style="width: 100%; margin-top: 8px;">
+                                    <label>الاسم*</label>
+                                    <input id="name" type="text" class="form-control" 
+                                        style="background-color: rgb(243, 243, 243);" autocomplete="off" required
+                                        placeholder="الاسم">
+                                </div>
+                                <div style="width: 100%; margin-top: 8px;">
+                                    <label>الرمز السري*</label>
+                                    <input id="pwd" type="text" class="form-control"
+                                        style="background-color: rgb(243, 243, 243);" autocomplete="off" required
+                                        placeholder="الرمز السري">
+                                </div>
+                                <div style=" margin-top: 8px;">
+                                    <label>المسمى الوظيفي*</label>
+                                    <input id="job" type="text" class="form-control" name="job"
+                                        style="background-color: rgb(243, 243, 243);" autocomplete="on" required
+                                        placeholder="الاسم">
+                                </div>
+                                <div style="width: 100%; margin-top: 8px;">
+                                    <label>رقم الهاتف</label>
+                                    <input id="phone" type="text" class="form-control"
+                                        style="background-color: rgb(243, 243, 243);" autocomplete="off"
+                                        placeholder="اختياري">
+                                </div>
+                                <div style="width: 100%; margin-top: 8px;">
+                                    <label>الايميل</label>
+                                    <input id="email" type="text" class="form-control"
+                                        style="background-color: rgb(243, 243, 243);" autocomplete="off"
+                                        placeholder="اختياري">
+                                </div>
+                               
+                                <div class="flex">
+                                    <div>
+                                        <label>الصورة الشخصية (اختياري)</label>
+                                        <div class="col-md-6" style="width: 100%;">
+                                            <input type="file" class="form-control imagefile" id="image"
+                                                style="width: 100%;" name="images[]" accept="image/x-png,image/jpeg" />
+                                        </div>
+                                    </div>
+                                    <div style="width: 13px;"></div>
+                                 
+                                </div>
+                                <br>
+                                <label>الصلاحيات</label>
+                                <div class="flex">
+                                    <div style="  margin: 8px;">
+                                        <input type="checkbox" class="btn-check" name="delivery" id="delivery"
+                                            autocomplete="off" style="width: 80px; height: 80px;">
+                                        <label class="btn btn-outline-primary" for="delivery"
+                                            style="width: 80px; height: 80px; padding: 8px;">
+                                            <div><i class="fas fa-truck" style="font-size: 30px;"></i>
+                                                <div>التوصيل</div>
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                    <div style="  margin: 8px;">
+                                        <input type="checkbox" class="btn-check" name="main" id="main"
+                                            autocomplete="off" style="width: 80px; height: 80px;">
+                                        <label class="btn btn-outline-primary" for="main"
+                                            style="width: 80px; height: 80px; padding: 8px;">
+                                            <div><i class="fas fa-user" style="font-size: 30px;"></i>
+                                                <div>العملاء</div>
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                    
+                                    
+                                    <div style="  margin: 8px;">
+                                        <input type="checkbox" class="btn-check" name="pharmacy" id="pharmacy"
+                                            autocomplete="off" style="width: 80px; height: 80px;">
+                                        <label class="btn btn-outline-primary" for="pharmacy"
+                                            style="width: 80px; height: 80px; padding: 8px;">
+                                            <div><i class="fas fa-th-large" style="font-size: 30px;"></i>
+                                                <div>العناصر</div>
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                    <div style="margin: 8px;">
+                                        <input type="checkbox" class="btn-check" name="add" id="add"
+                                            autocomplete="off" style="width: 80px; height: 80px;">
+                                        <label class="btn btn-outline-primary" for="add"
+                                            style="width: 80px; height: 80px; padding: 8px;">
+                                            <div><i class="fas fa-folder-plus" style="font-size: 30px;"></i>
+                                                <div>اضافة </div>
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                    <div style="  margin: 8px;">
+                                        <input type="checkbox" class="btn-check" name="nurses" id="nurses"
+                                            autocomplete="off" style="width: 80px; height: 80px;">
+                                        <label class="btn btn-outline-primary" for="nurses"
+                                            style="width: 80px; height: 80px; padding: 8px;">
+                                            <div><i class="fas fa-box-open" style="font-size: 30px;"></i>
+                                                <div>الطلبات</div>
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                   
+                                   
+                                    <div style="  margin: 8px;">
+                                        <input type="checkbox" class="btn-check" name="broadcast" id="broadcast"
+                                            autocomplete="off" style="width: 80px; height: 80px;">
+                                        <label class="btn btn-outline-primary" for="broadcast"
+                                            style="width: 80px; height: 80px; padding: 8px;">
+                                            <div><i class="fas fa-calculator" style="font-size: 30px;"></i>
+                                                <div>الحسابات</div>
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                    <div style="  margin: 8px;">
+                                        <input type="checkbox" class="btn-check" name="settings" id="settings"
+                                            autocomplete="off" style="width: 80px; height: 80px;">
+                                        <label class="btn btn-outline-primary" for="settings"
+                                            style="width: 80px; height: 80px; padding: 8px;">
+                                            <div><i class="fas fa-cog" style="font-size: 30px;"></i>
+                                                <div>الاعدادت</div>
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button onclick="Submit()" type="button" class="btn btn-primary"
+                                style="width: 100%; margin-top: 12px;">تـسجيل</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <%- include('parts/bar.ejs'); -%>
+
+          
+
+                <div style="padding: 3rem 1rem;">
+
+
+                    <div class="mycard" style="position: relative;">
+
+                        <div class="title">
+                            <i class="fas fa-user-plus" style="margin-left: 10px;"></i> الموظفين
+                        </div>
+                        <div style="position: absolute; left: 0%; transform: translate(13%,-92%);z-index: 3;">
+                            <button onclick="opendoc()" class="btn btn-primary"
+                                style="width: 245px; height: 60px; margin-top: 12px;">تـسجيل</button>
+                        </div>
+
+
+
+                    </div>
+                    <br>
+
+
+                    <div class="grid_emp">
+                        <% for( let i = 0; i < emp.length; i++ ) { %>
+                        
+                        
+                        <button class="mycard colorcard" style="padding: 0;">
+
+                            <div
+                                style="width: 100%; height: 8px; background-color: <% if(emp[i].setting){%>#db00ff <%}else if (emp[i].delivery) {%> #007aff <% }else if(emp[i].orders){ %> #00ffd6<%} else {%> #ffc200<%}%>; border-radius:8px 8px 0 0;">
+                            </div>
+                            <div style="padding: 1rem;">
+                                <div class="boximg glass"><img class="profimage" style="width: 120px; height: 120px;"
+                                        src="/<% if( emp[i].image != '') { %><%= emp[i].image%> <% }else{ %>images/unknown.png <% } %>"></div>
+                                <br>
+                                <h5 class="texcenter" style="font-weight: bold;"><%= emp[i].name%></h5>
+                                <h6 class="texcenter"><%= emp[i].job%></h6>
+                                <br>
+                                <div class="boximg">
+                                    <i class="fas fa-user hov" style="font-size: 13px; <% if(!emp[i].all) { %> color: gray ; <% } %> "></i>
+                                    <i class="fas fa-truck hov" style="font-size: 13px; <% if(!emp[i].delivery) { %> color: gray ; <% } %> ""></i>
+                           
+                                    <i class="fas fa-th-large hov" style="font-size: 13px; <% if(!emp[i].pharmacy) { %> color: gray ; <% } %> ""></i>
+                                    <i class="fas fa-folder-plus hov" style="font-size: 13px; <% if(!emp[i].add) { %> color: gray ; <% } %> ""></i>
+                                   
+                                    <i class="fas fa-box-open hov" style="font-size: 13px; <% if(!emp[i].orders) { %> color: gray ; <% } %> ""></i>
+                                   
+                                    <i class="fas fa-calculator hov" style="font-size: 13px; <% if(!emp[i].accounts) { %> color: gray ; <% } %> ""></i>
+                                    <i class="fas fa-cog hov" style="font-size: 13px; <% if(!emp[i].setting) { %> color: gray ; <% } %> ""></i>
+                                </div>
+                                <br>
+                                <div style="color:#929292; font-weight: lighter;">
+                                    <i class="fas fa-phone"></i><a href="tel:7"
+                                        style="color:#929292; margin-right: 5px;"> <%= emp[i].phone%> </a>
+                                </div>
+
+                            </div>
+
+                        </button>
+                        <% } %>
+                        <div>
+                        </div>
+                        <div>
+                        </div>
+                        <div>
+                        </div>
+                        <div>
+                        </div>
+                        <div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+                    <div style="height: 12px;"></div>
+
+                    <div style="height: 24px;"></div>
+
+
+
+                </div>
+        </div>
+
+        <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+
+<script>
+
+
+
+
+    function loadImage(file, done) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            done(null, reader.result)
+        };
+        reader.onerror = function (error) {
+            done(error, null)
+        };
+    }
+
+
+    function Submit() {
+
+
+        var image;
+
+
+
+
+
+
+        if (document.getElementById("image").files.length > 0) {
+            loadImage(document.getElementById("image").files[0], (err, bsse64) => {
+
+                var data = {
+
+                    name: $('#name').val().trim(),
+                    pwd: $('#pwd').val(),
+                    job: $('#job').val().trim(),
+                    phone: $('#phone').val(),
+                    email: $('#email').val(),
+                    salary: $('#salary').val(),
+                    image: bsse64,
+                    all: $('input[name="main"]').is(":checked"),
+                    delivery: $('input[name="delivery"]').is(":checked"),
+                    add: $('input[name="add"]').is(":checked"),
+                    pharmacy: $('input[name="pharmacy"]').is(":checked"),
+                    add: $('input[name="add"]').is(":checked"),
+                    analytic: $('input[name="analytic"]').is(":checked"),
+                    accounts: $('input[name="broadcast"]').is(":checked"),
+                    setting: $('input[name="settings"]').is(":checked"),
+                    orders: $('input[name="orders"]').is(":checked"),
+                    presentation:$('input[name="presentation"]').is(":checked"),
+                    action:$('#action_').val()
+
+
+
+                }
+
+                console.log(bsse64);
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "/add_employees",
+                    data: data
+
+
+                }).done(function (o) {
+
+
+                    if(o.success == 1)
+                    {
+                        $('.massage').show()
+                        $('.massage-error').hide()
+                    }
+                    else
+                    {
+                        $('.massage-error').show()
+                        $('.massage').hide()
+                    }
+                })
+            })
+
+        }
+        else {
+
+
+            var data = {
+
+                name: $('#name').val().trim(),
+                pwd: $('#pwd').val().trim(),
+                job: $('#job').val(),
+                phone: $('#phone').val(),
+                email: $('#email').val(),
+                salary: $('#salary').val(),
+                image: '',
+                all: $('input[name="main"]').is(":checked"),
+                delivery: $('input[name="delivery"]').is(":checked"),
+                add: $('input[name="add"]').is(":checked"),
+                pharmacy: $('input[name="pharmacy"]').is(":checked"),
+                add: $('input[name="add"]').is(":checked"),
+                analytic: $('input[name="analytic"]').is(":checked"),
+                accounts: $('input[name="broadcast"]').is(":checked"),
+                setting: $('input[name="settings"]').is(":checked"),
+                orders: $('input[name="orders"]').is(":checked"),
+                presentation:$('input[name="presentation"]').is(":checked"),
+                action:$('#action_').val()
+
+            }
+
+
+
+
+            $.ajax({
+                type: "POST",
+                url: "/add_employees",
+                data: data
+
+
+            }).done(function (o) {
+
+                if(o.success == 1)
+                    {
+                        $('.massage').show()
+                        $('.massage-error').hide()
+                    }
+                    else
+                    {
+                        $('.massage-error').show()
+                        $('#err').html(o.mass)
+                        $('.massage').hide()
+                    }
+            })
+
+        }
+
+
+    }
+    function opendoc() {
+        $('#add_doc').fadeIn(50)
+    }
+    $('.close').on('click', (e) => {
+        $(e.currentTarget).parent("div").parent('div').parent('div').fadeOut(100)
+    })
+
+
+    function doc() {
+        $('#doctor').fadeToggle(50);
+    }
+
+
+</script>
+
+</html>

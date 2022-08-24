@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    .scanned {
+        width: 400px;
+    }
+</style>
+
+<body>
+    <button type="button" onclick="scan();">Scan</button> <!-- Triggers scan -->
+    <button id="btn" type="button">submint</button>
+    <div id="images" style="width: 100px;"></div> <!-- Displays scanned images  -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="public/scannerjs/scanner.js"></script>
+
+    <script type="text/javascript">
+
+
+        var images = []
+
+        // Need to upload scanned images to server or save them on hard disk? Please refer to the dev guide: http://asprise.com/document-scan-upload-image-browser/ie-chrome-firefox-scanner-docs.html
+        // For more scanning code samples, please visit https://github.com/Asprise/scannerjs.javascript-scanner-access-in-browsers-chrome-ie.scanner.js
+
+        var scanRequest = {
+            "use_asprise_dialog": true, // Whether to use Asprise Scanning Dialog
+            "show_scanner_ui": false, // Whether scanner UI should be shown
+            "twain_cap_setting": { // Optional scanning settings
+                "ICAP_PIXELTYPE": "TWPT_RGB" // Color
+            },
+            "output_settings": [{
+                "type": "return-base64",
+                "format": "jpg"
+            }]
+        };
+
+        /** Triggers the scan */
+        function scan() {
+            scanner.scan(displayImagesOnPage, scanRequest);
+        }
+
+        /** Processes the scan result */
+        function displayImagesOnPage(successful, mesg, response) {
+            if (!successful) { // On error
+                console.error('Failed: ' + mesg);
+                return;
+            }
+            if (successful && mesg != null && mesg.toLowerCase().indexOf('user cancel') >= 0) { // User cancelled.
+                console.info('User cancelled');
+                return;
+            }
+            var scannedImages = scanner.getScannedImages(response, true, false); // returns an array of ScannedImage
+            for (var i = 0;
+                (scannedImages instanceof Array) && i < scannedImages.length; i++) {
+                var scannedImage = scannedImages[i];
+                images.push(scannedImage.src)
+                var elementImg = scanner.createDomElementFromModel({
+                    'name': 'img',
+                    'attributes': {
+                        'class': 'scanned',
+                        'src': scannedImage.src
+                    }
+                });
+                (document.getElementById('images') ? document.getElementById('images') : document.body).appendChild(elementImg);
+            }
+        }
+    </script>
+    <script>
+        $("#btn").on("click", (e) => {
+            e.preventDefault()
+            console.log(images)
+        })
+    </script>
+</body>
+
+</html>

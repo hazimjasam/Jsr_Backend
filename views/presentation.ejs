@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<style>
+
+</style>
+
+<body>
+
+
+    <div class="card mycard fixedpanel" id="open_bed" style="display: none;">
+        <div class="card massage-error" style="flex: 1; display: none;">
+            <div class="card-body flex">
+                <i class="fas fas fa-ban"></i>
+                <div id="err">رقم الغرفة في هذا الطابق موجود بالفعل</div>
+            </div>
+        </div>
+        <div>
+
+            <div>
+                حجز السرير الى:
+            </div>
+
+            <hr>
+
+            <div id="form" autocomplete="off">
+
+                <div class="form-group">
+                    <label>الاسم</label>
+                    <input id="add_name" type="text" class="form-control" style="background-color: rgb(243, 243, 243);"
+                        required>
+                    <div id="med" class="noselect pointer"
+                        style="width: 448px; top: 37%; left: 5%; max-height: fit-content;">
+
+                    </div>
+                    <input type="text" id="id" style="display: none;">
+                    <input type="text" id="floor" style="display: none;">
+                    <input type="text" id="room" style="display: none;">
+                    <input type="text" id="bed" style="display: none;">
+                    <label>الشكوى الاساسية</label>
+                    <input id="name_ill" type="text" class="form-control" style="background-color: rgb(243, 243, 243);"
+                        required>
+                    <div id="med" class="noselect pointer"
+                        style="width: 448px; top: 37%; left: 5%; max-height: fit-content;">
+
+                    </div>
+                </div>
+
+
+
+                <br>
+                <br>
+
+                <a href="/add" class="btn btn-primary w100">+اضافة
+                    جديد</a>
+                <label>في حال لم يتم تسجيل المراجع في قاعدة البيانات سابقا</label>
+
+
+
+
+
+            </div>
+
+            <br>
+            <div class="flex">
+                <button onclick="add_date()" class="btn btn-primary w100"
+                    >+حجز</button>
+                <div style="width: 20px;"></div>
+                <button onclick="open_bed()" type="button" class="btn btn-primary w100"
+                   >غلق</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+            <%- include('parts/bar.ejs'); -%>
+                <br>
+
+
+
+                <div class="mycard">
+
+                    <div style=" position: relative;">
+                        <div class="title">
+                            العرض السريري
+                        </div>
+
+                        <div class="flex"
+                            style="position: absolute; left: 0%; transform: translate(0%,-145%);z-index: 3; gap:10px">
+                            <div class="input-group">
+                                <select class="form-select" id="categorysel" onchange="search()"
+                                    name="type">
+                                    <option selected value="الكل">الطابق</option>
+
+
+
+
+
+                                </select>
+
+
+                            </div>
+                            <input type="text" id="search_box" placeholder="بحث ,اسم , رمز المريض" class="form-control"
+                                aria-label="Text input with segmented dropdown button" style="width: 300px;">
+                            <div style="width: 12px;"></div>
+
+
+
+
+                        </div>
+                    </div>
+
+
+                    <hr>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <span> عدد الاسرة الكلي : <%= allbeds %> </span><span>عدد الاسرة المحجوزة : <%= count %>
+                            </span>
+                        </div>
+
+                    </div>
+                    <br>
+
+                    <% for( let i=0; i < rooms.length; i++ ) { %>
+
+
+                        <div class="card">
+                            <div class="cardlable">
+
+                                <i class="fas fa-building hov"></i> الطابق : <%= rooms[i].floor %>
+                                    <i class="fab fa-buromobelexperte hov"></i>غرفة : <%= rooms[i].room %>
+                                        <div class="flex roombar">
+                                            <span>
+                                                عدد الاسرة :
+                                            </span>
+                                            <span style="font-weight: bold; color: blue;">
+                                                <%= rooms[i].beds %>
+                                            </span>
+
+                                        </div>
+                            </div>
+                            <div class="grid_bed card-body">
+                                <% for( let y=0; y < rooms[i].beds; y++ ) { %>
+
+                                    <div class="bedm " id="f<%= rooms[i].floor %>r<%= rooms[i].room %>b<%= y+1%>" >
+                                        <a onclick="open_bed('<%= rooms[i].floor%>','<%= rooms[i].room %>','<%= y+1%>')">
+                                            <div class="bed">
+                                            <div
+                                                style="width: 100%; height: 10px; background-color: blue; border-radius: 9px 9px 0 0;">
+                                            </div>
+                                            <h4>
+                                                <%= y+1%>
+                                            </h4>
+                                            <i class="fas fa-bed"></i>
+
+                                            <h5>متـاح</h5>
+                                        </div>
+                                        </a>
+                                    </div>
+
+                                    <% } %>
+
+
+                            </div>
+                        </div>
+                        <br>
+                        <% } %>
+
+
+                </div>
+
+
+
+                <div style="height: 12px;"></div>
+
+                <div style="height: 24px;"></div>
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+
+<script>
+
+    var socket = io();
+
+    function patient_sgin_out(index) {
+        $.ajax({
+            type: "POST",
+            url: "/patient_sgin_out",
+            data: {
+                id: index
+            }
+
+
+        }).done(function (o) {
+
+            if (o.success == 1) {
+                location.reload();
+            }
+
+        })
+    }
+
+    function open_ptient(index, doc) {
+        window.location.href = `/patient?id=${index}&doc=${doc}`
+    }
+
+
+    function open_bed(floor, room, bed) {
+
+        $('#floor').val(floor)
+        $('#room').val(room)
+        $('#bed').val(bed)
+
+        $("#open_bed").fadeToggle(200)
+    }
+
+    $('#add_name').keyup(() => {
+
+
+        $('#med').show()
+        socket.emit('search_small', { index: $('#add_name').val() })
+
+    })
+    socket.on('update_small', (_data) => {
+
+        var data = _data
+
+        console.log(_data)
+
+
+        $('#med').empty();
+
+        if ($('#add_name').val() != '') {
+
+
+
+            for (var i = 0; i < data.length; i++) {
+
+
+                $('#med').append(`
+
+
+                        <div>
+                            <a onclick='select_name("${data[i].name}","${data[i].phone_number}","${data[i]._id}","${data[i].action}")' class="flex">
+                                <div><img src="${(data[i].image != "") ? '/' + data[i].image : `/images/unknown.png`}" style="width: 35px; height:35px; margin-left: 20px; border-radius:30px "></div>
+                                <div>${data[i].name}</div>
+                        
+                            </a>
+                        </div>
+
+                         `)
+
+            }
+        }
+    })
+
+
+
+    function select_name(index, phone, id, action) {
+        $('#med').empty();
+
+        $('#add_name').val(index.trim())
+
+
+
+        $('#id').val(id)
+
+
+        $('#med').on('click', () => {
+            $('#med').hide()
+        })
+    }
+
+    function add_date() {
+
+
+
+        $.ajax({
+            type: "POST",
+            url: "/add_doc",
+            data: {
+                name: $('#name_ill').val(),
+                type: "العرض السريري",
+                id: $('#id').val(),
+                floor: $('#floor').val(),
+                room: $('#room').val(),
+                bed: $('#bed').val(),
+            }
+        }).done(function (o) {
+            if (o.success == 0) {
+
+                $('.massage-error').show()
+                $('#err').html(o.mass)
+            }
+            else {
+                location.reload();
+            }
+
+        })
+    }
+
+    get_clinical_reservation()
+    function get_clinical_reservation() {
+
+
+
+        $.ajax({
+            type: "POST",
+            url: "/get_clinical_reservation",
+            data: {
+                filter: 1,
+
+            }
+        }).done(function (o) {
+
+            if (o.success == 1) {
+
+                console.log('sec')
+                for (var i = 0; i < o.record_.length; i++) {
+
+                    
+                    $('#f'+o.record_[i].floor+'r'+o.record_[i].room+'b'+o.record_[i].bed).empty()
+                    $('#f'+o.record_[i].floor+'r'+o.record_[i].room+'b'+o.record_[i].bed).append(`
+
+                    <a
+                                                      onclick="open_ptient('${ o.record_[i].patient_id }','${ o.record_[i].name }')"
+                                                    class="bed">
+                                                    <div
+                                                        style="width: 100%; height: 10px; background-color: orange; border-radius: 9px 9px 0 0;">
+                                                    </div>
+                                                    <h6>
+                                                        ${ o.record_[i].bed}
+                                                    </h6>
+                                                    <div class="boximg glass"><img class="profimage"
+                                                            style="width: 50px; height: 50px;"
+                                                            src="/${ ( o.record_[i].patient_img != '')?  o.record_[i].patient_img:'images/unknown.png'  }">
+                                                    </div>
+
+
+                                                    <h1>
+                                                        ${ o.record_[i].patient_name }
+                                                    </h1>
+                                                    <div>
+                                                        ${ o.record_[i].open_date }
+                                                    </div>
+
+                                                    <div class="ext">
+                                                        <div>
+                                                            <a
+                                                                href="/patient?id=${ o.record_[i].patient_id }&doc=${ o.record_[i].name }">تبديل
+                                                                السرير</a>
+                                                        </div>
+                                                        <hr>
+                                                        <div>
+                                                            <a onclick="patient_sgin_out('${o.record_[i]._id}')"
+                                                                style="color:red">تسجيل الخروج</a>
+                                                        </div>
+
+                                                    </div>
+                                                </a>
+                    `)
+
+                }
+            }
+        })
+
+    }
+
+
+
+
+
+</script>
+
+</html>

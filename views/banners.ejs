@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<style>
+
+</style>
+
+<body>
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+            <%- include('parts/bar.ejs'); -%>
+                <br>
+                <div class="mycard pr">
+                    <div class="title">
+                        اضافة بنر جديد
+                    </div>
+                    <hr>
+                    <form action="/add_banner" method="POST" enctype="multipart/form-data">
+
+                        <div class="w100">
+                            <label>اسم المنتج بالعربي</label>
+                            <input name="product" type="text" class="form-control bcw" autocomplete="off"
+                                placeholder="الاسم يجب ان يكون صحيح" required>
+                        </div>
+                        <br>
+                        <label>الصورة لا تتجاوز 75Kb</label>
+                        <input type="file" class="form-control imagefile" name="img" accept="image/x-png,image/jpeg" /
+                            required>
+                        <button type="submit" class="btn btn-primary"
+                            style="width: 100%; margin-top: 12px;">اضافة</button>
+                    </form>
+                </div>
+                <br>
+                <div class="mycard pr">
+
+                    <div class="title">
+                        البنرات
+                    </div>
+
+                    <hr>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">الصورة</th>
+
+
+                                <th scope="col">المنتج</th>
+
+
+                                <th scope="col">الاجراء</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="data_tabel">
+
+                            <% for( let i=0; i < banners.length; i++ ) { %>
+                                <tr>
+                                    <td>
+                                        <img src="/images/<%= banners[i].image  %>" style="width: 50px;">
+                                    </td>
+                                    <td>
+                                        <%= banners[i].product %>
+                                    </td>
+                                    <td>
+                                        <a onclick="delete_banner('<%= banners[i].id%>')"><i class="fas fa-trash button_user"></i></a>
+                                    </td>
+                                </tr>
+                                <% } %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+
+
+
+</html>

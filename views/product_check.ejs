@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <link rel="stylesheet" href="/style/switch.css">
+        <title>لوحة التحكم</title>
+</head>
+
+<body>
+
+
+    <div class="fixedpanel wh" id="confirmation">
+        <div class="mycard">
+            <div class="flex">
+                <h5 style="flex: 1;">هل انت متاكد من رغبتك في عملية المسح ؟</h5>
+            </div>
+            <hr>
+
+
+            <div class="flex">
+                <input class="btn btn-primary" type="button" onclick="delete_('<%= stock.id %>')" value="نعم">
+                <input class="btn btn-primary" type="button" onclick="show()" value="لا">
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+            <div id="alert">
+
+            </div>
+
+            <%- include('parts/bar.ejs'); -%>
+
+                <div class="p2_3">
+
+
+                    <div class="mycard">
+
+                        <div class="title tac">
+                            <%= stock.name_ar%>
+                        </div>
+                        <hr>
+
+                        <div class="card-body">
+
+
+                            <div class="flex">
+                                <form class="f1" action="/edit_stock" method="POST">
+
+                                    <input class="form-control bc no" type="text" name="id" value='<%=stock.id %>'>
+                                    <div class="flex">
+
+                                        <div>
+                                            <label>رقـم الرف</label>
+                                            <input name="shelf" type="text" class="form-control bcw"
+                                                value="<%= stock.shelf %>">
+                                        </div>
+                                    </div>
+
+                                    <label>الباركود </label>
+                                    <input name="bar_code" id="bar_code" type="text" class="form-control bcw"
+                                        value="<%= stock.bar_code %>">
+                                    <i>قم بمسح الباركو بشكل مباشر</i>
+                                    <br>
+                                    <br>
+
+                                    <div>
+                                        <label>الفرع / المخزن</label>
+                                        <div class="input-group">
+                                            <select class="form-select" id="warehouce" onchange="search()"
+                                                name="warehouce" style="width: 200px;">
+                                                <% if(stock.warehouse=='لا يوجد' ) {%>
+                                                    <option value='لا يوجد' selected>
+                                                        لايوجد
+                                                    </option>
+                                                    <% } %>
+                                                        <% for( let index=0; index < warehouse.length; index++ ) { %>
+
+                                                            <option value="<%=warehouse[index].name%>" <%
+                                                                if(stock.warehouse==warehouse[index].name) {%> selected
+                                                                <% } %> >
+                                                                    <%=warehouse[index].name %>
+                                                            </option>
+                                                            <% } %>
+
+
+
+
+                                            </select>
+
+
+
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="flex">
+
+                                        <div>
+                                            <label>السعر</label>
+                                            <input name="price" type="number" class="form-control bcw"
+                                                value="<%= stock.price %>">
+                                        </div>
+                                        <div>
+                                            <label>التخفيض</label>
+                                            <input name="price_offer" type="number" class="form-control bcw"
+                                                value="<%= stock.price_offer %>">
+                                            <i>يتم تفعيل التخفيض عند وضع المبلغ</i>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="card wfc">
+                                        <div class="card-body">
+
+                                            <div class="flex">
+                                                <label> المــتـــبـــقي : </label>
+                                                <div>
+                                                    <input class="form-control bc" type="number" name="leftinstock"
+                                                        value='<%=stock.leftinstock %>'>
+
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="flex">
+
+                                        <label class="switch">
+                                            <input name="active" type="checkbox" <%if(stock.active){%> checked <%}%>>
+                                                <span class="slider round"></span>
+                                        </label>
+                                        <h5>تفعيل المنتج</h5>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div class="flex"><button class="btn btn-primary" type="submit"><i
+                                                class="fas fa-print"></i>
+                                            حفظ التعديلات </button>
+                                        <a class="btn btn-primary bcr" onclick="show()"><i class="fas fa-print"></i>
+                                            مسح </a>
+                                    </div>
+
+
+
+
+                                </form>
+                                <div>
+                                    <img src="<% if (stock.images.length != '') {%> <%= '/images/'+stock.images[0]  %>  <% }else{ %> /images/rndmed.png<% } %> "
+                                        class="br5" style="width: 300px;">
+                                    <% if (stock.images.length>= 2) {%>
+                                        <div class="flex" style="margin-top: 20px;">
+                                            <% if (stock.images.length>= 2) {%>
+                                                <img src="<%= '/images/'+stock.images[1]  %>" class="br5" style="width: 70px;">
+                                                <% } %>
+                                                    <% if (stock.images.length>= 3) {%>
+                                                        <img src="<%= '/images/'+stock.images[2]  %>" class="br5"
+                                                            style="width: 70px;">
+                                                        <% } %>
+                                                            <% if (stock.images.length>= 4) {%>
+                                                                <img src="<%= '/images/'+stock.images[3]  %>" class="br5"
+                                                                    style="width: 70px;">
+                                                                <% } %>
+                                        </div>
+                                        <% } %>
+                                            <br>
+                                            <br>
+                                            <div class="card ">
+
+                                                <div class="card-body">
+                                                    <div class="flex">
+                                                        <label class="f1"> القسم: </label>
+                                                        <% for(let i=0 ; i < ca.length ; i++) {%>
+                                                            <% if(ca[i].id==stock.category ) {%>
+                                                                <div>
+                                                                    <%= ca[i].name %>
+                                                                </div>
+                                                                <% } %>
+                                                                    <% } %>
+                                                    </div>
+                                                    <div class="flex">
+                                                        <label class="f1"> التصنيف: </label>
+                                                        <% for(let i=0 ; i < sub.length ; i++) {%>
+                                                            <% if(sub[i].id==stock.subcategory ) {%>
+                                                                <div>
+                                                                    <%= sub[i].name %>
+                                                                </div>
+                                                                <% } %>
+                                                                    <% } %>
+                                                    </div>
+                                                    <div class="flex">
+                                                        <label class="f1"> التصنيف الثانوي: </label>
+                                                        <% for(let i=0 ; i < subsub.length ; i++) {%>
+                                                            <% if(subsub[i].id==stock.subsubcategory ) {%>
+                                                                <div>
+                                                                    <%= subsub[i].name %>
+                                                                </div>
+                                                                <% } %>
+                                                                    <% } %>
+                                                    </div>
+                                                 
+
+
+                                                    <br>
+                                                    <br>
+
+
+
+                                                    <div class="flex">
+                                                        <label class="f1"> تاريخ الاضافة : </label>
+                                                        <div>
+
+                                                            <%=stock.date %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex">
+                                                        <label class="f1"> اخر تعديل من قبل : </label>
+                                                        <div>
+
+                                                            <%=stock.data_entry_name %>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="card ">
+
+                                                <div class="card-body">
+                                                    <h5>البطاقات</h5>
+                                                    <div>
+                                                        <%=stock.history %>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+<script>
+
+
+    function show() {
+        $('#confirmation').fadeToggle(100)
+    }
+
+
+    var barcode = '';
+    var interval;
+
+    document.addEventListener('keydown', function (evt) {
+        if (interval)
+            clearInterval(interval)
+        if (evt.code == "Enter") {
+            if (barcode)
+                handleBarcode(barcode)
+            barcode = ''
+            return
+        }
+
+
+
+        if (evt.code != "ShiftLeft" && evt.code != "ShiftRight")
+            barcode += evt.key
+
+
+        interval = setInterval(() => barcode = "", 60);
+    })
+
+
+    function handleBarcode(index) {
+
+
+
+        $("#bar_code").val("")
+        $("#bar_code").val(index)
+
+    }
+
+    function delete_(id) {
+
+        $.ajax({
+            type: "POST",
+            url: "/delete_stock",
+            data: {
+                id: id,
+
+            }
+        }).done(function (o) {
+
+            if (o.success)
+                window.history.back()
+        })
+
+    }
+
+</script>
+
+
+
+</html>

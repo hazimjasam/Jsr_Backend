@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<body>
+
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+            <div id="alert">
+
+            </div>
+
+            <%- include('parts/bar.ejs'); -%>
+
+
+
+
+
+                <div style="padding: 2.3rem 1rem;">
+
+
+                    <div class="mycard">
+
+                        <div class="title" style="position: relative">
+                            <i class="fas fa-history" style="margin-left: 10px;"></i>
+                            <%= title %>
+
+
+
+
+                                <div class="flex"
+                                    style="position: absolute; left: 0%; transform: translate(1%,-77%);z-index: 3; gap: 10px;">
+
+                                    <div class="input-group">
+                                        <select class="form-select" id="employee" onchange="search()" name="type">
+                                            <option selected value='الكل'>الموظف : الكل</option>
+                                            <% for( let i=0; i < employees.length; i++ ) { %>
+
+
+                                                <option value='<%= employees[i].name %>'>
+                                                    <%= employees[i].name %>
+                                                </option>
+                                                <% } %>
+
+
+
+
+
+
+                                        </select>
+
+
+
+                                    </div>
+                                    <div class="input-group">
+                                        <select class="form-select" id="type" onchange="search()" name="type">
+                                            <option selected value=-1 >النوع : الكل</option>
+                                            <option  value=0>تسجيل الدخول</option>
+                                            <option  value=1>اضافة</option>
+                                            <option  value=2>تعديل</option>
+                                            <option  value=3>حذف</option>
+                                           
+                                            <option  value=5>سحب مبلغ</option>
+                                            <option  value=6>اضافة مصروفات </option>
+                                            <option  value=7> اضافة ايرادات </option>
+                                            <option  value=12>حذف من الحسابات</option>
+                                            <option  value=8>مبيعات</option>
+                                            
+                                            <option  value=10>اضافة دائن</option>
+                                            <option  value=11>اضافة مدين</option>
+                                           
+
+
+
+
+
+
+
+                                        </select>
+
+
+
+                                    </div>
+
+
+
+
+
+
+
+                                </div>
+                        </div>
+
+
+                        <hr>
+                        <div class="flex">
+
+                            <div style="flex:1;">
+
+                                <div class="flex" style=" justify-content: left;">
+
+                                    <div>
+                                        <label>من</label>
+                                        <input type="date" id='start' class="form-control" value=<%=datestart %>>
+
+                                    </div>
+                                    <div class="spaceout2"></div>
+                                    <div>
+                                        <label>الى</label>
+                                        <input type="date" id='end' class="form-control" value=<%=dateend %>>
+                                    </div>
+                                    <div class="spaceout2"></div>
+                                    <button class="btn btn-primary" style="height: 38px; margin-top: 23px;"
+                                        onclick="search()"><i class="fas fa-arrow-circle-left"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div style="height: 12px;"></div>
+
+
+                        <div class="card">
+                            <div class="card-body">
+
+
+
+                                <table class="table">
+                                    <thead>
+                                        <tr >
+                                            <th scope="col">النوع</th>
+                                            <th scope="col">الموظف</th>
+                                            <th scope="col">التفاصيل</th>
+                                            <th scope="col"> التاريخ </th>
+
+
+
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="data_tabel">
+
+                                    </tbody>
+
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="height: 24px;"></div>
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+<script src="/js/open_statement.js"></script>
+
+<script defer>
+    function getdatein_ar(index) {
+        var now = new Date(index);
+        var month = (now.getMonth() + 1);
+        var day = now.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+        return day + '/' + month + '/' + now.getFullYear();
+    }
+    function gettime(index) {
+
+        var date = new Date(index);
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+    }
+    $(document).ready(function () {
+        search()
+    });
+
+
+
+    function doc_Toggle() {
+        $('#doc_panel').fadeToggle()
+    }
+    $("#search_box").keyup(function () {
+
+
+
+
+        search()
+
+
+
+
+    })
+
+
+
+
+    function search() {
+        $.ajax({
+            type: "POST",
+            url: "/serach_logo",
+            data: {
+
+                serach: $('#search_box').val(),
+                employee: $('#employee').val(),
+                type: $('#type').val(),
+                start: $('#start').val(),
+                end: $('#end').val(),
+
+            }
+
+
+        }).done(function (o) {
+
+            if (o.success == 1) {
+                $('#data_tabel').empty()
+                console.log(o.logs[0].employee)
+                var x = ''
+                for (let i = 0; i < o.logs.length; i++) {
+
+
+
+                    if (o.logs[i].type_ == 1) {
+
+                        x = '<div class="tag" style="background-color: #8ebef3;">  أضافة  </div>'
+                    }
+                    else if (o.logs[i].type_ == 3) {
+                        x = '<div class="tag" style="background-color: #f39a8e;">  حذف  </div>'
+                    }
+                    else if (o.logs[i].type_ == 2) {
+                        x = '<div class="tag" style="background-color: #f3da8e;">  تعديل  </div>'
+                    }
+                    else if (o.logs[i].type_ == 0) {
+                        x = '<div class="tag" style="background-color: #8ef3e7;"> تسجيل الدخول  </div>'
+                    }
+                    else if (o.logs[i].type_ == 8) {
+                        x = '<div class="tag" style="background-color: #a7ffe6;">مبيعات</div>'
+                    }
+                    
+                    else if (o.logs[i].type_ == 5) {
+                        x = '<div class="tag" style="background-color: #6cc172;">    سحب مبلغ  </div>'
+                    }
+                    else if (o.logs[i].type_ == 6) {
+                        x = '<div class="tag" style="background-color: #6cc172;">    اضافة مصروفات  </div>'
+                    }
+                    else if (o.logs[i].type_ == 7) {
+                        x = '<div class="tag" style="background-color: #6cc172;">    اضافة ايرادات  </div>'
+                    }
+                    else if (o.logs[i].type_ == 12) {
+                        x = '<div class="tag" style="background-color: #f39a8e;">حذف مالية </div>'
+                    }
+                   
+                    else if (o.logs[i].type_ == 10) {
+                        x = '<div class="tag" style="background-color: #6cc172;">اضافة دائن</div>'
+                    }
+                    else if (o.logs[i].type_ == 11) {
+                        x = '<div class="tag" style="background-color: #6cc172;">اضافة مدين</div>'
+                    }
+                 
+
+                    $('#data_tabel').append(`
+                    <tr>
+                        <td style="width: 150px;">
+    ${x}
+</td>
+<td>
+    <divstyle="width: 150px;">
+        ${o.logs[i].employee}
+       
+    </div>
+    
+</td>
+
+
+<td>
+    <div>
+        ${o.logs[i].details}
+    </div>
+
+</td>
+<td>
+    <div>
+        ${getdatein_ar(o.logs[i].createdAt) +" الساعة :  " + gettime(o.logs[i].createdAt)}
+    </div>
+
+</td>
+
+</tr>
+                `)
+                }
+
+            }
+        })
+    }
+
+
+
+</script>
+<script src="/scannerjs/scanner.js"></script>
+<script src="/js/scaner.js"></script>
+
+
+
+
+
+
+
+
+
+
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<body>
+
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+            <div id="alert">
+
+            </div>
+
+            <%- include('parts/bar.ejs'); -%>
+
+
+
+
+
+                <div style="padding: 2.3rem 1rem;">
+
+
+                    <div class="mycard">
+
+                        <div class="title" style="position: relative">
+                            <i class="fas fa-boxes" style="margin-left: 10px;"></i>
+                            <%= title %>
+
+
+
+
+                                <div class="flex"
+                                    style="position: absolute; left: 0%; transform: translate(1%,-77%);z-index: 3; gap: 10px;">
+
+                                    <div class="input-group">
+                                        <select class="form-select" id="employee" onchange="search()">
+                                            <option selected value='الكل'>الموظف : الكل</option>
+                                            <% for( let i=0; i < employees.length; i++ ) { %>
+
+
+                                                <option value='<%= employees[i].name %>'>
+                                                    <%= employees[i].name %>
+                                                </option>
+                                                <% } %>
+
+
+
+
+
+
+                                        </select>
+
+
+
+                                    </div>
+                                    <div class="input-group">
+                                        <select class="form-select" id="type" onchange="search()"
+                                            name="type">
+                                            <option selected value=-1>المخزن : الكل</option>
+                                            <% for( let i=0; i < warehouse.length; i++ ) { %>
+
+
+                                                <option value='<%= warehouse[i].id %>'>
+                                                    <%= warehouse[i].name %>
+                                                </option>
+                                                <% } %>
+
+
+
+
+
+
+                                        </select>
+
+
+
+                                    </div>
+
+
+
+
+
+                                    <input type="text" id="search_box" placeholder="بحث ,اسم , رقم الفاتورة"
+                                        class="form-control" aria-label="Text input with segmented dropdown button"
+                                        style="width: 300px;">
+                                    <div style="width: 12px;"></div>
+
+                                </div>
+                        </div>
+
+
+                        <hr>
+                        <div class="flex">
+                           
+                            <div style="flex:1;">
+                               
+                                <div class="flex" style=" justify-content: left;">
+                             
+                                    <div>
+                                        <label >من</label>
+                                        <input type="date" id='start' class="form-control" value=<%=datestart %>>
+
+                                    </div>
+                                    <div class="spaceout2"></div>
+                                    <div>
+                                        <label >الى</label>
+                                        <input type="date" id='end' class="form-control" value=<%=dateend %>>
+                                    </div>
+                                    <div class="spaceout2"></div>
+                                    <button class="btn btn-primary" style="height: 38px; margin-top: 23px;"
+                                        onclick="search()"><i class="fas fa-arrow-circle-left"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div style="height: 12px;"></div>
+
+
+                        <div class="card">
+                            <div class="card-body">
+
+
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">رقم الفاتورة</th>
+                                            <th scope="col">الاسم</th>
+                                            <th scope="col">التاريخ</th>
+                                            <th scope="col"> السعر (<%=general.currency %>)</th>
+
+
+                                            <th scope="col">الخصم (<%=general.currency %>)</th>
+                                            <th scope="col"> الاجمالي (<%=general.currency %>)</th>
+
+                                            <th scope="col">الاجراء</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="data_tabel">
+
+                                    </tbody>
+
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="height: 24px;"></div>
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+<script src="/js/open_statement.js"></script>
+
+<script defer>
+    function getdatein_ar(index) {
+        var now = new Date(index);
+        var month = (now.getMonth() + 1);
+        var day = now.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+        return day + '/' + month + '/' + now.getFullYear();
+    }
+    function formatCurrancy(price) {
+
+
+        var the_price = price.toFixed(2)
+
+
+        var fractional_number = the_price.toString().split(".")
+
+        var isLower = false
+
+        if (the_price < 0) {
+            isLower = true
+        }
+
+        var StringPrice = Math.abs(fractional_number[0]).toString()
+
+        var StringArray = StringPrice.split("").reverse()
+        var newArray = []
+        var counter = 0;
+
+
+        for (let i = 0; i < StringArray.length; i++) {
+            if (counter == 3) {
+                newArray.push(",")
+                counter = 0
+            }
+            newArray.push(StringArray[i])
+            counter++
+        }
+
+        if (isLower) {
+            newArray.push("-")
+        }
+
+        return newArray.reverse().join("") + ((fractional_number[1] == '00') ? '' : '.' + fractional_number[1])
+
+    }
+
+    $(document).ready(function () {
+        search()
+    });
+
+
+
+    function doc_Toggle() {
+        $('#doc_panel').fadeToggle()
+    }
+    $("#search_box").keyup(function () {
+
+
+
+
+        search()
+
+
+
+
+    })
+
+
+
+
+    function search() {
+        $.ajax({
+            type: "POST",
+            url: "/serach_sales",
+            data: {
+
+                serach: $('#search_box').val(),
+                employee:$('#employee').val(),
+                type:$('#type').val(),
+                start:$('#start').val(),
+                end:$('#end').val(),
+
+            }
+
+
+        }).done(function (o) {
+
+            if (o.success == 1) {
+                $('#data_tabel').empty()
+                for (let i = 0; i < o.creditor.length; i++)
+                    $('#data_tabel').append(`
+                    <tr>
+                        <td style="width: 200px;">
+    ${o.creditor[i].bar_code}
+</td>
+<td>
+    <div>
+        ${o.creditor[i].name}
+       
+    </div>
+    <i style="color: gray; font-size: 14px;"> ${o.creditor[i].company}</i>
+</td>
+
+
+<td style="width: 150px;">
+    <div>
+        ${getdatein_ar(o.creditor[i].createdAt)}
+    </div>
+
+</td>
+<td>
+    <div>
+        ${formatCurrancy(o.creditor[i].price)}
+    </div>
+
+</td>
+<td>
+    <div>
+        ${formatCurrancy(o.creditor[i].discount)}
+    </div>
+</td>
+<td>
+    <div>
+        ${formatCurrancy(o.creditor[i].price -
+                        o.creditor[i].discount)}
+    </div>
+</td>
+
+<td>
+    <a class="abtn" style=' padding: 0 20px;'
+        href="/statement?id=${o.creditor[i]._id}&last_page=/debit"><i
+            class="fas fa-eye"><span
+                style="margin-right: 15px;">عرض
+                القائمة </span></i></a>
+</td>
+</tr>
+                `)
+
+            }
+        })
+    }
+
+
+
+</script>
+<script src="/scannerjs/scanner.js"></script>
+<script src="/js/scaner.js"></script>
+
+
+
+
+
+
+
+
+
+
+</html>

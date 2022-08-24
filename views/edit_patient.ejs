@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>اضافة مراجع جديد</title>
+
+
+
+
+</head>
+
+<body>
+
+    <div class="cam">
+        <video id="webcam" autoplay playsinline width="500" height="250"></video>
+
+
+        <button onclick="take()">take</button>
+        <button onclick="saveImage()">send</button>
+    </div>
+
+
+    <div id="container" class="flex ">
+        <div id="side_nav">
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+            <div id="alert">
+
+            </div>
+            <%- include('parts/barVtwo.ejs'); -%>
+
+
+
+
+                <div class="card massage" style="flex: 1;">
+                    <div class="card-body">
+                        <i class="fas fa-check-circle"></i>
+                        تمت اضافة معلومات المراجع
+                    </div>
+                </div>
+                <div class="card massage-error" style="flex: 1;">
+                    <div class="card-body">
+                        <i class="fas fa-ban"></i>
+                        بعض الحقول الاساسية غير كاملة
+                    </div>
+                </div>
+                <div class="card massage-log" style="flex: 1;">
+                    <div class="card-body">
+                        <i class="fas fa-ban"></i>
+                        اسم المريض موجود بالفعل
+                        <button style="margin-right: 50px;">vddv</button>
+                    </div>
+                </div>
+
+                <div style="display: flex">
+                    <div class="card" style="flex: 1;">
+                        <div class="card-body" style="padding: 2.5rem 2.5rem">
+
+
+                            <div class="grid">
+                                <div>
+                                    <div class="form-group">
+                                        <label >الجنس</label>
+                                        <div style="height: 12px;"></div>
+                                        <div class=" radio-toolbar">
+
+                                            
+                                            <input id="male" type="radio" name="gender" value="1" <%if(patients.sex == 1){ %> checked <% } %>>
+                                            <label class="custom-control-label pointer" for="male"><i
+                                                    class="fas fa-male" style="margin-left: 10px;"></i>ذكر</label>
+
+
+                                            <input id="female" type="radio" name="gender" value="2" <%if(patients.sex == 2){ %> checked <% } %>>
+                                            <label class="custom-control-label pointer" for="female"><i
+                                                    class="fas fa-female" style="margin-left: 10px;"></i>انثى</label>
+
+                                        </div>
+
+                                    </div>
+                                    <div style="height: 12px;"></div>
+                                    <div class="form-group display_flex">
+                                        <li>
+                                            <label >الاسم الرباعي</label>
+                                            <input id="name" type="text" class="form-control"
+                                                style="background-color: rgb(243, 243, 243);"
+                                                 placeholder="العدد" value="<%= patients.name %>" disabled>
+                                        </li>
+                                        <div style="width: 30px;"></div>
+                                        <li>
+                                            <label >تاريخ الميلاد</label>
+                                            <input id="age" type="date" class="form-control"
+                                                style="background-color: rgb(243, 243, 243);" value="<%= patients.age %>"
+                                                >
+                                        </li>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                            <form id="out_form" autocomplete="on">
+
+
+                                <br>
+                                <div class="form-group display_flex">
+                                    <div style="width: 100%;">
+                                        <label >رقـم الهاتف</label>
+                                        <input id="phone_number" type="text" class="form-control"
+                                            style="background-color: rgb(243, 243, 243);" autocomplete="off"
+                                            value="<%= patients.phone_number %>">
+                                    </div>
+                                    <div style="width: 20px;"></div>
+                                    <div style="width: 100%;">
+                                        <label >مـحل الـسكن</label>
+                                        <input id="residence" type="text" class="form-control"
+                                            style="background-color: rgb(243, 243, 243);" autocomplete="off"
+                                            value="<%= patients.residence %>">
+                                    </div>
+                                </div>
+                                <div class="form-group" style="width: 100%;">
+                                    <label > الجـنسية</label>
+                                    <input id="nationality" type="text" class="form-control"
+                                        style="background-color: rgb(243, 243, 243);" name ="nationality"
+                                        value="<%= patients.nationality %>">
+                                </div>
+                                <div class="display_flex">
+                                    <div class="form-group" style="width: 100%;">
+                                        <label > المهنة</label>
+                                        <input id="occupation" type="text" class="form-control"
+                                            style="background-color: rgb(243, 243, 243);" value="<%= patients.occupation %>" >
+                                    </div>
+                                    <div style="width: 20px;"></div>
+                                    <div class="form-group" style="width: 100%;">
+                                        <label > عدد الاولاد</label>
+                                        <input id="number_Children" type="number" class="form-control"
+                                            style="background-color: rgb(243, 243, 243);" value="<%= patients.number_Children %>" >
+                                    </div>
+                                    <div style="width: 20px;"></div>
+                                    <div class="form-group" style="width: 100%;">
+                                        <label > الحالة الزوجية</label>
+                                        <div class="input-group">
+                                            <select class="form-select" id="marital_Status"
+                                               >
+                                                <option>اختر...</option>
+
+                                                <option value="عازب"  <% if(patients.marital_Status == "عازب"){ %> selected <% } %>>
+                                                    عازب
+                                                </option>
+                                                <option value="متزوج" <% if(patients.marital_Status == "متزوج"){ %> selected <% } %>>
+                                                    متزوج
+                                                </option>
+                                                <option value="ارمل" <% if(patients.marital_Status == "ارمل"){ %> selected <% } %>>
+                                                    ارمل
+                                                </option>
+                                                <option value="مطلاق" <% if(patients.marital_Status == "مطلاق"){ %> selected <% } %>>
+                                                    مطلاق
+                                                </option>
+
+
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div>المرافقين</div>
+                                <div class="form-group" style="width: 100%;">
+                                 
+                                    <input id="Attached" type="number" class="form-control" value="<%= patients.Attached %>"
+                                        style="background-color: rgb(243, 243, 243);" >
+                                </div>
+                                <div class="form-group" style="width: 100%;">
+                                    
+                                    <input id="Attached2" type="number" class="form-control" value="<%= patients.Attached2 %>"
+                                        style="background-color: rgb(243, 243, 243);" >
+                                </div>
+                                <label for="exampleFormControlTextarea1">فصيلة الدم</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="bloodtype"
+                                       >
+                                        <option value=0>اختر...</option>
+                                        <option value=1 <% if(patients.blood_type == 1){ %> selected <% } %>>A+</option>
+                                        <option value=2 <% if(patients.blood_type == 2){ %> selected <% } %>>A-</option>
+                                        <option value=3 <% if(patients.blood_type == 3){ %> selected <% } %>>B+</option>
+                                        <option value=4 <% if(patients.blood_type == 4){ %> selected <% } %>>B-</option>
+                                        <option value=5 <% if(patients.blood_type == 5){ %> selected <% } %>>AB+</option>
+                                        <option value=6 <% if(patients.blood_type == 6){ %> selected <% } %>>AB-</option>
+                                        <option value=7 <% if(patients.blood_type == 7){ %> selected <% } %>>O+</option>
+                                        <option value=8 <% if(patients.blood_type == 8){ %> selected <% } %>>O-</option>
+
+
+                                    </select>
+
+                                </div>
+                                <div class="form-group" >
+                                   
+                                    <div style="height: 5px;"></div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">الملاحظات</label>
+                                        <textarea id="note" class="form-control" 
+                                            rows="3" placeholder="اختياري"><%= patients.note %></textarea>
+                                    </div>
+                                    <div class="form-group display_flex">
+                                        <div style="width: 100%;">
+                                            <label for="exampleFormControlTextarea1">التوجية</label>
+                                            <div class="input-group">
+                                                <select class="form-select" id="action_"
+                                                    >
+                                                    <option>اختر...</option>
+                                                    <% for( let index=0; index < actions.length; index++ ) { %>
+                                                        <option value="<%= actions[index].name  %>" <% if(patients.action == actions[index].name){ %> selected <% } %> >
+                                                            <%= actions[index].name %>
+                                                        </option>
+                                                        <% } %>
+
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                        
+
+                                    </div>
+
+                                    <button onclick="Submit()" type="button" class="btn btn-primary"
+                                        style="width: 100%; margin-top: 12px;">تعديل</button>
+                                </div>
+
+                            </form>
+
+
+
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+
+                <div style="height: 24px;"></div>
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+
+
+<script>
+    class Webcam {
+        constructor(e, t = "user", s = null, i = null) {
+            this._webcamElement = e, this._webcamElement.width = this._webcamElement.width || 640, this._webcamElement.height = this._webcamElement.height || .75 * this._webcamElement.width, this._facingMode = t, this._webcamList = [], this._streamList = [], this._selectedDeviceId = "", this._canvasElement = s, this._snapSoundElement = i
+        }
+        get facingMode() {
+            return this._facingMode
+        }
+        set facingMode(e) {
+            this._facingMode = e
+        }
+        get webcamList() {
+            return this._webcamList
+        }
+        get webcamCount() {
+            return this._webcamList.length
+        }
+        get selectedDeviceId() {
+            return this._selectedDeviceId
+        }
+        getVideoInputs(e) {
+            return this._webcamList = [], e.forEach(e => {
+                "videoinput" === e.kind && this._webcamList.push(e)
+            }), 1 == this._webcamList.length && (this._facingMode = "user"), this._webcamList
+        }
+        getMediaConstraints() {
+            var e = {};
+            return "" == this._selectedDeviceId ? e.facingMode = this._facingMode : e.deviceId = {
+                exact: this._selectedDeviceId
+            }, {
+                video: e,
+                audio: !1
+            }
+        }
+        selectCamera() {
+            for (let e of this._webcamList)
+                if ("user" == this._facingMode && e.label.toLowerCase().includes("front") || "enviroment" == this._facingMode && e.label.toLowerCase().includes("back")) {
+                    this._selectedDeviceId = e.deviceId;
+                    break
+                }
+        }
+        flip() {
+            this._facingMode = "user" == this._facingMode ? "enviroment" : "user", this._webcamElement.style.transform = "", this.selectCamera()
+        }
+        async start(e = !0) {
+            return new Promise((t, s) => {
+                this.stop(), navigator.mediaDevices.getUserMedia(this.getMediaConstraints()).then(i => {
+                    this._streamList.push(i), this.info().then(i => {
+                        this.selectCamera(), e ? this.stream().then(e => {
+                            t(this._facingMode)
+                        }).catch(e => {
+                            s(e)
+                        }) : t(this._selectedDeviceId)
+                    }).catch(e => {
+                        s(e)
+                    })
+                }).catch(e => {
+                    s(e)
+                })
+            })
+        }
+        async info() {
+            return new Promise((e, t) => {
+                navigator.mediaDevices.enumerateDevices().then(t => {
+                    this.getVideoInputs(t), e(this._webcamList)
+                }).catch(e => {
+                    t(e)
+                })
+            })
+        }
+        async stream() {
+            return new Promise((e, t) => {
+                navigator.mediaDevices.getUserMedia(this.getMediaConstraints()).then(t => {
+                    this._streamList.push(t), this._webcamElement.srcObject = t, "user" == this._facingMode && (this._webcamElement.style.transform = "scale(-1,1)"), this._webcamElement.play(), e(this._facingMode)
+
+                }).catch(e => {
+                    console.log(e), t(e)
+                })
+            })
+        }
+        stop() {
+            this._streamList.forEach(e => {
+                e.getTracks().forEach(e => {
+                    e.stop()
+                })
+            })
+        }
+        snap() {
+            if (null != this._canvasElement) {
+                null != this._snapSoundElement && this._snapSoundElement.play(), this._canvasElement.height = this._webcamElement.scrollHeight, this._canvasElement.width = this._webcamElement.scrollWidth;
+                let e = this._canvasElement.getContext("2d");
+                return "user" == this._facingMode && (e.translate(this._canvasElement.width, 0), e.scale(-1, 1)), e.clearRect(0, 0, this._canvasElement.width, this._canvasElement.height), e.drawImage(this._webcamElement, 0, 0, this._canvasElement.width, this._canvasElement.height), this._canvasElement.toDataURL("image/png")
+            }
+            throw "canvas element is missing"
+        }
+    }
+
+
+</script>
+<script>
+
+    var image_is_added = false;
+
+    const webcamElement = document.getElementById('webcam');
+    const canvasElement = document.getElementById('canvas');
+    const snapSoundElement = document.getElementById('snapSound');
+    const webcam = new Webcam(webcamElement, 'user', canvasElement, snapSoundElement)
+
+    //start the cam
+    webcam.start()
+        .then(result => {
+            webcam.flip();
+            console.log("webcam started");
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+
+
+    //take a pic and put it in the canvas
+
+    function take() {
+        var picture = webcam.snap();
+        image_is_added = true;
+        $(".cam").css("display", "none");
+    }
+
+
+    //send the image throw "post" to the server
+
+    function Submit() {
+
+        if (image_is_added) {
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            //transfer the canvas data to base64
+            var dataURL = canvas.toDataURL();
+
+        }
+        else//no image
+        {
+            var dataURL = "";
+        }
+
+
+        console.log($("#action_").val())
+
+
+        $.ajax({
+            type: "POST",
+            url: "/edit_patient",
+            data: {
+                id:'<%= patients.id%>',
+                name: $("#name").val().trim(),
+                age: $("#age").val(),
+                sex: $("input[name='gender']:checked").val(),
+                phone_number: ($("#phone_number").val() != "") ? $("#phone_number").val() : "غـير معروف",
+                nationality: $("#nationality").val(),
+                residence: $("#residence").val(),
+                blood_type: $("#bloodtype").val(),
+                history: $("#history").val(),
+                note: $("#note").val(),
+                action: $("#action_").val(),
+                Attached:$('#Attached').val(),
+                Attached2:$('#Attached2').val(),
+                marital_Status:$('#marital_Status').val(),
+                number_Children:$('#number_Children').val(),
+                occupation:$('#occupation').val(),
+                main: ($("#main").val() != "") ? $("#main").val() : "لم يتم التحديد",
+                image: dataURL
+            }
+
+        }).done(function (o) {
+            console.log(o);
+
+
+            if (o.success == 1) {
+
+
+               window.location.href = "<%= last_page %>"
+
+            } else if (o.success == 0) {
+                $(".massage").css("display", "none")
+                $(".massage-error").css("display", "block")
+                $(".massage-log").css("display", "none")
+            }
+            else if (o.success == 2) {
+                $(".massage").css("display", "none")
+                $(".massage-error").css("display", "none")
+                $(".massage-log").css("display", "block")
+            }
+
+
+            $('#content').scrollTop()
+
+        });
+
+
+
+        
+    }
+
+
+
+
+    ///////put the default patient image into the canvas 
+
+    var canvas = document.getElementById('canvas'),
+        context = canvas.getContext('2d');
+
+    make_base();
+
+    function make_base() {
+        base_image = new Image();
+        base_image.src = '/images/unknown.png';
+        base_image.onload = function () {
+            context.drawImage(base_image, 0, 0, canvas.width, canvas.height);
+        }
+    }
+
+    function opencam() {
+        $(".cam").css("display", "block");
+    }
+
+    function putaill(index) {
+        var e = $.Event("keypress", { which: 13 });
+
+        $('.bootstrap-tagsinput').find('input').val(index).trigger(e);
+
+    }
+
+
+
+
+
+
+</script>
+
+
+</html>

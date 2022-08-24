@@ -1,0 +1,57 @@
+<div class="flex" style="padding: 0.3rem 1rem;">
+    <div style="width: 310px;">
+        <div class="flex">
+            <h4 style="margin-top: 10px;">
+                <%=title%>
+            </h4>
+            <div style="width: 50px;"></div>
+
+        </div>
+    </div>
+    <div>
+        <div class="flex">
+            <button onclick="reload()" class="abtn" style="color: gray;"><i class="fas fa-retweet"></i></button>
+
+            <button onclick="home()" class="abtn" style="color: gray;"><i class="fas fa-home"></i></button>
+
+    <button onclick="back('<%= last_page %>')" class="abtn" style="color: gray;"><i class="fas fa-chevron-left"></i></button>
+
+           
+        </div>
+    </div>
+    <div style=" flex: 1;">
+
+        <div class="flex" style="justify-content: left;">
+
+            <div style="margin-left: 10px;">
+                <span style="margin-left: 10px; font-weight: bold;"> <%= user.name %><div
+                        style="font-size: x-small; color:#38a2d6 ;">
+                        <a href="/logeout" class="pointer">
+                            <i class="fas fa-door-open"></i><span style="font-size: xx-small;">تسجيل الخروج</span></a>
+                    </div>
+                </span>
+
+            </div>
+
+            <img style=" width: 55px; height: 55px; border-radius: 90px;" src="/<% if( user.image != '') { %><%= user.image%> <% }else{ %>images/unknown.png <% } %>">
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function reload() {
+        location.reload();
+
+    }
+    function home() {
+        window.location.href = '/start';
+
+    }
+    function back(index) {
+        window.location.href = index;
+
+    }
+
+</script>

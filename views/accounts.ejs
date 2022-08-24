@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+
+
+
+  
+    <script src="/js/chart.min.js"></script>
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+
+
+
+
+<body>
+
+
+
+
+    <div class="fixedpanel scroll_enabled wh" id="expenses_panel" >
+        <div class="mycard">
+            <div class="flex">
+                <h5 style="flex: 1;"> اضافة مصروفات جديدة</h5>
+                <a class="x close noselect"><i class="fas fa-times-circle"></i></a>
+            </div>
+            <hr>
+            <form enctype="multipart/form-data" action="/add_expenses" method="post">
+                <div class="form-group" style="width: 100%;">
+                    <label >الاسم*</label>
+                    <input type="text" class="form-control" name="name" style="background-color: rgb(243, 243, 243);"
+                        id="name" autocomplete="off" required>
+                </div>
+                <div class="form-group" style="width: 100%;">
+                    <label >النوع</label>
+                    <div class="input-group">
+                        <select class="form-select" name="type">
+                            <option value="اخرى" selected>اخرى</option>
+                            <option value="اخرى" >مشتريات</option>
+                            <% for( let index=0; index < expenses_types.length; index++ ) { %>
+                                <option value="<%= expenses_types[index].name  %>">
+                                    <%= expenses_types[index].name %>
+                                </option>
+                                <% } %>
+
+                        </select>
+
+                    </div>
+                </div>
+                <div class="form-group" style="width: 100%;">
+                    <label >التاريخ*</label>
+                    <input type="date" class="form-control" name="date" style="background-color: rgb(243, 243, 243);"
+                        id="date" autocomplete="off" required value="<%= mydate  %>">
+                </div>
+                <label > التفاصيل </label>
+                <textarea id="details" class="form-control" name="details" placeholder="اختياري"
+                    style="background-color: rgb(243, 243, 243);resize: none;"></textarea>
+                <div class="form-group" style="width: 100%;">
+
+                    <label >السعر*</label>
+                    <input type="number" class="form-control" name="price" style="background-color: rgb(243, 243, 243);"
+                        id="namemed_" autocomplete="off" required>
+
+                </div>
+                <div class="col-md-6">
+                    <label for="images">صورة الوصـل ان وجد</label>
+                    <input type="file" onchange="preview_images()" class="form-control imagefile" id="images"
+                        name="image" accept="image/x-png,image/jpeg" />
+                    <div id="image_preview">
+
+                    </div>
+                </div>
+                <input class="btn btn-primary" type="submit" style="width: 100%; margin-top: 12px;" value="+أضافة">
+        </div>
+
+
+        </form>
+
+
+
+
+    </div>
+   
+
+    <div class="fixedpanel wh" id="revenues_panel" >
+        <div class="mycard">
+            <div class="flex">
+                <h5 style="flex: 1;"> اضافة الايردادت جديدة</h5>
+                <a class="x close noselect"><i class="fas fa-times-circle"></i></a>
+            </div>
+            <hr>
+            <form action="/add_revenues" method="post">
+                <div class="form-group" style="width: 100%;">
+                    <label >الاسم*</label>
+                    <input type="text" class="form-control" name="name" style="background-color: rgb(243, 243, 243);"
+                        autocomplete="off" required>
+                </div>
+                <div class="form-group" style="width: 100%;">
+                    <label >النوع</label>
+                    <div class="input-group">
+                        <select class="form-select" name="type">
+                            <option value="اخرى" selected>اخرى</option>
+                            <% for( let index=0; index < revenues_types.length; index++ ) { %>
+                                <option value="<%= revenues_types[index].name  %>">
+                                    <%= revenues_types[index].name %>
+                                </option>
+                                <% } %>
+
+                        </select>
+
+                    </div>
+                </div>
+                <div class="form-group" style="width: 100%;">
+                    <label >التاريخ*</label>
+                    <input type="date" class="form-control" name="date" style="background-color: rgb(243, 243, 243);"
+                        autocomplete="off" required value="<%= mydate  %>">
+                </div>
+                <label > التفاصيل </label>
+                <textarea class="form-control" name="details" placeholder="اختياري"
+                    style="background-color: rgb(243, 243, 243);resize: none;"></textarea>
+                <div class="form-group" style="width: 100%;">
+                    <label >السعر*</label>
+                    <input type="number" class="form-control" name="price" style="background-color: rgb(243, 243, 243);"
+                        autocomplete="off" required>
+                </div>
+
+                <div class="flex">
+                    <div class="form-group" style="width: 100%;">
+                        <label >الطبيب</label>
+                        <div class="input-group">
+                            <select class="form-select" name="doc_id">
+                                <option value="" selected>اختر...</option>
+                                <% for( let index=0; index < employees.length; index++ ) { %>
+                                    <option value="<%= employees[index].id  %>">
+                                        <%= employees[index].name %>
+                                    </option>
+                                    <% } %>
+
+                            </select>
+
+                        </div>
+                    </div>
+                    <div style="width: 20px;"></div>
+                    <div class="form-group" style="width: 100%;">
+                        <label >نسبة الطبيب ( من 0% الى 100%)</label>
+                        <input type="number" class="form-control" name="proportion" min="1" max="100"
+                            style="background-color: rgb(243, 243, 243);" autocomplete="off" placeholder="0 الى 100"
+                            min="0" max="100">
+                    </div>
+                </div>
+                <input class="btn btn-primary" type="submit" style="width: 100%; margin-top: 12px;" value="+أضافة">
+
+            </form>
+
+
+
+
+        </div>
+    </div>
+
+    <div class="fixedpanel scroll_enabled wh" id="fixed_panel" >
+
+        <div class="mycard">
+            <div class="flex">
+                <h5 style="flex: 1;"> المصروفات الثابتة </h5>
+                <a class="x close noselect"><i class="fas fa-times-circle"></i></a>
+            </div>
+            <hr>
+          
+            <br>
+            <div class="card">
+                <div class="cardlable">
+                    المصاريف الثابتة
+                </div>
+                <div class="card-body">
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">الاسم</th>
+                                <th scope="col">الكمية</th>
+                                <th scope="col">الاجراء</th>
+
+
+                            </tr>
+                        </thead>
+
+                        <tbody id="fixed_table">
+
+                            <% for( let i=0; i < fixed.length; i++ ) { %>
+
+                                <tr>
+                                    <td>
+                                        <%= i+1 %>
+                                    </td>
+                                    <td>
+                                        <%= fixed[i].name %>
+                                    </td>
+                                    <td>
+                                        <%= fixed[i].salary_ %>
+                                    </td>
+                                    <td>
+                                        <i onclick="delete_fixed('<%= fixed[i].id %>')"
+                                            class="fas fa-trash button_user"></i>
+
+
+                                    </td>
+                                </tr>
+                                <% } %>
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <br>
+            <a class="collapsible noselect">
+                <div class="slise flex fjc" >
+                    
+                    <div > اضـافة مصروفات ثابتة</div>
+                    <div class="side_nav_ul_item_after_icon"><i class="fas fa-chevron-down"></i></div>
+                </div>
+
+            </a>
+            <div class="card collapsible_content" style="background-color: white;">
+                <div class="card-body">
+                    <div>
+
+                        <div class="form-group">
+                            <label >الاسم*</label>
+                            <input type="text" class="form-control" name="name"
+                                style="background-color: rgb(243, 243, 243);" id="namefixed" autocomplete="off"
+                                required>
+                        </div>
+                        <div style="width: 50px;"></div>
+                        <div class="form-group">
+                            <label >الكمية*</label>
+                            <input type="number" class="form-control" name="name"
+                                style="background-color: rgb(243, 243, 243);" id="valuefixed" autocomplete="off"
+                                required>
+                        </div>
+
+
+
+                        <button class="btn btn-primary" onclick="add_fixed()"
+                            style="width: 100%; margin-top: 12px;">+أضافة</button>
+                    </div>
+                </div>
+            </div>
+
+            <form action="/add_fixed_expenses" method="post">
+                <label >التاريخ*</label>
+                <input type="date" class="form-control" name="date" style="background-color: rgb(243, 243, 243);"
+                    autocomplete="off" required value=<%=datestart %>>
+                <input class="btn btn-primary" type="submit" style="width: 100%; margin-top: 12px;"
+                    value="اضافة المصروفات الثابتة">
+            </form>
+
+
+
+        </div>
+    </div>
+
+    <div class="fixedpanel scroll_enabled wh" id="withdraw" >
+        <div class="mycard">
+            <div class="flex">
+                <h5 style="flex: 1;"> سحب مبلغ من الصندوق</h5>
+                <a class="x close noselect"><i class="fas fa-times-circle"></i></a>
+            </div>
+            <hr>
+            <form action="/add_withdraw" method="post">
+
+                <div class="form-group" style="width: 100%;">
+                    <label >التاريخ*</label>
+                    <input type="date" class="form-control" name="date" style="background-color: rgb(243, 243, 243);"
+                        id="date" autocomplete="off" required value="<%= mydate  %>">
+                </div>
+
+                <label >المبلغ*</label>
+                <input type="number" class="form-control" name="price" style="background-color: rgb(243, 243, 243);"
+                    id="namemed_" autocomplete="off" required>
+
+
+
+                <input class="btn btn-primary" type="submit" style="width: 100%; margin-top: 12px;" value="سحب">
+
+
+
+            </form>
+
+
+
+
+        </div>
+    </div>
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+
+
+            <%- include('parts/bar.ejs'); -%>
+
+                <div class="card massage-error" style="flex: 1; display: none;">
+                    <div class="card-body flex">
+                        <i class="fas fas fa-ban"></i>
+                        <div id="err"></div>
+                    </div>
+                </div>
+                <div class="card massage" style="flex: 1; display: none;">
+                    <div id="err" class="card-body">
+                        <i class="fas fa-check-circle" id="mass"></i>
+
+                    </div>
+                </div>
+
+                <div class="grid_start">
+                    <div class="noselect state_box ">
+                        <div>الصندوق</div>
+                        <i>الكلي</i>
+                        <h5>
+                            <%= formatCurrancy(revenues_money - expenses_money -withdraw_money) %>
+                                <%= general.currency %>
+                        </h5>
+                    </div>
+                    <a href="/creditor" class="noselect state_box ">
+                        <div>الدائن المتبقي</div>
+                        <i>الكلي</i>
+                        <h5>
+                            <%= formatCurrancy(creditor_left) %>
+                                <%= general.currency %>
+                        </h5>
+                    </a>
+                    <a href="/debit" class="noselect state_box ">
+                        <div>المدين المتبقي</div>
+                        <i>الكلي</i>
+                        <h5>
+                            <%= formatCurrancy(debit_left) %>
+                                <%= general.currency %>
+                        </h5>
+                    </a>
+                    <div class="noselect state_box ">
+                        <div>الايردات</div>
+                        <i>
+                            الكلي
+                        </i>
+                        <h5>
+                            <%= formatCurrancy(revenues_money) %>
+                                <%= general.currency %>
+                        </h5>
+                    </div>
+                    <div class="noselect state_box ">
+                        <div>المصروفات</div>
+                        <i>
+                            الكلي
+                        </i>
+                        <h5>
+                            <%= formatCurrancy(expenses_money) %>
+                                <%= general.currency %>
+                        </h5>
+                    </div>
+                    <div class="noselect state_box ">
+                        <div>السحب (withdraw)</div>
+                        <i>الكلي</i>
+                        <h5>
+                            <%= formatCurrancy(withdraw_money) %>
+                                <%= general.currency %>
+                        </h5>
+                    </div>
+                    <a href="/sales" class="noselect state_box ">
+                        <div>مبيعات الصيدلية</div>
+                        <i>اليوم</i>
+                        <h5>
+                            <%= formatCurrancy(today_sales_value) %>
+                                <%= general.currency %>
+                        </h5>
+                    </a>
+                    
+                    <a href="/sales" class="noselect state_box ">
+                        <div>مبيعات الصيدلية</div>
+                        <i>بالأمس</i>
+                        <h5>
+                            <%= formatCurrancy(lastday_sales_value) %>
+                                <%= general.currency %>
+                        </h5>
+                    </a>
+                    
+                </div>
+
+
+                <div style="padding: 2.3rem 1rem;">
+
+
+                    <div class="mycard pr" >
+
+
+                        <div class="flex pr" >
+                            <div class="title" style="flex: 1;">
+                                <i class="fas fa-box" style="margin-left: 10px;"></i>الصندوق
+                                <button onclick="show(1)" class="btn btn-primary" style="margin-right: 30px;"><i
+                                        style="margin-left: 5px;" class="fas fa-plus-circle"></i>مصروفات
+                                </button>
+                                <button onclick="show(2)" class="btn btn-primary" style="margin-right: 30px;"><i
+                                        style="margin-left: 5px;" class="fas fa-plus-circle"></i> اردات
+                                </button>
+                                <button onclick="show(4)" class="btn btn-primary" style="margin-right: 30px;"><i
+                                        style="margin-left: 5px;" class="fas fa-plus-circle"></i> سحب
+                                </button>
+                                <button onclick="show(3)" class="btn btn-primary" style="margin-right: 30px;"><i
+                                        style="margin-left: 5px;" class="fas fa-plus-circle"></i>اضافة المصروفات
+                                    الثابتة</button>
+                            </div>
+
+
+
+
+
+
+
+                        </div>
+
+                        <hr>
+                        <div class="flex">
+                            <input type="text" id="search_box" placeholder="بحث " class="form-control" aria-label="Text input with segmented dropdown button" style="width: 100px;height:50px;margin-top: 15px;">
+                          
+                            <div style="flex:1;">
+                               
+                                <div class="flex" style=" justify-content: left;">
+
+                                   
+                                    <select class="form-select" id="employee" onchange="search()" style="height:50px;margin-top: 15px; margin-left: 10px; width: 150px; font-size: 13px;"
+                                    name="expenses_types">
+                                    <option selected value="">الموظف : الكل</option>
+                                    
+                                    <% for( let index=0; index < employees.length; index++ ) { %>
+                                        <option value="<%= employees[index].name  %>">
+                                            <%= employees[index].name %>
+                                        </option>
+                                        <% } %>
+
+
+
+
+
+                                </select>
+                                    <select class="form-select" id="expenses_types" onchange="search()" style="width: 150px; font-size: 13px;height:50px;margin-top: 15px; margin-left: 10px;"
+                                        name="expenses_types">
+                                        <option selected value="">المصروفات : الكل</option>
+                                        <option value="الثابتة">الثابتة</option>
+                                        <option value="مشتريات">مشتريات</option>
+                                        <option value="نسبة الموظفين"> نسبة الموظفين</option>
+                                        <option value="رواتب الموظفين">  رواتب الموظفين</option>
+                                        <option value="دفع مدين">  دفع مدين</option>
+                                        <option value="سحب">سحب</option>
+                                        <option value="اخرى">   اخرى </option>
+                                        <% for( let index=0; index < expenses_types.length; index++ ) { %>
+                                            <option value="<%= expenses_types[index].name  %>">
+                                                <%= expenses_types[index].name %>
+                                            </option>
+                                            <% } %>
+
+
+
+
+
+                                    </select>
+                                    <select class="form-select" id="revenues_type" onchange="search()" style="width: 150px; font-size: 13px;height:50px;margin-top: 15px; margin-left: 50px;"
+                                        name="revenues_type">
+                                        <option selected value="">الايرادات : الكل</option>
+                                        <option value="الحجز السريري">الحجز السريري</option>
+                                       
+                                        <option value="الزيارات">الزيارات</option>
+                                        <option value="مبيعات الصيدلية"> مبيعات الصيدلية</option>
+                                        <option value="تسديد دائن"> تسديد دائن</option>
+                                        <option value="اخرى"> اخرى </option>
+                                        <% for( let index=0; index < revenues_types.length; index++ ) { %>
+                                            <option value="<%= revenues_types[index].name  %>">
+                                                <%= revenues_types[index].name %>
+                                            </option>
+                                            <% } %>
+                                      
+
+
+
+
+                                    </select>
+                                    <div>
+                                        <label >من</label>
+                                        <input type="date" id='start' class="form-control" value=<%=datestart %>>
+
+                                    </div>
+                                    <div class="spaceout2"></div>
+                                    <div>
+                                        <label >الى</label>
+                                        <input type="date" id='end' class="form-control" value=<%=dateend %>>
+                                    </div>
+                                    <div class="spaceout2"></div>
+                                    <button class="btn btn-primary" style="height: 38px; margin-top: 23px;"
+                                        onclick="calculate()"><i class="fas fa-arrow-circle-left"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <br>
+
+                        <div style="display: grid; grid-template-columns: 1fr  1fr ; grid-gap: 20px;">
+
+                            <div>
+                                <div class="card">
+                                    <div class="cardlable">
+                                        المصروفات
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table">
+
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">التفاصيل</th>
+                                                    <th scope="col">السعر</th>
+                                                    <th scope="col">التاريخ</th>
+                                                    <th scope="col"></th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for( let i=0; i < expenses.length; i++ ) { %>
+
+
+                                                    <tr
+                                                        style="background-color:  <% if(i % 2==0){ %> #e6e6e6; <% }else{ %>white; <% } %> ">
+                                                        <td>
+                                                            <div>
+                                                                <%= i+1 %>
+                                                            </div>
+                                                        </td>
+                                                        <td style="width: 200px;">
+                                                            <div>
+                                                                <%= expenses[i].name %>
+                                                            </div>
+
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <%= formatCurrancy(expenses[i].price)%>
+                                                                    <%= general.currency %>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <%= expenses[i].date %>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <i class="button_user fas fa-eye"></i>
+                                                            </div>
+                                                        </td>
+
+                                                    </tr>
+                                                   
+                                                    <% } %>
+                                                   
+                                                        <% for( let i=0; i < withdraw.length; i++ ) { %>
+
+
+                                                            <tr
+                                                                style="background-color:  <% if(i % 2==0){ %> #e6e6e6; <% }else{ %>white; <% } %> ">
+                                                                <td>
+                                                                    <div>
+                                                                        <%= i+1 %>
+                                                                    </div>
+                                                                </td>
+                                                                <td style="width: 200px;">
+                                                                    <div>
+                                                                        سحب مبلغ
+                                                                    </div>
+
+                                                                </td>
+                                                                <td>
+                                                                    <div>
+                                                                        <%= formatCurrancy(withdraw[i].price)%>
+                                                                            <%= general.currency %>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div>
+                                                                        <%= withdraw[i].date %>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div>
+                                                                        <i class="button_user fas fa-eye"></i>
+                                                                    </div>
+                                                                </td>
+
+                                                            </tr>
+                                                            <% } %>
+
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="card">
+                                <div class="cardlable">
+                                    الايرادات
+                                </div>
+                                <div class="card-body">
+                                    <table class="table">
+
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">التفاصيل</th>
+                                                <th scope="col">السعر</th>
+                                                <th scope="col">التاريخ</th>
+                                                <th scope="col"></th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <% for( let i=0; i < revenues.length; i++ ) { %>
+
+
+                                                <tr
+                                                    style="background-color:  <% if(i % 2==0){ %> #e6e6e6; <% }else{ %>white; <% } %> ">
+                                                    <td>
+                                                        <div>
+                                                            <%= i+1 %>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width: 200px;">
+                                                        <div>
+                                                            <%= revenues[i].name %>
+                                                        </div>
+
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <%= formatCurrancy(revenues[i].price) %>
+                                                                <%= general.currency %>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <%= revenues[i].date %>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <i class="button_user fas fa-eye"></i>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                                <% } %>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr  1fr ; grid-gap: 20px;">
+
+                            <div class="pr">
+                                <div>
+                                    <hr>
+                                    <span> المصروفات من</span>
+                                    <span style="color: blue;">
+                                        <%= datestart %>
+                                    </span>
+                                    <span> الى </span>
+                                    <span style="color: blue;">
+                                        <%= dateend %>
+                                    </span>
+                                    <u
+                                        style=" margin-left: 50px; font-size: x-large; font-weight: bolder; color: red; position:absolute; left: 0%;">
+                                        <%= formatCurrancy(expenses_value)%>
+                                            <%= general.currency %>
+                                    </u>
+                                </div>
+                                <div>
+                                    
+                                    <span> السحب من</span>
+                                    <span style="color: blue;">
+                                        <%= datestart %>
+                                    </span>
+                                    <span> الى </span>
+                                    <span style="color: blue;">
+                                        <%= dateend %> :  <%= formatCurrancy(withdraw_value)%>
+                                    </span>
+                                   
+                                </div>
+                            </div>
+                            <div class="pr">
+                                <hr>
+                                <span> الايرادات من</span>
+                                <span style="color: blue;">
+                                    <%= datestart %>
+                                </span>
+                                <span> الى </span>
+                                <span style="color: blue;">
+                                    <%= dateend %>
+                                </span>
+                                <u
+                                    style=" margin-left: 50px; font-size: x-large; font-weight: bolder; color: green; position:absolute; left: 0%;">
+                                    <%= formatCurrancy(revenues_value) %>
+                                        <%= general.currency %>
+                                </u>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <br>
+
+                    <div class="mycard pr" >
+
+                        <div>
+                            <span> الارباح الصافية من</span>
+                            <span style="color: blue;">
+                                <%= datestart %>
+                            </span>
+                            <span> الى </span>
+                            <span style="color: blue;">
+                                <%= dateend %>
+                            </span>
+                            <span class="sidrbtn"
+                                style="color:<% if(revenues_value - expenses_value > 0){ %> green <% } else { %> red <% } %>; margin-right: 50px; font-weight: bolder; font-size:large;">
+                                <%= formatCurrancy(revenues_value - expenses_value) %>
+                                    <%= general.currency %>
+                            </span>
+                        </div>
+
+                    </div>
+                    <br>
+
+                    <div class="mycard pr">
+
+
+                        <div class="flex pr">
+                            <div class="title">
+                                <i class="fas fa-calendar-check" style="margin-left: 10px;"></i>التحليلات
+                            </div>
+
+
+
+
+
+
+                        </div>
+
+                        <hr>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr ; grid-gap: 20px;">
+
+                            <div class="trello" style="width: 20rem;">
+                                <canvas id="myChart" width="400" height="400"></canvas>
+                            </div>
+                            <div class="trello" style="width: 20rem;">
+                                <canvas id="myChart2" width="400" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+        </div>
+
+        <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+<script src="/js/open_statement.js"></script>
+
+
+<script>
+
+
+
+    function preview_images() {
+        $('#image_preview').empty()
+        var total_file = document.getElementById("images").files.length;
+        for (var i = 0; i < total_file; i++) {
+            $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' style='width:200px' src='" + URL.createObjectURL(event.target.files[i]) + "'></div>");
+
+        };
+    }
+
+
+
+
+
+
+    $('.close').on('click', (e) => {
+        $(e.currentTarget).parent("div").parent('div').parent('div').fadeOut(100)
+    })
+
+
+
+    function show(index) {
+
+        if (index == 1)
+            $('#expenses_panel').fadeIn(100)
+        else if (index == 2)
+            $('#revenues_panel').fadeIn(100)
+        else if (index == 3)
+            $('#fixed_panel').fadeIn(100)
+        else if (index == 4)
+            $('#withdraw').fadeIn(100)
+    }
+
+
+
+
+    function calculate() {
+        window.location.href = "/accounts?start=" + $("#start").val() + "&end=" + $("#end").val()+"&expenses_type="+$('#expenses_types').val()+"&revenues_type="+$('#revenues_type').val() +"&employee="+$('#employee').val();
+    }
+    function delete_expenses(index) {
+        $.ajax({
+            type: "POST",
+            url: "delete_expenses",
+            data: { id: index },
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+
+    function delete_fixed(index) {
+        $.ajax({
+            type: "POST",
+            url: "delete_fixed",
+            data: { id: index },
+
+        }).done((o) => {
+            if (o.success == 1) {
+                $('.massage').show(100)
+                $('#fixed_table').empty()
+                $('#mass').html('عملية المسح اكتملت')
+
+                console.log(o.doc)
+                for (let i = 0; i < o.doc.length; i++) {
+
+
+                    $('#fixed_table').append(`
+                         <tr>
+                                    <td>
+                                        ${i + 1}
+                                    </td>
+                                    <td>
+                                        ${o.doc[i].name}
+                                    </td>
+                                    <td>
+                                        ${o.doc[i].salary_}
+                                    </td>
+                                    <td>
+                                        <i onclick="delete_fixed('${o.doc[i]._id}')"
+                                            class="fas fa-trash button_user"></i>
+
+
+                                    </td>
+                                </tr>`
+                    )
+
+                }
+
+
+
+            }
+        })
+    }
+
+
+    function add_fixed() {
+        $.ajax({
+            type: "POST",
+            url: "/add_fixed",
+            data: {
+                name: $('#namefixed').val(),
+                salary_: $('#valuefixed').val()
+            }
+
+        }).done(function (o) {
+
+            if (o.success == 1) {
+                $('.massage').show(100)
+                $('.massage-error').hide()
+                $('#fixed_table').empty()
+                $('#mass').html('تمت الاضافة')
+
+                console.log(o.doc)
+                for (let i = 0; i < o.doc.length; i++) {
+
+
+                    $('#fixed_table').append(`
+                         <tr>
+                                    <td>
+                                        ${i + 1}
+                                    </td>
+                                    <td>
+                                        ${o.doc[i].name}
+                                    </td>
+                                    <td>
+                                        ${o.doc[i].salary_}
+                                    </td>
+                                    <td>
+                                        <i onclick="delete_fixed('${o.doc[i]._id}')"
+                                            class="fas fa-trash button_user"></i>
+
+
+                                    </td>
+                                </tr>`
+                    )
+
+                }
+
+
+
+            }
+            else if (o.success == 2) {
+                $('.massage').hide()
+                $('.massage-error').show(100)
+                $('#err').html('الاسم موجود بالفعل')
+            }
+            else if (o.success == 3) {
+                $('.massage').hide()
+                $('.massage-error').show(100)
+                $('#err').html('حدث خطاء')
+            }
+        })
+    }
+
+
+
+
+</script>
+
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const ctx2 = document.getElementById('myChart2').getContext('2d');
+
+    /*  const myChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+              labels: ['المصروفات الثابتة', 'المصروفات', 'نسبة الاطباء', 'رواتب الموظفين'],
+              datasets: [{
+                  label: '# of Votes',
+                  data: [, , ],
+                  backgroundColor: [
+                      'rgba(26, 128, 26, 0.6)',
+                      'rgba(54, 162, 235, 0.6)',
+                      'rgba(255, 206, 86, 0.6)',
+                      'rgba(200, 55, 55, 0.6)',
+                      'rgba(153, 102, 255, 0.6)',
+                      'rgba(255, 159, 64, 0.6)'
+                  ],
+                  borderColor: [
+                      'rgba(26, 128, 26, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(200, 55, 55, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                  ],
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              }
+          }
+      });*/
+
+</script>
+
+</html>

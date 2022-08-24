@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<body>
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+            <div id="alert">
+
+            </div>
+
+            <%- include('parts/bar.ejs'); -%>
+
+                <div class="p2_3">
+
+
+                    <div class="mycard">
+
+                        <div class="title">
+                            <%=title%>
+                        </div>
+                        <hr>
+                        <div class="card" style="border: none;">
+                            <div class="card-body">
+
+
+
+                                <div class="flex">
+                                    <select class="form-select filters" id="sex">
+                                        <option selected>النوع: الكل</option>
+
+                                        <option value="فوري">
+                                            فوري
+                                        </option>
+                                        <option value="موعد">
+                                            موعد
+                                        </option>
+
+                                    </select>
+
+                                    <select class="form-select filters" id="action_type">
+                                        <option selected value="الكل">القسم</option>
+
+
+
+
+
+
+                                    </select>
+
+                                    <select class="form-select filters" id="login">
+                                        <option selected>الجميع</option>
+
+                                        <option value="yes">
+                                            تم تسجيل دخولهم
+                                        </option>
+                                        <option value="bed">
+                                            الحجز السريري الفعال
+                                        </option>
+
+
+
+
+                                    </select>
+
+
+
+
+                                    <input type="text" id="search_box" placeholder="بحث" class="form-control"
+                                        aria-label="Text input with segmented dropdown button">
+
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div style="height: 12px;"></div>
+
+
+                        <div class="card">
+                            <div class="card-body">
+
+
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">الاسم</th>
+                                            <th scope="col">النوع</th>
+                                            <th scope="col">الموعد</th>
+                                            <th scope="col">الموقع</th>
+                                            <th scope="col">السعر</th>
+                                            <th scope="col">الحالة</th>
+                                            <th scope="col">الاجراء</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="data_tabel">
+
+                                       
+
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="height: 24px;"></div>
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+
+<script defer src="/js/orderpage.js"></script>
+
+
+
+</html>

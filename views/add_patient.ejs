@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>اضافة مراجع جديد</title>
+
+
+
+
+</head>
+
+<body>
+
+    <div class="cam">
+        <video id="webcam" autoplay playsinline width="500" height="250"></video>
+
+
+        <button onclick="take()">take</button>
+        <button onclick="saveImage()">send</button>
+    </div>
+
+
+    <div id="container" class="flex ">
+        <div id="side_nav">
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+            <div id="alert">
+
+            </div>
+            <%- include('parts/bar.ejs'); -%>
+
+
+
+
+                
+
+                <div class="flex">
+                    <div class="card f1" >
+                        <div class="card-body p2_3">
+
+
+                            <div class="grid">
+                                <div>
+                                    <div class="form-group">
+                                        <label >الجنس</label>
+                                        <br>
+                                        <div class=" radio-toolbar">
+
+                                            <input id="male" type="radio" name="gender" value="1" checked>
+                                            <label class="custom-control-label pointer" for="male"><i
+                                                    class="fas fa-male ml10" ></i>ذكر</label>
+
+
+                                            <input id="female" type="radio" name="gender" value="2">
+                                            <label class="custom-control-label pointer" for="female"><i
+                                                    class="fas fa-female ml10" ></i>انثى</label>
+
+                                        </div>
+
+                                    </div>
+                                    <br>
+                                    <div class="form-group display_flex">
+                                        <li>
+                                            <label >الاسم الرباعي</label>
+                                            <input id="name" type="text" class="form-control bcw"
+                                                
+                                                 placeholder="العدد" value="<%= name %> ">
+                                        </li>
+                                        
+                                        <li>
+                                            <label >تاريخ الميلاد</label>
+                                            <input id="age" type="date" class="form-control bcw"
+                                                
+                                                >
+                                        </li>
+                                    </div>
+                                </div>
+                                <div class="pr">
+                                    <canvas id="canvas" class="profileimage"></canvas>
+                                    <div style="position: absolute; top:50%; left: 0%; transform: translate(61%,43%);">
+                                        <button onclick="opencam()"
+                                            style="width: 50px; height: 50px; border: none; background-color: none;">
+                                            <li class="fas fa-plus-square" style="font-size: 40px; color: blue;"></li>
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <form id="out_form" autocomplete="on">
+
+
+                                <br>
+                                <div class="form-group display_flex">
+                                    <div class="w100">
+                                        <label >رقـم الهاتف</label>
+                                        <input id="phone_number" type="text" class="form-control bcw"
+                                             autocomplete="off"
+                                             placeholder="مثلا 0770...." <% if(phone != ''){ %> value='<%= phone %>' <% } %>  >
+                                    </div>
+                                    
+                                    <div class="w100">
+                                        <label >مـحل الـسكن</label>
+                                        <input id="residence" type="text" class="form-control bcw"
+                                             autocomplete="off"
+                                             placeholder="مثل حي الظباط....">
+                                    </div>
+                                </div>
+                                <div class="form-group w100">
+                                    <label > الجـنسية</label>
+                                    <input id="nationality" type="text" class="form-control bcw"
+                                         name ="nationality"
+                                        value="عراقي">
+                                </div>
+                                <div class="display_flex">
+                                    <div class="form-group w100" >
+                                        <label > المهنة</label>
+                                        <input id="occupation" type="text" class="form-control bcw" >
+                                    </div>
+                                    
+                                    <div class="form-group w100" >
+                                        <label > عدد الاولاد</label>
+                                        <input id="number_Children" type="number" class="form-control bcw"
+                                             >
+                                    </div>
+                                    
+                                    <div class="form-group w100">
+                                        <label > الحالة الزوجية</label>
+                                        <div class="input-group">
+                                            <select class="form-select" id="marital_Status"
+                                               >
+                                                <option selected>اختر...</option>
+
+                                                <option value="عازب">
+                                                    عازب
+                                                </option>
+                                                <option value="متزوج">
+                                                    متزوج
+                                                </option>
+                                                <option value="ارمل">
+                                                    ارمل
+                                                </option>
+                                                <option value="مطلاق">
+                                                    مطلاق
+                                                </option>
+
+
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div>المرافقين</div>
+                                <div class="form-group w100">
+                                 
+                                    <input id="Attached" type="number" class="form-control bcw" placeholder="رقم الهاتف المرافق الاول (اختياري)"
+                                         >
+                                </div>
+                                <div class="form-group w100">
+                                    
+                                    <input id="Attached2" type="number" class="form-control bcw" placeholder="رقم الهاتف المرافق الثاني (اختياري)"
+                                         >
+                                </div>
+                                <label >فصيلة الدم</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="bloodtype"
+                                       >
+                                        <option value=0 selected>اختر...</option>
+                                        <option value=1>A+</option>
+                                        <option value=2>A-</option>
+                                        <option value=3>B+</option>
+                                        <option value=4>B-</option>
+                                        <option value=5>AB+</option>
+                                        <option value=6>AB-</option>
+                                        <option value=7>O+</option>
+                                        <option value=8>O-</option>
+
+
+                                    </select>
+
+                                </div>
+                                <div class="form-group" >
+                                   
+                                    <br>
+                                    <div class="form-group">
+                                        <label >الملاحظات</label>
+                                        <textarea id="note" class="form-control" 
+                                            rows="3" placeholder="اختياري"></textarea>
+                                    </div>
+                                    <div class="form-group display_flex">
+                                        <div class="w100" >
+                                            <label >التوجية</label>
+                                            <div class="input-group">
+                                                <select class="form-select" id="action_"
+                                                   >
+                                                    <option <% if(selected_action == '') {%>  selected <% } %> >اختر...</option>
+                                                    <% for( let index=0; index < actions.length; index++ ) { %>
+                                                        <option <% if(selected_action == actions[index].name) {%>  selected <% } %> value="<%= actions[index].name  %>">
+                                                            <%= actions[index].name %>
+                                                        </option>
+                                                        <% } %>
+
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                        
+
+                                    </div>
+                                    <br>
+                                    <div class="card massage f1" >
+                                        <div class="card-body">
+                                            <i class="fas fa-check-circle"></i>
+                                            تمت اضافة معلومات المراجع
+                                        </div>
+                                    </div>
+                                    <div class="card massage-error f1" >
+                                        <div class="card-body">
+                                            <i class="fas fa-ban"></i>
+                                            بعض الحقول الاساسية غير كاملة
+                                        </div>
+                                    </div>
+                                    <div class="card massage-log f1" >
+                                        <div class="card-body">
+                                            <i class="fas fa-ban"></i>
+                                            اسم المريض موجود بالفعل
+                                            <button onclick="open_patient()" style="margin-right: 50px; background-color: orange;" class="btn btn-primary">عرض معلومات المريض</button>
+                                        </div>
+                                    </div>
+
+                                    <button onclick="Submit()" type="button" class="btn btn-primary w100"
+                                        >+أضافة</button>
+                                </div>
+
+                            </form>
+
+
+
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+
+               <br>
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+
+
+<script>
+    class Webcam {
+        constructor(e, t = "user", s = null, i = null) {
+            this._webcamElement = e, this._webcamElement.width = this._webcamElement.width || 640, this._webcamElement.height = this._webcamElement.height || .75 * this._webcamElement.width, this._facingMode = t, this._webcamList = [], this._streamList = [], this._selectedDeviceId = "", this._canvasElement = s, this._snapSoundElement = i
+        }
+        get facingMode() {
+            return this._facingMode
+        }
+        set facingMode(e) {
+            this._facingMode = e
+        }
+        get webcamList() {
+            return this._webcamList
+        }
+        get webcamCount() {
+            return this._webcamList.length
+        }
+        get selectedDeviceId() {
+            return this._selectedDeviceId
+        }
+        getVideoInputs(e) {
+            return this._webcamList = [], e.forEach(e => {
+                "videoinput" === e.kind && this._webcamList.push(e)
+            }), 1 == this._webcamList.length && (this._facingMode = "user"), this._webcamList
+        }
+        getMediaConstraints() {
+            var e = {};
+            return "" == this._selectedDeviceId ? e.facingMode = this._facingMode : e.deviceId = {
+                exact: this._selectedDeviceId
+            }, {
+                video: e,
+                audio: !1
+            }
+        }
+        selectCamera() {
+            for (let e of this._webcamList)
+                if ("user" == this._facingMode && e.label.toLowerCase().includes("front") || "enviroment" == this._facingMode && e.label.toLowerCase().includes("back")) {
+                    this._selectedDeviceId = e.deviceId;
+                    break
+                }
+        }
+        flip() {
+            this._facingMode = "user" == this._facingMode ? "enviroment" : "user", this._webcamElement.style.transform = "", this.selectCamera()
+        }
+        async start(e = !0) {
+            return new Promise((t, s) => {
+                this.stop(), navigator.mediaDevices.getUserMedia(this.getMediaConstraints()).then(i => {
+                    this._streamList.push(i), this.info().then(i => {
+                        this.selectCamera(), e ? this.stream().then(e => {
+                            t(this._facingMode)
+                        }).catch(e => {
+                            s(e)
+                        }) : t(this._selectedDeviceId)
+                    }).catch(e => {
+                        s(e)
+                    })
+                }).catch(e => {
+                    s(e)
+                })
+            })
+        }
+        async info() {
+            return new Promise((e, t) => {
+                navigator.mediaDevices.enumerateDevices().then(t => {
+                    this.getVideoInputs(t), e(this._webcamList)
+                }).catch(e => {
+                    t(e)
+                })
+            })
+        }
+        async stream() {
+            return new Promise((e, t) => {
+                navigator.mediaDevices.getUserMedia(this.getMediaConstraints()).then(t => {
+                    this._streamList.push(t), this._webcamElement.srcObject = t, "user" == this._facingMode && (this._webcamElement.style.transform = "scale(-1,1)"), this._webcamElement.play(), e(this._facingMode)
+
+                }).catch(e => {
+                    console.log(e), t(e)
+                })
+            })
+        }
+        stop() {
+            this._streamList.forEach(e => {
+                e.getTracks().forEach(e => {
+                    e.stop()
+                })
+            })
+        }
+        snap() {
+            if (null != this._canvasElement) {
+                null != this._snapSoundElement && this._snapSoundElement.play(), this._canvasElement.height = this._webcamElement.scrollHeight, this._canvasElement.width = this._webcamElement.scrollWidth;
+                let e = this._canvasElement.getContext("2d");
+                return "user" == this._facingMode && (e.translate(this._canvasElement.width, 0), e.scale(-1, 1)), e.clearRect(0, 0, this._canvasElement.width, this._canvasElement.height), e.drawImage(this._webcamElement, 0, 0, this._canvasElement.width, this._canvasElement.height), this._canvasElement.toDataURL("image/png")
+            }
+            throw "canvas element is missing"
+        }
+    }
+
+
+</script>
+<script>
+
+    var patient_id_ = ''
+
+    var image_is_added = false;
+
+    const webcamElement = document.getElementById('webcam');
+    const canvasElement = document.getElementById('canvas');
+    const snapSoundElement = document.getElementById('snapSound');
+    const webcam = new Webcam(webcamElement, 'user', canvasElement, snapSoundElement)
+
+    //start the cam
+    webcam.start()
+        .then(result => {
+            webcam.flip();
+            console.log("webcam started");
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+
+
+    //take a pic and put it in the canvas
+
+    function take() {
+        var picture = webcam.snap();
+        image_is_added = true;
+        $(".cam").css("display", "none");
+    }
+
+
+    //send the image throw "post" to the server
+
+    function Submit() {
+
+        if (image_is_added) {
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            //transfer the canvas data to base64
+            var dataURL = canvas.toDataURL();
+
+        }
+        else//no image
+        {
+            var dataURL = "";
+        }
+
+
+        console.log($("#action_").val())
+
+
+        $.ajax({
+            type: "POST",
+            url: "/add_patient",
+            data: {
+                name: $("#name").val().trim(),
+                age: $("#age").val(),
+                sex: $("input[name='gender']:checked").val(),
+                phone_number: ($("#phone_number").val() != "") ? $("#phone_number").val() : "غـير معروف",
+                nationality: $("#nationality").val(),
+                residence: $("#residence").val(),
+                blood_type: $("#bloodtype").val(),
+                history: $("#history").val(),
+                note: $("#note").val(),
+                action: $("#action_").val(),
+                Attached:$('#Attached').val(),
+                Attached2:$('#Attached2').val(),
+                marital_Status:$('#marital_Status').val(),
+                number_Children:$('#number_Children').val(),
+                occupation:$('#occupation').val(),
+                main: ($("#main").val() != "") ? $("#main").val() : "لم يتم التحديد",
+                image: dataURL
+            }
+
+        }).done(function (o) {
+            console.log(o);
+
+
+            if (o.success == 1) {
+                //  window.location.href = o.url
+                //show the massage
+                $(".massage").css("display", "block")
+                $(".massage-error").css("display", "none")
+                $(".massage-log").css("display", "none")
+                //restart input values
+                $("#name").val("")
+                $("#age").val("")
+                $("#phone_number").val("")
+                $("#nationality").val("عراقي")
+                $("#history").val("")
+                $("#note").val("")
+                $("#main").val("")
+                patient_id_ =''
+                //change the profile image
+                make_base();
+            } else if (o.success == 0) {
+                $(".massage").css("display", "none")
+                $(".massage-error").css("display", "block")
+                $(".massage-log").css("display", "none")
+
+                patient_id_ =''
+            }
+            else if (o.success == 2) {
+                $(".massage").css("display", "none")
+                $(".massage-error").css("display", "none")
+                $(".massage-log").css("display", "block")
+
+                patient_id_ =o.id
+            }
+
+
+            $('#content').scrollTop()
+
+        });
+
+
+
+        
+    }
+
+
+
+
+    ///////put the default patient image into the canvas 
+
+    var canvas = document.getElementById('canvas'),
+        context = canvas.getContext('2d');
+
+    make_base();
+
+    function make_base() {
+        base_image = new Image();
+        base_image.src = '/images/unknown.png';
+        base_image.onload = function () {
+            context.drawImage(base_image, 0, 0, canvas.width, canvas.height);
+        }
+    }
+
+    function opencam() {
+        $(".cam").css("display", "block");
+    }
+
+    function putaill(index) {
+        var e = $.Event("keypress", { which: 13 });
+
+        $('.bootstrap-tagsinput').find('input').val(index).trigger(e);
+
+    }
+
+
+    function open_patient()
+    {
+        window.location.href = "/patient?id=" + patient_id_;
+    }
+
+
+
+
+
+
+</script>
+
+
+</html>

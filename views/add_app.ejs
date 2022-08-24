@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<body>
+
+
+    <div id="container" class="flex ">
+        <div id="side_nav">
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+            <%- include('parts/bar.ejs'); -%>
+                <div id="add_doc">
+
+
+                    <div class="mycard "
+                        style="display: block; width: 1000px; height:100%px; overflow-x: auto; direction: rtl; margin: auto;">
+                        <div>
+
+                            <div class="flex">
+
+                                <h5 style="flex: 1;">
+                                    اضافة دواء جديد الى الصيدلية
+                                </h5>
+
+                            </div>
+                            <hr>
+
+                          
+                            <div class="input-group">
+                                <select class="form-select no" id="meds"
+                                    name="type">
+                                   
+                                            <option value="جديد" selected>جديد</option>
+
+
+                                </select>
+
+
+
+                            </div>
+
+
+                            <div id="new_med">
+
+                                <br>
+                                <div class="card">
+                                    <div class="cardlable">
+                                        معلومات اساسية
+                                    </div>
+                                    <div class="card-body">
+
+                                        <div>
+
+                                            <div class="flex">
+                                                <div class="form-group" style="width: 100%;">
+                                                    <label >الاسم باللغة
+                                                        الانكليزية*</label>
+                                                    <input type="text" class="form-control" name="namemed"
+                                                        style="background-color: rgb(243, 243, 243);" id="namemed"
+                                                        autocomplete="off">
+                                                </div>
+                                                <div class="form-group" style="width: 100%; margin-right: 20px;">
+                                                    <label>الاسم باللغة العربية</label>
+                                                        
+                                                    <input type="text" class="form-control" name="name_ar"
+                                                      
+                                                        style="background-color: rgb(243, 243, 243);" id="name_ar">
+
+                                                </div>
+                                               
+                                            </div>
+
+
+
+                                            <label >القسم*</label>
+                                            <div class="input-group">
+                                                <select class="form-select" id="category"
+                                                    name="type">
+                                                   
+                                                    <option value="">
+                                                       اختار
+                                                    </option>
+                                                    <% for( let index=0; index < category.length; index++ ) { %>
+
+                                                        <option value="<%=category[index].id  %>">
+                                                            <%=category[index].name %>
+                                                        </option>
+                                                        <% } %>
+
+
+
+                                                </select>
+
+
+
+                                            </div>
+                                            <label id="label1">التصنيف</label>
+                                            <div class="input-group">
+                                                <select class="form-select" id="subcategory"
+                                                    name="type">
+                                                   
+                                                 
+
+
+
+                                                </select>
+
+
+
+                                            </div>
+                                            <label id="label2">التصنيف الثانوي</label>
+                                            <div class="input-group">
+                                                <select class="form-select" id="subsubcategory"
+                                                    name="type">
+                                                   
+                                                   
+
+
+
+                                                </select>
+
+
+
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br>
+                                <div class="card">
+                                    <div class="cardlable">
+                                        معلومات عامة
+                                    </div>
+                                    <div class="card-body">
+
+                                        <div class="card">
+                                            <div
+                                                style="width: 100%; background-color: #efeff0; border-radius: .25rem .25rem 0 0; padding: 0.5rem;">
+
+                                                صورة للمنتج (اختياري)
+
+                                            </div>
+                                            <div class="card-body flex">
+
+                                               
+
+
+                                                <div class="card">
+                                                    <div class="card-body" style="min-width:200px">
+                                                        <h5 style="margin-bottom: 50px;">قم باخذ صورة للمنتج لسهولة
+                                                            التعرف علية
+                                                            (اختياري)
+                                                        </h5>
+                                                        <input id="imagefile" type="file" class="btn btn-primary" style="width: 100%;" 
+                                                        accept="image/x-png,image/jpeg" multiple>
+
+                                                      
+                                                    </div>
+                                                    <i>يفضل ان لا تتجاوز حجم الصورة  50Kb</i>
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+
+                                      
+
+                                        <div class="form-group">
+                                            <label > الوصف عربي </label>
+                                            <textarea id="details" class="form-control" placeholder="اختياري"  
+                                                style="background-color: rgb(243, 243, 243);resize: none;"></textarea>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label > الوصف الانكليزي </label>
+                                            <textarea id="side_effect" class="form-control" name="side_effect"  
+                                                placeholder="optional"  
+                                                style="background-color: rgb(243, 243, 243);resize: none; direction: ltr;"></textarea>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>البطاقات tags</label>
+                                            <input id="history" type="text" style="width: 100%; height: 90px;"
+                                                data-role="tagsinput">
+                                            <div class="scroll_enabled"
+                                                style="display:flex; width: 100%; overflow-y:hidden; white-space:nowrap; height: 45px; overflow-x:auto;">
+                                                <span>اختصارات :</span>
+
+                                                <div>
+                                                    <% for( let index=0; index < ill.length; index++ ) { %>
+
+                                                        <span class="tag pointer marg"
+                                                            onclick="putaill('<%= ill[index].name  %>')">
+                                                            <%= ill[index].name %>
+                                                        </span>
+
+                                                        <% } %>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                      
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <br>
+                            <div class="card no">
+                                <div class="cardlable">
+                                     المشتريات
+                                </div>
+                                <div class="card-body">
+                                    <div class="flex">
+                                        <div class="f1">
+                                        <label id="ptitle" > سعر الكامل </label>
+                                        <input id="eliteprice" type="number" class="form-control" name="number"
+                                            placeholder="سعر" style="background-color: rgb(243, 243, 243);">
+                                        </div>
+                                        
+                                            <div >
+                                                <label >  طريقة الشراء </label>
+                                                <select class="form-select" id="pay_type"
+                                                    name="type">
+                                                    <option value="فوري">فوري </option>
+                                                    <option value="بالاجل">بالأجل </option>
+                                                    <option value="التصريف">على التصريف</option>
+                                                   
+    
+    
+    
+                                                </select>
+                                            </div>
+                                    </div>
+                                    <i id="info">سوف يتم وضع المبلغ بشكل مباشر على شكل مصاريف بالحسابات</i>
+                                    <br>
+                                    
+                                    <br>
+                                    <label >اسم المذخر / الشركة</label>
+                                    <input id="medical_reserve" type="text" class="form-control" name="medical_reserve"
+                                        placeholder="اختياري" style="background-color: rgb(243, 243, 243);">
+                                        <br>
+                                        <i id="info">يمكن اضافة المبلغ الى الحسابات بشكل يدوي لاحقا</i>
+                                </div>
+                            </div>
+
+                            <br>
+                            <div class="card">
+                                <div class="cardlable">
+                                    معلومات نقاط البيع
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+
+                                        <label >العدد*</label>
+                                        <input id="number" type="number" class="form-control" name="number"
+                                            placeholder="الكمية" style="background-color: rgb(243, 243, 243);">
+                                            <div class="no">
+                                        <label >تاريخ انتهاء الصلاحية*</label>
+                                        <input id="expire_date" type="date" class="form-control" placeholder="الكمية"
+                                            style="background-color: rgb(243, 243, 243);">
+                                        </div>
+                                        <div class="form-group">
+                                            <label > رقم الباركود </label>
+                                            <input id="bar_code" type="text" class="form-control" placeholder="اختياري"
+                                                style="background-color: rgb(243, 243, 243);">
+                                            <label style="font-size: small;"> يمكن ادخالها بشكل يدويد او عن طريق
+                                                الجهاز
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label >الكمية</label>
+                                            <input id="size" type="text" class="form-control" placeholder="مثل 1 كلو (اختياري)"
+                                                style="background-color: rgb(243, 243, 243);">
+                                            
+                                        </div>
+                                        <div class="form-group">
+                                            <label > اسم المخزن </label>
+                                            <select class="form-select" id="type_warehouce"
+                                                name="type">
+                                                <option value="لا يوجد">لا يوجد</option>
+                                                <% for( let index=0; index < warehouse.length; index++ ) { %>
+
+                                                    <option value="<%=warehouse[index].name  %>">
+                                                        <%=warehouse[index].name %>
+                                                    </option>
+                                                    <% } %>
+
+
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label > رقم الرف </label>
+                                            <input id="shelf" type="text" class="form-control" placeholder="اختياري"
+                                                style="background-color: rgb(243, 243, 243);">
+                                            <label style="font-size: small;"> موقع او رقم الرف داخل المخزن </label>
+                                        </div>
+                                        <div class="form-group no">
+                                            <label >عدد القطع داخل العلبة
+                                                الواحدة</label>
+                                            <input id="sheet" type="number" class="form-control"
+                                                onchange="showsideprice(this.value)" name="sheet" placeholder="اختياري"
+                                                style="background-color: rgb(243, 243, 243);">
+
+                                        </div>
+                                        <div class="flex">
+                                            <div  style="width: 100%;">
+                                                <label >سعر البيع*</label>
+                                                <input type="number" class="form-control" name="price"
+                                                    onchange="pricechange(this.value)"
+                                                    style="background-color: rgb(243, 243, 243);resize: none;"
+                                                    id="price" required>
+                                                    <i id="pinfo" style="color: rgb(16, 180, 22);"></i>
+                                            </div>
+                                          
+
+                                            <div id="price_sheetdiv" class="form-group"
+                                                style="width: 100%; margin-right: 20px; display: none;">
+                                                <label >سعر الشريط الواحد</label>
+                                                <input id="price_sheet" type="number" class="form-control"
+                                                    name="price_sheet" placeholder="اختياري"
+                                                    style="background-color: rgb(243, 243, 243);">
+                                                <label style="font-size: small;">اذا تم اضافة سعر يمكنكم البيع بشكل
+                                                    مفرد</label>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="card massage-error" style="flex: 1; display: none;">
+                                <div class="card-body flex">
+                                    <i class="fas fas fa-ban"></i>
+                                    <div id="err"></div>
+                                </div>
+                            </div>
+                            <div class="card massage" style="flex: 1; display: none;">
+                                <div class="card-body flex">
+                                    <i class="fas fa-check-circle"></i>
+                                    <div id="mass"></div>
+                                   
+                                </div>
+                            </div>
+
+                            <div class="flex">
+                                <button id="addbtn" onclick="add_doc()" class="btn btn-primary w100">+أضافة</button>
+                             
+                               
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+<script src="/js/print-html-element.min.js"></script>
+<script src="/js/add_product.js"></script>
+
+
+
+</html>

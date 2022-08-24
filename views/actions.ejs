@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<body>
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+
+
+            <%- include('parts/bar.ejs'); -%>
+
+                <%- include('parts/massage.ejs'); -%>
+
+
+
+
+                    <div style="padding: 0rem 2rem;">
+
+                        <div class="mycard">
+
+                            <div class="title">بطاقة</div>
+                            <hr>
+
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <form style="display: flex;" action="/add_Illness" method="post">
+
+
+                                        <input type="text" id="name" name="name" placeholder="الاسـم"
+                                            class="form-control" aria-label="Text input with segmented dropdown button"
+                                            required>
+                                        <div style="width: 12px;"></div>
+                                        <button id="all_btn" onclick="addaction()" type="submit" class="btn btn-primary"
+                                            style="width: 300px;">
+                                            <h6> +اضافة </h6>
+                                        </button>
+
+
+                                    </form>
+
+
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="usersgrid">
+                                <div>
+                                    #
+                                </div>
+
+                                <div>
+                                    الاسـم
+
+                                </div>
+
+                                <div>الاجراء</div>
+
+                            </div>
+                            <% for(var i=0 ; i < data2.length ; i++){ %>
+                                <div class="usersgrid_item">
+                                    <div>
+                                        <%= i+1 %>
+                                    </div>
+
+
+                                    <div>
+
+                                        <div>
+                                            <%= data2[i].name %>
+                                        </div>
+
+                                    </div>
+                                    <div><i onclick="delete_illness('<%= data2[i].id %>')"
+                                            class="fas fa-trash button_user"></i>
+
+                                    </div>
+
+                                </div>
+                                <% } %>
+
+
+                                    <div class="jaw2"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="padding: 0rem 2rem;">
+
+                        <div class="mycard">
+
+                            <div class="title">الاقسام</div>
+                            <hr>
+
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <form enctype="multipart/form-data" class="flex" action="/add_category"
+                                        method="post">
+
+
+                                        <input type="text" id="subname" name="name" placeholder="الاسـم"
+                                            class="form-control" aria-label="Text input with segmented dropdown button"
+                                            required>
+
+                                        <input type="file"  class="form-control imagefile"
+                                            id="image" name="image" accept="image/x-png,image/jpeg" required>
+
+                                        <button id="all_btn" onclick="addaction()" type="submit" class="btn btn-primary"
+                                            style="width: 300px;">
+                                            <h6> +اضافة </h6>
+                                        </button>
+
+
+                                    </form>
+
+
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="usersgrid">
+                                <div>
+                                    #
+                                </div>
+
+                                <div>
+                                    الاسـم
+
+                                </div>
+
+                                <div>الاجراء</div>
+
+                            </div>
+                            <% for(var i=0 ; i < data3.length ; i++){ %>
+                                <a class="collapsiblev2">
+
+                                    <div class="usersgrid_item">
+                                        <div>
+                                            <%= i+1 %>
+                                        </div>
+
+
+                                        <div>
+
+                                            <div>
+                                                <%= data3[i].name %>
+                                            </div>
+
+                                        </div>
+                                        <div>
+
+                                            <i onclick="delete_category('<%= data3[i].id %>')"
+                                                class="fas fa-trash button_user"></i>
+
+                                            <button onclick="addsub('<%= data3[i].id %>')" style="margin-right: 50px;">
+
+
+                                                اضافة
+
+
+
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+
+
+
+                                </a>
+                                <div class="collapsible_content bcg" style="width: 80%;">
+                                    <% for(y=0 ; y < sub.length ; y++) {%>
+                                        <% if(sub[y].link==data3[i].id) {%>
+                                            <a class="collapsible">
+                                                <div class="usersgrid_item bcg">
+                                                    <div class="bcg">
+                                                        تصنيف
+                                                    </div>
+
+
+                                                    <div class="bcg">
+
+                                                        <div>
+                                                            <%= sub[y].name %>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bcg"><i onclick="delete_subcategory('<%= sub[y].id %>')"
+                                                            class="fas fa-trash button_user"></i>
+
+                                                        <button onclick="addsubsub('<%= sub[y].id %>')"
+                                                            style="margin-right: 50px;">
+
+
+                                                            اضافة
+
+
+
+                                                        </button>
+
+                                                    </div>
+
+                                                </div>
+                                            </a>
+                                            <div class="collapsible_content" style="width: 80%;">
+                                                <% for(z=0 ; z< subsub.length ; z++) {%>
+                                                    <% if(subsub[z].link==sub[y].id) {%>
+                                                        <div class="usersgrid_item bcg2">
+                                                            <div class="bcg2">
+                                                                تصنيف ثانوي
+                                                            </div>
+
+
+                                                            <div class="bcg2">
+
+                                                                <div>
+                                                                    <%= subsub[z].name %>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bcg2"><i
+                                                                    onclick="delete_subsubcategory('<%= subsub[z].id %>')"
+                                                                    class="fas fa-trash button_user"></i>
+
+
+
+                                                            </div>
+
+                                                        </div>
+                                                        <% } %>
+                                                            <% } %>
+
+                                            </div>
+
+
+                                            <% } %>
+                                                <% } %>
+
+
+
+
+
+                                </div>
+                                <% } %>
+
+
+                                    <div class="jaw2"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="padding: 0rem 2rem;">
+
+                        <div class="mycard">
+
+                            <div class="title">مواعيد التوصيل</div>
+                            <hr>
+
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <form class="flex" action="/add_time" method="post">
+
+
+                                        <input type="time" id="time" name="time" placeholder="الاسـم"
+                                            class="form-control" aria-label="Text input with segmented dropdown button"
+                                            required>
+                                        <input type="number" id="count" name="count" placeholder="العدد"
+                                            class="form-control" aria-label="Text input with segmented dropdown button"
+                                            required>
+                                        <div style="width: 12px;"></div>
+                                        <button id="all_btn" onclick="addaction()" type="submit" class="btn btn-primary"
+                                            style="width: 300px;">
+                                            <h6> +اضافة </h6>
+                                        </button>
+
+
+                                    </form>
+
+
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="usersgrid usersgrid2">
+                                <div>
+                                    #
+                                </div>
+
+                                <div>
+                                    الاسـم
+
+                                </div>
+                                <div>
+                                    العدد
+
+                                </div>
+
+                                <div>الاجراء</div>
+
+                            </div>
+                            <% for(var i=0 ; i < delivery.length ; i++){ %>
+                                <div class="usersgrid_item usersgrid2">
+                                    <div>
+                                        <%= i+1 %>
+                                    </div>
+
+
+                                    <div>
+
+                                        <div>
+                                            <%= delivery[i].time %>
+                                        </div>
+
+                                    </div>
+                                    <div>
+
+                                        <div>
+                                            <%= delivery[i].count %>
+                                        </div>
+
+                                    </div>
+                                    <div><i onclick="delete_time('<%= delivery[i].id %>')"
+                                            class="fas fa-trash button_user"></i>
+
+                                    </div>
+
+                                </div>
+                                <% } %>
+
+
+                                    <div class="jaw2"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="padding: 0rem 2rem;">
+
+                        <div class="mycard">
+
+                            <div class="title">الافرع/المخازن</div>
+                            <hr>
+
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <form style="display: flex;" action="/add_warehouse" method="post">
+
+
+                                        <input type="text" id="name" name="name" placeholder="الاسـم"
+                                            class="form-control" aria-label="Text input with segmented dropdown button"
+                                            required>
+                                        <div style="width: 12px;"></div>
+                                        <button id="all_btn" onclick="addaction()" type="submit" class="btn btn-primary"
+                                            style="width: 300px;">
+                                            <h6> +اضافة </h6>
+                                        </button>
+
+
+                                    </form>
+
+
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="usersgrid">
+                                <div>
+                                    #
+                                </div>
+
+                                <div>
+                                    الاسـم
+
+                                </div>
+
+                                <div>الاجراء</div>
+
+                            </div>
+                            <% for(var i=0 ; i < data4.length ; i++){ %>
+                                <div class="usersgrid_item">
+                                    <div>
+                                        <%= i+1 %>
+                                    </div>
+
+
+                                    <div>
+
+                                        <div>
+                                            <%= data4[i].name %>
+                                        </div>
+
+                                    </div>
+                                    <div><i onclick="delete_warehouce('<%= data4[i].id %>')"
+                                            class="fas fa-trash button_user"></i>
+
+                                    </div>
+
+                                </div>
+                                <% } %>
+
+
+                                    <div class="jaw2"></div>
+                        </div>
+                    </div>
+                    <br>
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+<script>
+
+
+    var images_file = [];
+
+    $('#image').on("change", function () {
+        images_file = [];
+        //diable submit button
+        $(':input[type="button"]').prop('disabled', true);
+        var fileSelecter = this;
+
+        for (var i = 0; i < fileSelecter.files.length; i++) {
+
+
+            loadImage(fileSelecter.files[i], (err, data) => {
+                images_file.push(data)
+                if (fileSelecter.files.length == i) {
+                    //enable submit button
+                    $(':input[type="button"]').prop('disabled', false);
+                }
+            })
+
+
+        }
+    });
+
+
+    function loadImage(file, done) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            done(null, reader.result)
+        };
+        reader.onerror = function (error) {
+            done(error, null)
+        };
+    }
+
+
+    function addsub(id) {
+        $.ajax({
+            type: "POST",
+            url: "/add_sucategory",
+            data: { link: id, name: $('#subname').val(),images:images_file },
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+
+    function addsubsub(id) {
+        $.ajax({
+            type: "POST",
+            url: "/add_susucategory",
+            data: { link: id, name: $('#subname').val(),images:images_file },
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+
+    function delete_action(index) {
+        $.ajax({
+            type: "POST",
+            url: "delete_action",
+            data: { id: index },
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+
+    function delete_illness(index) {
+        $.ajax({
+            type: "POST",
+            url: "delete_illness",
+            data: { id: index },
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+    function delete_category(index) {
+        $.ajax({
+            type: "POST",
+            url: "delete_category",
+            data: { id: index },
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+    function delete_subcategory(index) {
+        $.ajax({
+            type: "POST",
+            url: "/delete_subcategory",
+            data: { id: index },
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+    function delete_subsubcategory(index) {
+        $.ajax({
+            type: "POST",
+            url: "/delete_subsubcategory",
+            data: { id: index },
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+    function delete_warehouce(index) {
+        $.ajax({
+            type: "POST",
+            url: "delete_warehouse",
+            data: { id: index },
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+    function delete_time(index) {
+        $.ajax({
+            type: "POST",
+            url: "delete_time",
+            data: { id: index },
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+
+
+
+
+</script>
+
+<script src="/js/savepagepostion.js">
+
+</script>
+
+
+
+</html>

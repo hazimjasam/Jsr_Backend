@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<body>
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+            <div id="alert">
+
+            </div>
+
+            <%- include('parts/bar.ejs'); -%>
+
+                <div style="padding: 2.3rem 1rem;">
+
+
+                    <div class="mycard">
+
+                        <div class="title">
+                            <i class="fas fa-stethoscope" style="margin-left: 10px;"></i>
+                            <%=title%>
+                        </div>
+
+
+                        <hr>
+                        <div class="card" style="border: none;">
+                            <div class="card-body">
+
+
+
+                                <div style="display: flex;">
+                                    <% if(user.action == 'الكل'){ %> 
+                                    <div>
+                                        <div class="dropdown">
+                                            <button class="dropbtn" style="background-color:#<%= col %> ">
+                                                <%= selected_action%>
+                                            </button>
+                                            <div class="dropdown-content">
+                                                <a onclick="changeAction('الكل','3e8e41')"
+                                                    style="background-color:#3e8e41;">
+                                                    الكل
+                                                </a>
+                                                <% for( let index=0; index < actions.length; index++ ) { %>
+                                                    <a onclick="changeAction('<%= actions[index].name%>','<%= actions[index].color %>')"
+                                                        style="background-color:#<%= actions[index].color %>">
+                                                        <%= actions[index].name %>
+                                                    </a>
+                                                    <% } %>
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <% } else {%> 
+
+                                        <div>
+                                            <div class="dropdown">
+                                                <button class="dropbtn" style="background-color:#<%= user.col %> ">
+                                                    <%= user.action%>
+                                                </button>
+                                                <div class="dropdown-content">
+                                                    <a onclick="changeAction('<%= user.action%>','<%= user.col %>')"
+                                                        style="background-color:#3e8e41;">
+                                                        <%= user.action%>
+                                                    </a>
+                                                   
+    
+                                                </div>
+    
+    
+                                            </div>
+                                        </div>
+                                    <% } %> 
+
+
+                                    <div style="width: 10px;"></div>
+                                    <input type="text" id="search_box" placeholder="بحث" class="form-control"
+                                        aria-label="Text input with segmented dropdown button">
+                                    <div style="width: 12px;"></div>
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div style="height: 12px;"></div>
+
+
+                        <div class="card">
+                            <div class="card-body">
+
+
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">الصورة</th>
+                                            <th scope="col">الاسم</th>
+                                            <th scope="col">العمر</th>
+
+
+                                            <th scope="col">الحجوزات</th>
+                                            <th scope="col">الاجراء</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="data_tabel">
+
+
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="height: 24px;"></div>
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+
+<script defer>
+
+
+    var socket = io();
+    var delay = false;
+    var selected_action = 'الكل'
+
+    //setTimeout(()=>socket.emit('search', ''),1000);
+    socket.on("connect", () => {
+
+        socket.emit('search', { index: $("#search_box").val() , action:selected_action });
+    })
+
+    function getdate() {
+        var now = new Date();
+        var month = (now.getMonth() + 1);
+        var day = now.getDate();
+        if (month < 10)
+            month = "0" + month;
+        if (day < 10)
+            day = "0" + day;
+        return now.getFullYear() + '-' + month + '-' + day;
+    }
+
+
+    $("#search_box").keyup(function () {
+
+
+
+
+        console.log($("#search_box").val())
+       
+
+
+        socket.emit('search', { index: $("#search_box").val() , action:selected_action });
+    })
+
+
+    socket.on('info',(data)=>{
+
+        socket.emit('search', { index: '' , action:selected_action });
+    })
+   
+
+    socket.on('update', function (doc) {
+
+
+        var data = doc.docs;
+        var actions = doc.actions;
+
+
+
+
+
+
+
+
+        var dataTabel = $("#data_tabel")
+        dataTabel.empty()
+        for (let i = 0; i < data.length; i++) {
+
+
+
+
+
+          
+                dataTabel.append(`
+            
+            <tr>
+                            
+                            ${(data[i].image != "") ? `<td style="width: 100px;" ><img class="profimage" src=" ${"/" + data[i].image}"></td>` : `<td style="width: 100px;" ><img class="profimage" src="/images/unknown.png"></td>`}
+                                
+                            
+                        
+                            <td style="width: 420px;" >${data[i].name}<div class='note'>${data[i].bar_code}</div></td>
+                            <td style="width: 220px;">${data[i].age}</td>
+                           
+                                    
+                                    <td >
+                                        <div>
+                                            <h5 class="maxtext" style="width: 150px;">الموعد</h5>
+                                            <h6 style="color: rgb(95, 95, 211);">اليوم الساعة 9:30</h6>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                        <button class="abtn" style='width: fit-content; padding: 0 50px;' onclick="show('${data[i]._id}')"><i class="fas fa-eye"><span style="margin-right: 15px;">معاينة</span></i></button>
+                                 
+                                        
+                                        </div>
+                                        
+                                    </td>
+                
+                        </tr>
+            
+            
+            `)
+
+
+            action_lable = "";
+
+        }
+
+
+
+
+    });
+
+
+
+
+
+   
+
+    function show(index) {
+        window.location.href = "/patient?id=" + index;
+    }
+
+   
+
+
+
+    function changeAction(_action, col) {
+
+
+
+        selected_action = _action;
+
+
+        $('.dropbtn').text(selected_action);
+        $('.dropbtn').css("background-color", "#" + col)
+
+        
+
+
+        socket.emit('search', { index: $("#search_box").val(), action:selected_action });
+    }
+
+
+    
+
+
+
+    var barcode = '';
+    var interval;
+
+    document.addEventListener('keydown', function (evt) {
+        if (interval)
+            clearInterval(interval)
+        if (evt.code == "Enter") {
+            if (barcode)
+                handleBarcode(barcode)
+            barcode = ''
+            return
+        }
+
+        console.log(evt.code)
+
+        if (evt.code != "ShiftLeft" && evt.code != "ShiftRight")
+            barcode += evt.key
+
+
+        interval = setInterval(() => barcode = "", 60);
+    })
+
+    function handleBarcode(index) {
+
+        $('#search_box').val(index)
+        socket.emit('search', { index: $("#search_box").val(), action:selected_action });
+    }
+
+</script>
+
+
+
+</html>

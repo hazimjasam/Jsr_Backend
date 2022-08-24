@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<style>
+
+</style>
+
+<body>
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+            <%- include('parts/bar.ejs'); -%>
+            <br>
+           
+                    <div class="mycard" style="position: relative;">
+
+                        <div class="title">
+                            الاستدعاء
+                        </div>
+
+                        <hr>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">الطابق</th>
+                                    <th scope="col">الغرفة</th>
+
+                                    <th scope="col">السرير</th>
+
+                                    <th scope="col">صورة</th>
+                                    <th scope="col">اسم المريض</th>
+                                    <th scope="col">الاجراء</th>
+                                   
+                                </tr>
+                            </thead>
+                          
+                        </table>
+                    </div>
+
+
+
+                    <div style="height: 12px;"></div>
+
+                    <div style="height: 24px;"></div>
+
+
+
+                </div>
+        </div>
+
+        <%- include('parts/scripts.ejs'); -%>
+</body>
+
+
+
+
+<script>
+
+
+
+
+    function loadImage(file, done) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            done(null, reader.result)
+        };
+        reader.onerror = function (error) {
+            done(error, null)
+        };
+    }
+
+
+    function Submit() {
+
+
+        var image;
+
+
+
+
+
+
+        if (document.getElementById("image").files.length > 0) {
+            loadImage(document.getElementById("image").files[0], (err, bsse64) => {
+
+                var data = {
+
+                    name: $('#name').val(),
+                    pwd: $('#pwd').val(),
+                    job: $('#job').val(),
+                    phone: $('#phone').val(),
+                    email: $('#email').val(),
+                    image: bsse64,
+                    acc_type1: $('input[name="main"]').is(":checked"),
+                    acc_type2: $('input[name="dir"]').is(":checked"),
+                    acc_type3: $('input[name="add"]').is(":checked"),
+                    acc_type4: $('input[name="pharmacy"]').is(":checked"),
+                    acc_type5: $('input[name="reservations"]').is(":checked"),
+                    acc_type6: $('input[name="analytic"]').is(":checked"),
+                    acc_type7: $('input[name="broadcast"]').is(":checked"),
+                    acc_type8: $('input[name="settings"]').is(":checked"),
+                    acc_type9: $('input[name="nurses"]').is(":checked"),
+
+
+
+                }
+
+                console.log(bsse64);
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "/add_employees",
+                    data: data
+
+
+                }).done(function (o) {
+
+
+                })
+            })
+
+        }
+        else {
+
+
+            var data = {
+
+                name: $('#name').val(),
+                pwd: $('#pwd').val(),
+                job: $('#job').val(),
+                phone: $('#phone').val(),
+                email: $('#email').val(),
+                salary: $('#salary').val(),
+                image: '',
+                acc_type1: $('input[name="main"]').is(":checked"),
+                acc_type2: $('input[name="dir"]').is(":checked"),
+                acc_type3: $('input[name="add"]').is(":checked"),
+                acc_type4: $('input[name="nof"]').is(":checked"),
+                acc_type5: $('input[name="reservations"]').is(":checked"),
+                acc_type6: $('input[name="analytic"]').is(":checked"),
+                acc_type7: $('input[name="broadcast"]').is(":checked"),
+                acc_type8: $('input[name="settings"]').is(":checked"),
+                acc_type9: $('input[name="nurses"]').is(":checked"),
+
+
+            }
+
+
+
+
+            $.ajax({
+                type: "POST",
+                url: "/add_employees",
+                data: data
+
+
+            }).done(function (o) {
+
+
+            })
+
+        }
+
+
+    }
+
+
+
+    function doc()
+    {
+       $('#doctor').fadeToggle(50);
+    }
+
+
+</script>
+
+</html>

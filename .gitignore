@@ -1,0 +1,6 @@
+node_modules/
+public/images/
+public/item_images/
+public/medimages/
+public/patientimages/
+package-lock.json

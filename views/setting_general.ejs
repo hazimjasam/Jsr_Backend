@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<body>
+
+
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+
+
+            <%- include('parts/bar.ejs'); -%>
+
+
+
+
+                <div style="padding: 2rem 2rem;">
+
+                    <div class="mycard">
+
+                        <div class="title"> معلومات اساسية</div>
+                        <hr>
+                        <form action="/update_general" method="POST" enctype="multipart/form-data">
+                            <div class="flex" style="gap: 30px;">
+                                <div style="flex: 1;">
+                                    <div class="flex">
+                                        <div class="form-group" style="width: 100%;">
+                                            <label >اسم المركز الطبي/المستشفى*</label>
+                                            <input type="text" class="form-control" name="name"
+                                                style="background-color: rgb(243, 243, 243);"
+                                                value="<%=  general.name %>" autocomplete="off">
+                                        </div>
+                                        <div class="form-group" style="width: 100%;margin-right: 20px;">
+                                            <label >اسم المركز الطبي/المستشفى باللغة
+                                                الانكليزية*</label>
+                                            <input type="text" class="form-control" name="name_en"
+                                                value="<%=  general.name_en %>"
+                                                style="background-color: rgb(243, 243, 243);" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="flex">
+                                        <div class="form-group" style="width: 100%;">
+                                            <label >رقم الهاتف</label>
+                                            <input type="text" class="form-control" name="phone"
+                                                style="background-color: rgb(243, 243, 243);"
+                                                value="<%=  general.phone %>" autocomplete="off">
+                                        </div>
+                                        <div class="form-group" style="width: 100%;margin-right: 20px;">
+                                            <label >رقم الهاتف الثانوي</label>
+                                            <input type="text" class="form-control" name="phone_two"
+                                                style="background-color: rgb(243, 243, 243);"
+                                                value="<%=  general.phone_two %>" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="width: 100%;">
+                                        <label >الموقع الجغرافي</label>
+                                        <input type="text" class="form-control" name="location"
+                                            style="background-color: rgb(243, 243, 243);"
+                                            value="<%=  general.location %>" autocomplete="off">
+                                    </div>
+                                    <div>
+                                        <label>شعار المركز / المستشفى (لوكو)</label>
+                                        <div class="col-md-6" style="width: 100%;">
+                                            <input type="file" class="form-control imagefile" style="width: 100%;"
+                                                name="img" accept="image/x-png,image/jpeg" />
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <label for="colorpicker">نمط الالون الخاص بالمستشفى/المركز الطبي </label>
+                                    <input type="color" name="color" value="<%= general.color %>">
+                                    <button type="submit" class="btn btn-primary"
+                                        style="width: 100%; margin-top: 12px;">تحديث</button>
+                                </div>
+                                <div
+                                    style="width: 35%; padding: 20px; background: linear-gradient(0deg,  <%= general.color %> 0%,<%= general.color %>1a 50%, rgba(254,254,254,1) 100%); border-radius: 5px; margin-right: 20px; text-align: center;">
+                                    <div style=" margin-top: 10%;">
+                                        <div class="flex fjc">
+                                            <img src="/images/<%=  general.img %>"
+                                                style="width: 150px; max-height: 150px;">
+
+                                        </div>
+                                        <h5>
+                                            <%= general.name %>
+                                        </h5>
+                                        <div>
+                                            <%= general.name_en %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                    <br>
+                   
+
+                </div>
+
+                <%- include('parts/scripts.ejs'); -%>
+        </div>
+    </div>
+</body>
+
+
+
+<script>
+
+    function opendoc() {
+
+        $('#beds-panel').fadeToggle(100)
+    }
+
+    function sendroominfo() {
+        $.ajax({
+            type: "POST",
+            url: "/add_room",
+            data: {
+                floor: $('#floor').val(),
+                room:$('#room').val(),
+                beds:$('#beds').val(),
+            }
+        }).done(function (o) {
+
+
+            if(o.success == 0)
+            {
+
+                $('.massage-error').show()
+            }
+            else
+            {
+                location.reload();
+            }
+
+        })
+    }
+    function delete_room(index) {
+        $.ajax({
+            type: "POST",
+            url: "/delete_room",
+            data: { id: index },
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+
+
+
+
+
+</script>
+
+<script src="/js/savepagepostion.js"></script>
+
+
+
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>لوحة التحكم</title>
+</head>
+
+<body>
+
+
+    <div class="fixedpanel scroll_enabled" id="doc_panel" style="display: none; width: 500px; height: 650px;">
+        <div class="mycard">
+            <div class="flex">
+                <h5 style="flex: 1;"> اضافة دائن جديد للمريض</h5>
+                <a onclick="doc_Toggle()" class="x close noselect"><i class="fas fa-times-circle"></i></a>
+            </div>
+            <hr>
+            <form action="/add_creditor_patient" method="post">
+                <div class="form-group" style="width: 100%;">
+                    <label >العنصر *</label>
+                    <input type="text" class="form-control" name="name" style="background-color: rgb(243, 243, 243);"
+                        id="name" autocomplete="off" required>
+                </div>
+                <div class="form-group" style="width: 100%;">
+                    <label >السعر *</label>
+                    <input type="number" class="form-control" name="price" style="background-color: rgb(243, 243, 243);"
+                        id="price" autocomplete="off" required>
+                </div>
+                <div class="form-group" style="width: 100%;">
+
+                    <input type="text" class="form-control" name="patient_id" style="display:none;" id="patient_id"
+                        autocomplete="off" required value="<%= patient.id %>">
+                </div>
+
+                <label > التفاصيل </label>
+                <textarea id="details" class="form-control" name="details" placeholder="اختياري"
+                    style="background-color: rgb(243, 243, 243);resize: none;"></textarea>
+                <div>يتم اضافة المبلغ على قائمة قديم لم يتم المحاسبة علية او فتح قائمة جديدة للمريض بشكل الي</div>
+                <input class="btn btn-primary" type="submit" style="width: 100%; margin-top: 12px;" value="+أضافة">
+
+            </form>
+
+
+
+
+        </div>
+    </div>
+
+    <div id="container" class="flex">
+        <div id="side_nav">
+
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content" class="scroll_enabled">
+
+
+            <div id="alert">
+
+            </div>
+
+            <%- include('parts/barVtwo.ejs'); -%>
+
+
+                <% if(mass){ %>
+                    <div class="card massage" style="flex: 1; display: block;">
+                        <div class="card-body">
+                            <i class="fas fa-check-circle"></i>
+                            تمت اضافة المبلغ على المراجع بقائمة جديدة
+                        </div>
+                    </div>
+                    <% } %>
+                    <% if(mass2 != ''){ %>
+                        <div class="card massage" style="flex: 1; display: block;">
+                            <div class="card-body">
+                                <i class="fas fa-check-circle"></i>
+                            تمت اضافة الديون على القائمة  :  <%= mass2 %> 
+                            </div>
+                        </div>
+                        <% } %>
+
+                        <div style="padding: 2.3rem 1rem;">
+
+
+                            <div class="mycard">
+
+                                <div class="title">
+                                    <i class="fas fa-stethoscope" style="margin-left: 10px;"></i>
+                                    <%= 'حسابات المريض : ' + patient.name %>
+
+
+                                        <button onclick="doc_Toggle()" class="btn btn-primary"
+                                            style="margin-right: 30px; border-radius: 10px;"><i
+                                                style="margin-left: 10px;" class="fas fa-plus-circle"></i>اضافة مبلغ
+                                            جديد</button>
+                                </div>
+
+
+                                <hr>
+                                <div class="card" style="border: none;">
+                                    <div class="card-body">
+
+
+
+
+
+
+                                    </div>
+                                </div>
+
+                                <div style="height: 12px;"></div>
+
+
+                                <div class="card">
+                                    <div class="card-body">
+
+
+
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">رقم القائمة</th>
+                                                    <th scope="col">التاريخ</th>
+                                                    <th scope="col">السعر الكلي (<%=general.currency %>)</th>
+
+
+                                                    <th scope="col">المدفوع (<%=general.currency %>)</th>
+                                                    <th scope="col">   المتبقي (<%=general.currency %>)</th>
+                                                    <th scope="col">الاجراء</th>
+                                                </tr>
+                                            </thead>
+
+                                            <% for( let i=0; i < creditor.length; i++ ) { %>
+
+                                                <tbody id="data_tabel">
+                                                    <td style="width: 250px;"><%= creditor[i].bar_code %> </td>
+                                                    <td style="width: 150px;">
+                                                        <h5><%= getdatein_ar(creditor[i].createdAt) %></h5>
+
+                                                    </td>
+                                                    <td>
+                                                        <h5><%= formatCurrancy(creditor[i].total_price) %></h5>
+
+                                                    </td>
+                                                    <td>
+                                                        <h5><%= formatCurrancy(creditor[i].total_paid) %></h5>
+                                                    </td>
+                                                    <td>
+                                                        <h5>
+                                                            <%= formatCurrancy(creditor[i].total_price -   creditor[i].total_paid)  %>
+                                                        </h5>
+                                                    </td>
+                                                    <td>
+                                                        <a class="actionbutton" style=' padding: 0 50px;'  href="/statement?id=<%= creditor[i].id  %>&last_page=patient_account?id=<%= patient.id %>"><i class="fas fa-eye"><span style="margin-right: 15px;">عرض القائمة </span></i></a>
+                                                    </td>
+                                                </tbody>
+                                                <% } %>
+
+
+
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="height: 24px;"></div>
+
+
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+<script>
+
+    function doc_Toggle() {
+        $('#doc_panel').fadeToggle()
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+</html>

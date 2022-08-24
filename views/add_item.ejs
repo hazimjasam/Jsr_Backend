@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('parts/links.ejs'); -%>
+        <title>اضافة مادة</title>
+</head>
+
+<body>
+    <div id="container" class="flex">
+        <div id="side_nav">
+            <%- include('parts/menu.ejs'); -%>
+        </div>
+        <div id="content">
+            <div id="alert">
+
+            </div>
+            <h4>اضافة مادة</h4>
+
+            <div style="height: 24px;"></div>
+
+
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">الاسم</label>
+                        <input type="text" name="title" class="form-control" placeholder="اسم المنتج">
+                    </div>
+
+                    <div style="height: 12px;"></div>
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">السعر</label>
+                        <input type="number" name="title" class="form-control" placeholder="السعر">
+                    </div>
+
+                    <div style="height: 12px;"></div>
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">الصنف</label>
+                        <select class="form-control">
+                            <option value="0">اختر الصنف</option>
+                            <% for( let i=0; i < categories.length; i++ ) { %>
+                                <option value="<%= categories[i].title %>">
+                                    <%= categories[i].title %>
+                                </option>
+                                <% } %>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <%- include('parts/scripts.ejs'); -%>
+</body>
+
+</html>
